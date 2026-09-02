@@ -1,0 +1,91 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Années
+universitaires — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div class="academic-page-heading__icon">
+              <i class="fa-solid fa-calendar"></i>
+            </div>
+
+            <div>
+              <h1>Années universitaires</h1>
+              <p>Gestion des années universitaires</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="academic-panel">
+          <div class="academic-panel__header">
+            <h2>Liste des années</h2>
+            <p>Années universitaires du système</p>
+          </div>
+
+          {% if annees %}
+
+          <div class="academic-table-wrapper">
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Année universitaire</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for annee in annees %}
+
+                <tr>
+                  <td>{{ annee.libelle }}</td>
+
+                  <td>
+                    {% if annee.active %}
+
+                    <span class="academic-status academic-status--active">
+                      Active
+                    </span>
+
+                    {% else %}
+
+                    <span class="academic-status academic-status--inactive">
+                      Inactive
+                    </span>
+
+                    {% endif %}
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+
+          <div class="academic-empty">
+            <i class="fa-solid fa-calendar"></i>
+            <p>Aucune année universitaire enregistrée.</p>
+          </div>
+
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

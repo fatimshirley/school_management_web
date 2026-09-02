@@ -1,0 +1,128 @@
+{% extends "base/base.html" %} {% load static %} {% block title %} Détail
+étudiant — Administration {% endblock %} {% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+
+<link rel="stylesheet" href="{% static 'css/admin/students.css' %}" />
+
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="students-page-heading">
+          <div class="students-page-heading__title">
+            <div class="students-page-heading__icon">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+              <h1>Détail de l'étudiant</h1>
+
+              <p>Informations administratives</p>
+            </div>
+          </div>
+
+          <div class="students-heading-actions">
+            <a
+              href="{% url 'admin_student_edit' student.id %}"
+              class="students-btn students-btn--primary"
+            >
+              <i class="fa-solid fa-pen"></i>
+              Modifier
+            </a>
+
+            <a
+              href="{% url 'admin_students' %}"
+              class="students-btn students-btn--secondary"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              Retour
+            </a>
+          </div>
+        </div>
+
+        <section class="student-detail-panel">
+          <div class="student-profile-header">
+            <div class="student-profile-icon">
+              <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+              <h2>{{ student.nom }} {{ student.prenom }}</h2>
+
+              <p>{{ student.matricule }}</p>
+            </div>
+          </div>
+
+          <div class="student-detail-grid">
+            <div class="student-detail-item">
+              <span class="student-detail-item__label"> Matricule </span>
+
+              <span class="student-detail-item__value">
+                {{ student.matricule }}
+              </span>
+            </div>
+
+            <div class="student-detail-item">
+              <span class="student-detail-item__label"> Nom </span>
+
+              <span class="student-detail-item__value">
+                {{ student.nom }}
+              </span>
+            </div>
+
+            <div class="student-detail-item">
+              <span class="student-detail-item__label"> Prénom </span>
+
+              <span class="student-detail-item__value">
+                {{ student.prenom }}
+              </span>
+            </div>
+
+            <div class="student-detail-item">
+              <span class="student-detail-item__label"> Âge </span>
+
+              <span class="student-detail-item__value">
+                {{ student.age }} ans
+              </span>
+            </div>
+
+            <div class="student-detail-item">
+              <span class="student-detail-item__label"> Niveau </span>
+
+              <span class="student-detail-item__value">
+                {% if student.niveau %} {{ student.niveau.code }} — {{
+                student.niveau.nom }} {% else %} Non affecté {% endif %}
+              </span>
+            </div>
+
+            <div class="student-detail-item">
+              <span class="student-detail-item__label">
+                Compte utilisateur
+              </span>
+
+              <span class="student-detail-item__value">
+                {% if student.user %} {{ student.user.username }} {% else %}
+                Aucun compte associé {% endif %}
+              </span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

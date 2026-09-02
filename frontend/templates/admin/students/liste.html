@@ -1,0 +1,185 @@
+{% extends "base/base.html" %} {% load static %} {% block title %} Étudiants —
+Administration {% endblock %} {% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+
+<link rel="stylesheet" href="{% static 'css/admin/students.css' %}" />
+
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <!-- EN-TÊTE -->
+
+        <div class="students-page-heading">
+          <div class="students-page-heading__title">
+            <div class="students-page-heading__icon">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+              <h1>Étudiants</h1>
+
+              <p>Gestion des étudiants enregistrés</p>
+            </div>
+          </div>
+
+          <a
+            href="{% url 'admin_student_add' %}"
+            class="students-btn students-btn--primary"
+          >
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Ajouter un étudiant</span>
+          </a>
+        </div>
+
+        <!-- CONTENU -->
+
+        <section class="students-panel">
+          <div class="students-panel__header">
+            <div>
+              <h2>Liste des étudiants</h2>
+
+              <p>
+                {{ students|length }} étudiant{{ students|length|pluralize }}
+                enregistré{{ students|length|pluralize }}
+              </p>
+            </div>
+          </div>
+
+          {% if students %}
+
+          <div class="students-table-wrapper">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>Matricule</th>
+                  <th>Nom complet</th>
+                  <th>Niveau</th>
+                  <th>Âge</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for student in students %}
+
+                <tr>
+                  <td>
+                    <span class="student-matricule">
+                      {{ student.matricule }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div class="student-name">
+                      <span class="student-name__main">
+                        {{ student.nom }} {{ student.prenom }}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td>
+                    {% if student.niveau %}
+
+                    <span class="student-level">
+                      {{ student.niveau.code }}
+
+                      <span> {{ student.niveau.nom }} </span>
+                    </span>
+
+                    {% else %}
+
+                    <span class="student-empty"> Non affecté </span>
+
+                    {% endif %}
+                  </td>
+
+                  <td>{{ student.age }} ans</td>
+
+                  <td>
+                    <div class="student-actions">
+                      <a
+                        href="{% url 'admin_student_detail' student.id %}"
+                        class="student-action"
+                        title="Voir"
+                      >
+                        <i class="fa-solid fa-eye"></i>
+                      </a>
+
+                      <a
+                        href="{% url 'admin_student_edit' student.id %}"
+                        class="student-action"
+                        title="Modifier"
+                      >
+                        <i class="fa-solid fa-pen"></i>
+                      </a>
+
+                      <form
+                        method="post"
+                        action="{% url 'admin_student_delete' student.id %}"
+                      >
+                        {% csrf_token %}
+
+                        <button
+                          type="submit"
+                          class="student-action student-action--danger"
+                          title="Supprimer"
+                          onclick="
+                            return confirm(
+                              'Voulez-vous vraiment supprimer cet étudiant ?',
+                            );
+                          "
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+
+          <div class="students-empty">
+            <div class="students-empty__icon">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <h3>Aucun étudiant</h3>
+
+            <p>Aucun étudiant n'est actuellement enregistré.</p>
+
+            <a
+              href="{% url 'admin_student_add' %}"
+              class="students-btn students-btn--primary"
+            >
+              <i class="fa-solid fa-user-plus"></i>
+              Ajouter un étudiant
+            </a>
+          </div>
+
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

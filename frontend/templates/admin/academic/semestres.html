@@ -1,0 +1,83 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Semestres —
+Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div class="academic-page-heading__icon">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+
+            <div>
+              <h1>Semestres</h1>
+              <p>Organisation des semestres par niveau</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="academic-panel">
+          <div class="academic-panel__header">
+            <h2>Liste des semestres</h2>
+            <p>Organisation académique</p>
+          </div>
+
+          {% if semestres %}
+
+          <div class="academic-table-wrapper">
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Semestre</th>
+                  <th>Niveau</th>
+                  <th>Date de début</th>
+                  <th>Date de fin</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for semestre in semestres %}
+
+                <tr>
+                  <td>{{ semestre.nom }}</td>
+
+                  <td>{{ semestre.niveau.code }}</td>
+
+                  <td>{{ semestre.date_debut|date:"d/m/Y"|default:"—" }}</td>
+
+                  <td>{{ semestre.date_fin|date:"d/m/Y"|default:"—" }}</td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+
+          <div class="academic-empty">
+            <i class="fa-solid fa-calendar-days"></i>
+            <p>Aucun semestre enregistré.</p>
+          </div>
+
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,430 @@
+/* ==================================================
+   DASHBOARD
+================================================== */
+
+.admin-layout {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.admin-layout__body {
+  padding-top: 72px;
+  min-height: 100vh;
+}
+
+/* ==================================================
+   MAIN
+================================================== */
+
+.admin-main {
+  margin-left: 235px;
+  min-height: calc(100vh - 72px);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-main__content {
+  flex: 1;
+  padding: 32px;
+}
+
+/* ==================================================
+   PAGE HEADING
+================================================== */
+
+.page-heading {
+  margin-bottom: 28px;
+}
+
+.page-heading h1 {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 650;
+
+  color: #111827;
+}
+
+.page-heading p {
+  margin: 6px 0 0;
+
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ==================================================
+   SUMMARY
+================================================== */
+
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  margin-bottom: 24px;
+}
+
+.summary-item {
+  min-height: 112px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 20px 24px;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+.summary-item:last-child {
+  border-right: none;
+}
+
+/* ==================================================
+   SUMMARY ICON
+================================================== */
+
+.summary-item__icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  font-size: 17px;
+}
+
+/* Étudiants */
+
+.summary-item__icon--students {
+  background-color: #eef3f8;
+  color: #1e3a5f;
+}
+
+/* Professeurs */
+
+.summary-item__icon--teachers {
+  background-color: #eef1f4;
+  color: #3f5870;
+}
+
+/* Matières */
+
+.summary-item__icon--subjects {
+  background-color: #edf4f0;
+  color: #35634d;
+}
+
+/* Absences */
+
+.summary-item__icon--absences {
+  background-color: #f5f0e8;
+  color: #8a6826;
+}
+
+/* ==================================================
+   SUMMARY CONTENT
+================================================== */
+
+.summary-item__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-item__label {
+  margin-bottom: 5px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  color: #6b7280;
+}
+
+.summary-item__value {
+  font-size: 25px;
+  line-height: 1;
+
+  font-weight: 650;
+
+  color: #1e3a5f;
+}
+
+/* ==================================================
+   DASHBOARD GRID
+================================================== */
+
+.dashboard-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 24px;
+}
+
+/* ==================================================
+   DASHBOARD PANEL
+================================================== */
+
+.dashboard-panel {
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+}
+
+/* ==================================================
+   PANEL HEADER
+================================================== */
+
+.dashboard-panel__header {
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ==================================================
+   PANEL TITLE
+================================================== */
+
+.dashboard-panel__title {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+/* ==================================================
+   PANEL ICON
+================================================== */
+
+.dashboard-panel__icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+
+  font-size: 14px;
+}
+
+/* Inscriptions */
+
+.dashboard-panel__icon--students {
+  background-color: #eef3f8;
+  color: #1e3a5f;
+}
+
+/* Évaluations */
+
+.dashboard-panel__icon--evaluations {
+  background-color: #edf4f0;
+  color: #35634d;
+}
+
+/* ==================================================
+   PANEL TITLES
+================================================== */
+
+.dashboard-panel__header h2 {
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 650;
+
+  color: #1f2937;
+}
+
+.dashboard-panel__header p {
+  margin: 5px 0 0;
+
+  font-size: 12px;
+
+  color: #6b7280;
+}
+
+/* ==================================================
+   PANEL LINK
+================================================== */
+
+.dashboard-panel__header a {
+  font-size: 12px;
+
+  color: #1e3a5f;
+
+  text-decoration: none;
+}
+
+.dashboard-panel__header a:hover {
+  text-decoration: underline;
+}
+
+/* ==================================================
+   PANEL CONTENT
+================================================== */
+
+.dashboard-panel__body {
+  min-height: 180px;
+
+  padding: 4px 20px;
+}
+
+/* ==================================================
+   LIST
+================================================== */
+
+.simple-list__item {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.simple-list__item:last-child {
+  border-bottom: none;
+}
+
+.simple-list__item div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.simple-list__item strong {
+  font-size: 13px;
+  font-weight: 550;
+
+  color: #374151;
+}
+
+.simple-list__item span {
+  font-size: 12px;
+
+  color: #6b7280;
+}
+
+/* ==================================================
+   EMPTY STATE
+================================================== */
+
+.empty-state {
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-state__icon {
+  width: 36px;
+  height: 36px;
+
+  margin-bottom: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #f3f4f6;
+
+  border-radius: 5px;
+
+  font-size: 14px;
+
+  color: #9ca3af;
+}
+
+.empty-state p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #9ca3af;
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 1000px) {
+  .dashboard-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .summary-item:nth-child(2) {
+    border-right: none;
+  }
+
+  .summary-item:nth-child(-n + 2) {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+  .admin-sidebar {
+    display: none;
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-main__content {
+    padding: 20px;
+  }
+
+  .admin-header {
+    padding: 0 20px;
+  }
+
+  .account-button__identity {
+    display: none;
+  }
+
+  .dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-item {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .summary-item:last-child {
+    border-bottom: none;
+  }
+}

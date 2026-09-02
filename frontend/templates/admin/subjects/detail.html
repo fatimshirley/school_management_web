@@ -1,0 +1,167 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Détail matière — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/subjects.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+    {% include "admin/layout/header.html" %}
+
+    <div class="admin-layout__body">
+
+        {% include "admin/layout/sidebar.html" %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <div class="subjects-page-heading">
+
+                    <div class="subjects-page-heading__title">
+
+                        <div class="subjects-page-heading__icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+
+                        <div>
+                            <h1>Détail de la matière</h1>
+                            <p>Informations pédagogiques</p>
+                        </div>
+
+                    </div>
+
+                    <div class="subjects-heading-actions">
+
+                        <a
+                            href="{% url 'admin_subject_edit' subject.id %}"
+                            class="subjects-btn subjects-btn--primary"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                            Modifier
+                        </a>
+
+                        <a
+                            href="{% url 'admin_subjects' %}"
+                            class="subjects-btn subjects-btn--secondary"
+                        >
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Retour
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <section class="subject-detail-panel">
+
+                    <div class="subject-profile-header">
+
+                        <div class="subject-profile-icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+
+                        <div>
+                            <h2>{{ subject.nom }}</h2>
+                            <p>
+                                {{ subject.credits|default:"—" }} crédit{{ subject.credits|pluralize }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="subject-detail-grid">
+
+                        <div class="subject-detail-item">
+                            <span class="subject-detail-item__label">
+                                Matière
+                            </span>
+
+                            <span class="subject-detail-item__value">
+                                {{ subject.nom }}
+                            </span>
+                        </div>
+
+                        <div class="subject-detail-item">
+                            <span class="subject-detail-item__label">
+                                Crédits
+                            </span>
+
+                            <span class="subject-detail-item__value">
+                                {{ subject.credits|default:"Non renseigné" }}
+                            </span>
+                        </div>
+
+                        <div class="subject-detail-item">
+                            <span class="subject-detail-item__label">
+                                Semestre
+                            </span>
+
+                            <span class="subject-detail-item__value">
+                                {{ subject.semestre.nom|default:"Non affecté" }}
+                            </span>
+                        </div>
+
+                        <div class="subject-detail-item">
+                            <span class="subject-detail-item__label">
+                                Niveau
+                            </span>
+
+                            <span class="subject-detail-item__value">
+
+                                {% if subject.semestre and subject.semestre.niveau %}
+                                    {{ subject.semestre.niveau.code }}
+                                    — {{ subject.semestre.niveau.nom }}
+                                {% else %}
+                                    Non affecté
+                                {% endif %}
+
+                            </span>
+                        </div>
+
+                        <div class="subject-detail-item subject-detail-item--full">
+
+                            <span class="subject-detail-item__label">
+                                Professeurs
+                            </span>
+
+                            <span class="subject-detail-item__value">
+
+                                {% for teacher in subject.teachers.all %}
+
+                                    {{ teacher.nom }}
+                                    {{ teacher.prenom|default:"" }}{% if not forloop.last %}, {% endif %}
+
+                                {% empty %}
+
+                                    Aucun professeur affecté
+
+                                {% endfor %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            {% include "admin/layout/footer.html" %}
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}

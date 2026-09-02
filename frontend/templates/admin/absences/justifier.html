@@ -1,0 +1,91 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Justifier une
+absence — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/absences.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="absences-page-heading">
+          <div class="absences-page-heading__title">
+            <div class="absences-page-heading__icon">
+              <i class="fa-solid fa-file-circle-check"></i>
+            </div>
+
+            <div>
+              <h1>Justifier une absence</h1>
+              <p>Enregistrer la justification de l'absence</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="absences-form-panel">
+          <div class="absences-form-panel__header">
+            <h2>
+              Absence de {{ absence.student.nom }} {{ absence.student.prenom }}
+            </h2>
+
+            <p>
+              {{ absence.student.matricule }} — {{
+              absence.evaluation.subject.nom }}
+            </p>
+          </div>
+
+          <form method="post" class="absences-form">
+            {% csrf_token %}
+
+            <div class="absences-form-grid">
+              <div class="absences-form-group">
+                <label for="justification"> Justification </label>
+
+                <textarea
+                  id="justification"
+                  name="justification"
+                  rows="5"
+                  placeholder="Saisir le motif de la justification..."
+                ></textarea>
+              </div>
+
+              <div class="absences-form-group">
+                <label for="date_justification"> Date de justification </label>
+
+                <input
+                  type="date"
+                  id="date_justification"
+                  name="date_justification"
+                />
+              </div>
+            </div>
+
+            <div class="absences-form-actions">
+              <a
+                href="{% url 'admin_absences' %}"
+                class="absences-btn absences-btn--secondary"
+              >
+                <i class="fa-solid fa-arrow-left"></i>
+                Annuler
+              </a>
+
+              <button type="submit" class="absences-btn absences-btn--primary">
+                <i class="fa-solid fa-check"></i>
+                Valider la justification
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

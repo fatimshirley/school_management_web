@@ -1,0 +1,146 @@
+<aside class="admin-sidebar">
+  <nav class="admin-sidebar__nav">
+    <!-- ==================================================
+             PRINCIPAL
+        ================================================== -->
+
+    <div class="admin-sidebar__section">
+      <span class="admin-sidebar__section-title"> PRINCIPAL </span>
+
+      <a
+        href="{% url 'admin_dashboard' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_dashboard' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Tableau de bord</span>
+      </a>
+    </div>
+
+    <!-- ==================================================
+             GESTION
+        ================================================== -->
+
+    <div class="admin-sidebar__section">
+      <span class="admin-sidebar__section-title"> GESTION </span>
+
+      <!-- ÉTUDIANTS -->
+
+      <a
+        href="{% url 'admin_students' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_students' or request.resolver_match.url_name == 'admin_student_add' or request.resolver_match.url_name == 'admin_student_detail' or request.resolver_match.url_name == 'admin_student_edit' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-user-graduate"></i>
+        <span>Étudiants</span>
+      </a>
+
+      <!-- PROFESSEURS -->
+
+      <a
+        href="{% url 'admin_teachers' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_teachers' or request.resolver_match.url_name == 'admin_teacher_add' or request.resolver_match.url_name == 'admin_teacher_detail' or request.resolver_match.url_name == 'admin_teacher_edit' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span>Professeurs</span>
+      </a>
+
+      <!-- MATIÈRES -->
+
+      <a
+        href="{% url 'admin_subjects' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_subjects' or request.resolver_match.url_name == 'admin_subject_add' or request.resolver_match.url_name == 'admin_subject_detail' or request.resolver_match.url_name == 'admin_subject_edit' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-book"></i>
+        <span>Matières</span>
+      </a>
+
+      <!-- NOTES -->
+
+      <a
+        href="{% url 'admin_grades' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_grades' or request.resolver_match.url_name == 'admin_grade_add' or request.resolver_match.url_name == 'admin_grade_history' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-clipboard-check"></i>
+        <span>Notes</span>
+      </a>
+
+      <!-- ABSENCES -->
+
+      <a
+        href="{% url 'admin_absences' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_absences' or request.resolver_match.url_name == 'admin_absence_add' or request.resolver_match.url_name == 'admin_absence_justify' or request.resolver_match.url_name == 'admin_absence_makeup' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-calendar-xmark"></i>
+        <span>Absences</span>
+      </a>
+    </div>
+
+    <!-- ==================================================
+             ACADÉMIQUE
+        ================================================== -->
+
+    <div class="admin-sidebar__section">
+      <span class="admin-sidebar__section-title"> ACADÉMIQUE </span>
+
+      <!-- FILIÈRES -->
+
+      <a
+        href="{% url 'admin_filieres' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_filieres' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Filières</span>
+      </a>
+
+      <!-- NIVEAUX -->
+
+      <a
+        href="{% url 'admin_niveaux' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_niveaux' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Niveaux</span>
+      </a>
+
+      <!-- SEMESTRES -->
+
+      <a
+        href="{% url 'admin_semestres' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_semestres' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Semestres</span>
+      </a>
+
+      <!-- ANNÉES UNIVERSITAIRES -->
+
+      <a
+        href="{% url 'admin_annees' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_annees' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-calendar"></i>
+        <span>Années universitaires</span>
+      </a>
+
+      <!-- ARRIÉRÉS -->
+
+      <a
+        href="{% url 'admin_arrieres' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'admin_arrieres' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Arriérés</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ==================================================
+         DÉCONNEXION
+    ================================================== -->
+
+  <div class="admin-sidebar__bottom">
+    <a href="{% url 'deconnexion' %}" class="admin-sidebar__logout">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Déconnexion</span>
+    </a>
+  </div>
+</aside>

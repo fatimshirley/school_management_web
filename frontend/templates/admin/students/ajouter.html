@@ -1,0 +1,248 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}
+Ajouter un étudiant — Administration
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/students.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="admin-layout">
+
+    {% include "admin/layout/header.html" %}
+
+    <div class="admin-layout__body">
+
+        {% include "admin/layout/sidebar.html" %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <div class="students-page-heading">
+
+                    <div class="students-page-heading__title">
+
+                        <div class="students-page-heading__icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+
+                        <div>
+
+                            <h1>
+                                Ajouter un étudiant
+                            </h1>
+
+                            <p>
+                                Enregistrer un nouvel étudiant
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <section class="students-form-panel">
+
+                    <div class="students-form-panel__header">
+
+                        <h2>
+                            Informations de l'étudiant
+                        </h2>
+
+                        <p>
+                            Les champs marqués d'un astérisque sont obligatoires.
+                        </p>
+
+                    </div>
+
+
+                    {% if error %}
+
+                    <div class="students-message students-message--error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+
+                    {% endif %}
+
+
+                    <form
+                        method="post"
+                        class="students-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <div class="students-form-grid">
+
+                            <div class="students-form-group">
+
+                                <label for="matricule">
+                                    Matricule *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="matricule"
+                                    name="matricule"
+                                    value="{{ request.POST.matricule|default:'' }}"
+                                    placeholder="Ex. ETU2026001"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="students-form-group">
+
+                                <label for="age">
+                                    Âge *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="age"
+                                    name="age"
+                                    value="{{ request.POST.age|default:'' }}"
+                                    min="1"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="students-form-group">
+
+                                <label for="nom">
+                                    Nom *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nom"
+                                    name="nom"
+                                    value="{{ request.POST.nom|default:'' }}"
+                                    placeholder="Nom de famille"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="students-form-group">
+
+                                <label for="prenom">
+                                    Prénom *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="prenom"
+                                    name="prenom"
+                                    value="{{ request.POST.prenom|default:'' }}"
+                                    placeholder="Prénom"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="students-form-group">
+
+                                <label for="niveau">
+                                    Niveau *
+                                </label>
+
+                                <select
+                                    id="niveau"
+                                    name="niveau"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Sélectionner un niveau
+                                    </option>
+
+                                    {% for niveau in niveaux %}
+
+                                    <option
+                                        value="{{ niveau.id }}"
+                                        {% if request.POST.niveau == niveau.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ niveau.code }} — {{ niveau.nom }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="students-form-actions">
+
+                            <a
+                                href="{% url 'admin_students' %}"
+                                class="students-btn students-btn--secondary"
+                            >
+                                <i class="fa-solid fa-arrow-left"></i>
+                                Annuler
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="students-btn students-btn--primary"
+                            >
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Enregistrer
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+            {% include "admin/layout/footer.html" %}
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}

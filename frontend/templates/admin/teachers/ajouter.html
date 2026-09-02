@@ -1,0 +1,108 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Ajouter un
+professeur — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/teachers.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="teachers-page-heading">
+          <div class="teachers-page-heading__title">
+            <div class="teachers-page-heading__icon">
+              <i class="fa-solid fa-user-plus"></i>
+            </div>
+
+            <div>
+              <h1>Ajouter un professeur</h1>
+              <p>Enregistrer un nouveau professeur</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="teachers-form-panel">
+          <div class="teachers-form-panel__header">
+            <h2>Informations du professeur</h2>
+
+            <p>Les champs marqués d'un astérisque sont obligatoires.</p>
+          </div>
+
+          {% if error %}
+          <div class="teachers-message teachers-message--error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>{{ error }}</span>
+          </div>
+          {% endif %}
+
+          <form method="post" class="teachers-form">
+            {% csrf_token %}
+
+            <div class="teachers-form-grid">
+              <div class="teachers-form-group">
+                <label for="identifiant"> Identifiant * </label>
+
+                <input
+                  type="text"
+                  id="identifiant"
+                  name="identifiant"
+                  value="{{ request.POST.identifiant|default:'' }}"
+                  placeholder="Ex. ENS2026001"
+                  required
+                />
+              </div>
+
+              <div class="teachers-form-group">
+                <label for="nom"> Nom * </label>
+
+                <input
+                  type="text"
+                  id="nom"
+                  name="nom"
+                  value="{{ request.POST.nom|default:'' }}"
+                  required
+                />
+              </div>
+
+              <div class="teachers-form-group">
+                <label for="prenom"> Prénom </label>
+
+                <input
+                  type="text"
+                  id="prenom"
+                  name="prenom"
+                  value="{{ request.POST.prenom|default:'' }}"
+                />
+              </div>
+            </div>
+
+            <div class="teachers-form-actions">
+              <a
+                href="{% url 'admin_teachers' %}"
+                class="teachers-btn teachers-btn--secondary"
+              >
+                <i class="fa-solid fa-arrow-left"></i>
+                Annuler
+              </a>
+
+              <button type="submit" class="teachers-btn teachers-btn--primary">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Enregistrer
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

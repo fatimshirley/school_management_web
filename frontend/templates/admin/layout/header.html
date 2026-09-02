@@ -1,0 +1,80 @@
+<header class="admin-header">
+  <div class="admin-header__brand">
+    <span class="admin-header__title"> SCHOOL MANAGEMENT </span>
+
+    <span class="admin-header__section"> Administration </span>
+  </div>
+
+  <div class="admin-header__account">
+    <button
+      type="button"
+      class="account-button"
+      id="accountButton"
+      aria-expanded="false"
+      aria-controls="accountMenu"
+    >
+      <span class="account-button__icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
+        </svg>
+      </span>
+
+      <span class="account-button__identity">
+        <strong>
+          {{ request.user.get_full_name|default:request.user.username }}
+        </strong>
+
+        <small> Administrateur </small>
+      </span>
+
+      <span class="account-button__arrow">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </span>
+    </button>
+
+    <div class="account-menu" id="accountMenu" hidden>
+      <div class="account-menu__identity">
+        <strong>
+          {{ request.user.get_full_name|default:request.user.username }}
+        </strong>
+
+        <span> Administrateur </span>
+      </div>
+
+      <div class="account-menu__separator"></div>
+
+      <a href="#"> Mon profil </a>
+
+      <a href="#"> Paramètres </a>
+
+      <div class="account-menu__separator"></div>
+
+      <a href="{% url 'deconnexion' %}" class="account-menu__logout">
+        Déconnexion
+      </a>
+    </div>
+  </div>
+</header>

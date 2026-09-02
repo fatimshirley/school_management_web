@@ -1,0 +1,194 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Ajouter une matière — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/subjects.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+    {% include "admin/layout/header.html" %}
+
+    <div class="admin-layout__body">
+
+        {% include "admin/layout/sidebar.html" %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <div class="subjects-page-heading">
+
+                    <div class="subjects-page-heading__title">
+
+                        <div class="subjects-page-heading__icon">
+                            <i class="fa-solid fa-book-medical"></i>
+                        </div>
+
+                        <div>
+                            <h1>Ajouter une matière</h1>
+                            <p>Enregistrer une nouvelle matière</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <section class="subjects-form-panel">
+
+                    <div class="subjects-form-panel__header">
+
+                        <h2>Informations de la matière</h2>
+
+                        <p>
+                            Renseignez les informations pédagogiques.
+                        </p>
+
+                    </div>
+
+                    {% if error %}
+                    <div class="subjects-message subjects-message--error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="subjects-form">
+
+                        {% csrf_token %}
+
+                        <div class="subjects-form-grid">
+
+                            <div class="subjects-form-group">
+
+                                <label for="nom">
+                                    Nom de la matière *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nom"
+                                    name="nom"
+                                    value="{{ request.POST.nom|default:'' }}"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="subjects-form-group">
+
+                                <label for="credits">
+                                    Crédits
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="credits"
+                                    name="credits"
+                                    value="{{ request.POST.credits|default:'' }}"
+                                    min="1"
+                                >
+
+                            </div>
+
+                            <div class="subjects-form-group">
+
+                                <label for="semestre">
+                                    Semestre
+                                </label>
+
+                                <select id="semestre" name="semestre">
+
+                                    <option value="">
+                                        Sélectionner un semestre
+                                    </option>
+
+                                    {% for semestre in semestres %}
+
+                                    <option
+                                        value="{{ semestre.id }}"
+                                        {% if request.POST.semestre == semestre.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ semestre.niveau.code }} — {{ semestre.nom }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+                            <div class="subjects-form-group subjects-form-group--full">
+
+                                <label for="teachers">
+                                    Professeurs
+                                </label>
+
+                                <select
+                                    id="teachers"
+                                    name="teachers"
+                                    multiple
+                                >
+
+                                    {% for teacher in teachers %}
+
+                                    <option value="{{ teacher.id }}">
+                                        {{ teacher.nom }} {{ teacher.prenom|default:"" }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <small>
+                                    Maintenez Ctrl pour sélectionner plusieurs professeurs.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="subjects-form-actions">
+
+                            <a
+                                href="{% url 'admin_subjects' %}"
+                                class="subjects-btn subjects-btn--secondary"
+                            >
+                                <i class="fa-solid fa-arrow-left"></i>
+                                Annuler
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="subjects-btn subjects-btn--primary"
+                            >
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Enregistrer
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+            {% include "admin/layout/footer.html" %}
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}

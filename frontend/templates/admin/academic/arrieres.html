@@ -1,0 +1,109 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Arriérés —
+Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div class="academic-page-heading__icon">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+
+            <div>
+              <h1>Arriérés</h1>
+              <p>Suivi des crédits et matières en arriéré</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="academic-panel">
+          <div class="academic-panel__header">
+            <h2>Liste des arriérés</h2>
+
+            <p>Suivi des matières non validées</p>
+          </div>
+
+          {% if arrieres %}
+
+          <div class="academic-table-wrapper">
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Matricule</th>
+                  <th>Étudiant</th>
+                  <th>Matière</th>
+                  <th>Crédits</th>
+                  <th>Statut</th>
+                  <th>Date de validation</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for arriere in arrieres %}
+
+                <tr>
+                  <td>{{ arriere.progression.student.matricule }}</td>
+
+                  <td>
+                    {{ arriere.progression.student.nom }} {{
+                    arriere.progression.student.prenom }}
+                  </td>
+
+                  <td>{{ arriere.subject.nom }}</td>
+
+                  <td>{{ arriere.credits }}</td>
+
+                  <td>
+                    {% if arriere.statut == "valide" %}
+
+                    <span class="academic-status academic-status--active">
+                      Validé
+                    </span>
+
+                    {% else %}
+
+                    <span class="academic-status academic-status--inactive">
+                      Non validé
+                    </span>
+
+                    {% endif %}
+                  </td>
+
+                  <td>
+                    {{ arriere.date_validation|date:"d/m/Y"|default:"—" }}
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+
+          <div class="academic-empty">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <p>Aucun arriéré enregistré.</p>
+          </div>
+
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

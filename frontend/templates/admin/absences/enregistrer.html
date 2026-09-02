@@ -1,0 +1,117 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Enregistrer
+une absence — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/absences.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="absences-page-heading">
+          <div class="absences-page-heading__title">
+            <div class="absences-page-heading__icon">
+              <i class="fa-solid fa-calendar-plus"></i>
+            </div>
+
+            <div>
+              <h1>Enregistrer une absence</h1>
+              <p>Déclarer l'absence d'un étudiant</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="absences-form-panel">
+          <div class="absences-form-panel__header">
+            <h2>Informations de l'absence</h2>
+            <p>Renseignez les informations de l'évaluation concernée.</p>
+          </div>
+
+          {% if error %}
+          <div class="absences-message absences-message--error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>{{ error }}</span>
+          </div>
+          {% endif %}
+
+          <form method="post" class="absences-form">
+            {% csrf_token %}
+
+            <div class="absences-form-grid">
+              <div class="absences-form-group">
+                <label for="student"> Étudiant * </label>
+
+                <select id="student" name="student" required>
+                  <option value="">Sélectionner un étudiant</option>
+
+                  {% for student in students %}
+
+                  <option value="{{ student.id }}">
+                    {{ student.matricule }} — {{ student.nom }} {{
+                    student.prenom }}
+                  </option>
+
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="absences-form-group">
+                <label for="evaluation"> Évaluation * </label>
+
+                <select id="evaluation" name="evaluation" required>
+                  <option value="">Sélectionner une évaluation</option>
+
+                  {% for evaluation in evaluations %}
+
+                  <option value="{{ evaluation.id }}">
+                    {{ evaluation.subject.nom }} — {{
+                    evaluation.get_type_evaluation_display }} — {{
+                    evaluation.date|date:"d/m/Y" }}
+                  </option>
+
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="absences-form-group">
+                <label for="date_absence"> Date de l'absence * </label>
+
+                <input
+                  type="date"
+                  id="date_absence"
+                  name="date_absence"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="absences-form-actions">
+              <a
+                href="{% url 'admin_absences' %}"
+                class="absences-btn absences-btn--secondary"
+              >
+                <i class="fa-solid fa-arrow-left"></i>
+                Annuler
+              </a>
+
+              <button type="submit" class="absences-btn absences-btn--primary">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Enregistrer
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

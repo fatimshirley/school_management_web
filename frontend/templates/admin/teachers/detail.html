@@ -1,0 +1,105 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Détail
+professeur — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/teachers.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="teachers-page-heading">
+          <div class="teachers-page-heading__title">
+            <div class="teachers-page-heading__icon">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+
+            <div>
+              <h1>Détail du professeur</h1>
+              <p>Informations du professeur</p>
+            </div>
+          </div>
+
+          <div class="teachers-heading-actions">
+            <a
+              href="{% url 'admin_teacher_edit' teacher.id %}"
+              class="teachers-btn teachers-btn--primary"
+            >
+              <i class="fa-solid fa-pen"></i>
+              Modifier
+            </a>
+
+            <a
+              href="{% url 'admin_teachers' %}"
+              class="teachers-btn teachers-btn--secondary"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              Retour
+            </a>
+          </div>
+        </div>
+
+        <section class="teacher-detail-panel">
+          <div class="teacher-profile-header">
+            <div class="teacher-profile-icon">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+
+            <div>
+              <h2>{{ teacher.nom }} {{ teacher.prenom|default:"" }}</h2>
+
+              <p>{{ teacher.identifiant }}</p>
+            </div>
+          </div>
+
+          <div class="teacher-detail-grid">
+            <div class="teacher-detail-item">
+              <span class="teacher-detail-item__label"> Identifiant </span>
+
+              <span class="teacher-detail-item__value">
+                {{ teacher.identifiant }}
+              </span>
+            </div>
+
+            <div class="teacher-detail-item">
+              <span class="teacher-detail-item__label"> Nom </span>
+
+              <span class="teacher-detail-item__value">
+                {{ teacher.nom }}
+              </span>
+            </div>
+
+            <div class="teacher-detail-item">
+              <span class="teacher-detail-item__label"> Prénom </span>
+
+              <span class="teacher-detail-item__value">
+                {{ teacher.prenom|default:"Non renseigné" }}
+              </span>
+            </div>
+
+            <div class="teacher-detail-item">
+              <span class="teacher-detail-item__label">
+                Compte utilisateur
+              </span>
+
+              <span class="teacher-detail-item__value">
+                {% if teacher.user %} {{ teacher.user.username }} {% else %}
+                Aucun compte associé {% endif %}
+              </span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

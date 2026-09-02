@@ -1,0 +1,170 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Notes — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/grades.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+    {% include "admin/layout/header.html" %}
+
+    <div class="admin-layout__body">
+
+        {% include "admin/layout/sidebar.html" %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <div class="grades-page-heading">
+
+                    <div class="grades-page-heading__title">
+
+                        <div class="grades-page-heading__icon">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+
+                        <div>
+                            <h1>Notes</h1>
+                            <p>Gestion des notes et évaluations</p>
+                        </div>
+
+                    </div>
+
+                    <div class="grades-heading-actions">
+
+                        <a
+                            href="{% url 'admin_grade_history' %}"
+                            class="grades-btn grades-btn--secondary"
+                        >
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            Historique
+                        </a>
+
+                        <a
+                            href="{% url 'admin_grade_add' %}"
+                            class="grades-btn grades-btn--primary"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Saisir une note
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <section class="grades-panel">
+
+                    <div class="grades-panel__header">
+                        <h2>Liste des notes</h2>
+                        <p>Notes enregistrées dans le système</p>
+                    </div>
+
+                    {% if grades %}
+
+                    <div class="grades-table-wrapper">
+
+                        <table class="grades-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Matricule</th>
+                                    <th>Étudiant</th>
+                                    <th>Matière</th>
+                                    <th>Évaluation</th>
+                                    <th>Session</th>
+                                    <th>Année</th>
+                                    <th>Note</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for grade in grades %}
+
+                                <tr>
+
+                                    <td>{{ grade.student.matricule }}</td>
+
+                                    <td>
+                                        {{ grade.student.nom }}
+                                        {{ grade.student.prenom }}
+                                    </td>
+
+                                    <td>
+                                        {{ grade.evaluation.subject.nom }}
+                                    </td>
+
+                                    <td>
+                                        {{ grade.evaluation.get_type_evaluation_display }}
+                                    </td>
+
+                                    <td>
+                                        Session {{ grade.evaluation.session }}
+                                    </td>
+
+                                    <td>
+                                        {{ grade.evaluation.annee_universitaire.libelle }}
+                                    </td>
+
+                                    <td>
+                                        <strong>{{ grade.note }}/20</strong>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="grades-empty">
+
+                        <div class="grades-empty__icon">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+
+                        <h3>Aucune note</h3>
+
+                        <p>Aucune note n'est actuellement enregistrée.</p>
+
+                        <a
+                            href="{% url 'admin_grade_add' %}"
+                            class="grades-btn grades-btn--primary"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Saisir une note
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                </section>
+
+            </div>
+
+            {% include "admin/layout/footer.html" %}
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}

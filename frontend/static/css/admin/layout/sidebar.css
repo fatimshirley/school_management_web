@@ -1,0 +1,225 @@
+/* ==================================================
+   SIDEBAR ADMINISTRATION
+================================================== */
+
+.admin-sidebar {
+  width: 235px;
+
+  height: calc(100vh - 72px);
+
+  position: fixed;
+
+  left: 0;
+
+  top: 72px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  background-color: #ffffff;
+
+  border-right: 1px solid #e5e7eb;
+
+  overflow-y: auto;
+
+  z-index: 900;
+}
+
+/* --------------------------------------------------
+   NAVIGATION
+-------------------------------------------------- */
+
+.admin-sidebar__nav {
+  padding: 24px 14px;
+}
+
+.admin-sidebar__section {
+  margin-bottom: 28px;
+}
+
+.admin-sidebar__section-title {
+  display: block;
+
+  padding: 0 12px;
+
+  margin-bottom: 8px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+  color: #9ca3af;
+}
+
+/* --------------------------------------------------
+   LIENS
+-------------------------------------------------- */
+
+.admin-sidebar__link {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+
+  padding: 9px 12px;
+
+  margin-bottom: 2px;
+
+  color: #4b5563;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.admin-sidebar__link i {
+  width: 17px;
+
+  flex-shrink: 0;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  color: #7b8794;
+}
+
+.admin-sidebar__link span {
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------
+   HOVER
+-------------------------------------------------- */
+
+.admin-sidebar__link:hover {
+  background-color: #f3f4f6;
+
+  color: #1e3a5f;
+}
+
+.admin-sidebar__link:hover i {
+  color: #1e3a5f;
+}
+
+/* --------------------------------------------------
+   PAGE ACTIVE
+-------------------------------------------------- */
+
+.admin-sidebar__link.active {
+  background-color: #eef2f7;
+
+  color: #1e3a5f;
+
+  font-weight: 600;
+}
+
+.admin-sidebar__link.active i {
+  color: #1e3a5f;
+}
+
+/* --------------------------------------------------
+   ZONE BASSE
+-------------------------------------------------- */
+
+.admin-sidebar__bottom {
+  padding: 16px 14px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+/* --------------------------------------------------
+   DÉCONNEXION
+-------------------------------------------------- */
+
+.admin-sidebar__logout {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+
+  padding: 9px 12px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.admin-sidebar__logout i {
+  width: 17px;
+
+  flex-shrink: 0;
+
+  text-align: center;
+
+  font-size: 13px;
+}
+
+.admin-sidebar__logout:hover {
+  background-color: #f8f9fa;
+
+  color: #b42318;
+}
+
+.admin-sidebar__logout:hover i {
+  color: #b42318;
+}
+
+/* --------------------------------------------------
+   SCROLLBAR
+-------------------------------------------------- */
+
+.admin-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+
+  border-radius: 3px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    width: 210px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-sidebar {
+    width: 190px;
+  }
+}

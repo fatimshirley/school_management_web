@@ -1,0 +1,151 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Professeurs —
+Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/teachers.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="teachers-page-heading">
+          <div class="teachers-page-heading__title">
+            <div class="teachers-page-heading__icon">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+
+            <div>
+              <h1>Professeurs</h1>
+              <p>Gestion des professeurs de l'établissement</p>
+            </div>
+          </div>
+
+          <a
+            href="{% url 'admin_teacher_add' %}"
+            class="teachers-btn teachers-btn--primary"
+          >
+            <i class="fa-solid fa-user-plus"></i>
+            Ajouter un professeur
+          </a>
+        </div>
+
+        <section class="teachers-panel">
+          <div class="teachers-panel__header">
+            <div>
+              <h2>Liste des professeurs</h2>
+              <p>
+                {{ teachers|length }} professeur{{ teachers|length|pluralize }}
+                enregistré{{ teachers|length|pluralize }}
+              </p>
+            </div>
+          </div>
+
+          {% if teachers %}
+
+          <div class="teachers-table-wrapper">
+            <table class="teachers-table">
+              <thead>
+                <tr>
+                  <th>Identifiant</th>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for teacher in teachers %}
+
+                <tr>
+                  <td>
+                    <span class="teacher-identifiant">
+                      {{ teacher.identifiant }}
+                    </span>
+                  </td>
+
+                  <td>{{ teacher.nom }}</td>
+
+                  <td>{{ teacher.prenom|default:"—" }}</td>
+
+                  <td>
+                    <div class="teacher-actions">
+                      <a
+                        href="{% url 'admin_teacher_detail' teacher.id %}"
+                        class="teacher-action"
+                        title="Voir"
+                      >
+                        <i class="fa-solid fa-eye"></i>
+                      </a>
+
+                      <a
+                        href="{% url 'admin_teacher_edit' teacher.id %}"
+                        class="teacher-action"
+                        title="Modifier"
+                      >
+                        <i class="fa-solid fa-pen"></i>
+                      </a>
+
+                      <form
+                        method="post"
+                        action="{% url 'admin_teacher_delete' teacher.id %}"
+                      >
+                        {% csrf_token %}
+
+                        <button
+                          type="submit"
+                          class="teacher-action teacher-action--danger"
+                          title="Supprimer"
+                          onclick="
+                            return confirm(
+                              'Voulez-vous vraiment supprimer ce professeur ?',
+                            );
+                          "
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+
+          <div class="teachers-empty">
+            <div class="teachers-empty__icon">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+
+            <h3>Aucun professeur</h3>
+
+            <p>Aucun professeur n'est actuellement enregistré.</p>
+
+            <a
+              href="{% url 'admin_teacher_add' %}"
+              class="teachers-btn teachers-btn--primary"
+            >
+              <i class="fa-solid fa-user-plus"></i>
+              Ajouter un professeur
+            </a>
+          </div>
+
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,409 @@
+/* ==================================================
+   PAGE ABSENCES
+================================================== */
+
+.absences-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.absences-page-heading__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.absences-page-heading__icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f0e8;
+  color: #8a6826;
+  border-radius: 6px;
+  font-size: 17px;
+}
+
+.absences-page-heading h1 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 650;
+  color: #1f2937;
+}
+
+.absences-page-heading p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ==================================================
+   BOUTONS
+================================================== */
+
+.absences-btn {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.absences-btn--primary {
+  background-color: #1e3a5f;
+  border-color: #1e3a5f;
+  color: #ffffff;
+}
+
+.absences-btn--primary:hover {
+  background-color: #172f4d;
+  border-color: #172f4d;
+}
+
+.absences-btn--secondary {
+  background-color: #ffffff;
+  border-color: #d1d5db;
+  color: #4b5563;
+}
+
+.absences-btn--secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #bfc5cc;
+}
+
+/* ==================================================
+   PANNEAU
+================================================== */
+
+.absences-panel {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.absences-panel__header {
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.absences-panel__header h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: #1f2937;
+}
+
+.absences-panel__header p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ==================================================
+   TABLEAU
+================================================== */
+
+.absences-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.absences-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.absences-table thead {
+  background-color: #f8f9fa;
+}
+
+.absences-table th {
+  padding: 12px 18px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.absences-table td {
+  padding: 14px 18px;
+  color: #374151;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.absences-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.absences-table tbody tr:hover {
+  background-color: #fafbfc;
+}
+
+/* ==================================================
+   STATUTS
+================================================== */
+
+.absence-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.absence-status--justified {
+  background-color: #edf4f0;
+  color: #35634d;
+}
+
+.absence-status--unjustified {
+  background-color: #fdf0ef;
+  color: #9f2d24;
+}
+
+.absence-status--done {
+  background-color: #edf4f0;
+  color: #35634d;
+}
+
+.absence-status--pending {
+  background-color: #f5f0e8;
+  color: #8a6826;
+}
+
+/* ==================================================
+   ACTIONS
+================================================== */
+
+.absence-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.absence-action {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e1e5e9;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #667085;
+  font-size: 12px;
+  text-decoration: none;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.absence-action:hover {
+  background-color: #f3f5f7;
+  border-color: #d5dbe1;
+  color: #1e3a5f;
+}
+
+/* ==================================================
+   FORMULAIRE
+================================================== */
+
+.absences-form-panel {
+  width: 100%;
+  max-width: 700px;
+  margin: 30px auto 0;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.absences-form-panel__header {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.absences-form-panel__header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  color: #1f2937;
+}
+
+.absences-form-panel__header p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.absences-form {
+  width: 100%;
+  padding: 22px 20px;
+}
+
+.absences-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.absences-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.absences-form-group label {
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.absences-form-group input,
+.absences-form-group select,
+.absences-form-group textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 11px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  color: #1f2937;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.absences-form-group input:focus,
+.absences-form-group select:focus,
+.absences-form-group textarea:focus {
+  border-color: #1e3a5f;
+  box-shadow: 0 0 0 2px rgba(30, 58, 95, 0.08);
+}
+
+.absences-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #eeeeee;
+}
+
+/* ==================================================
+   MESSAGE
+================================================== */
+
+.absences-message {
+  margin: 18px 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 13px;
+  border: 1px solid;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.absences-message--error {
+  background-color: #fdf0ef;
+  border-color: #e6c2bd;
+  color: #9f2d24;
+}
+
+/* ==================================================
+   ÉTAT VIDE
+================================================== */
+
+.absences-empty {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.absences-empty__icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  background-color: #f5f0e8;
+  color: #8a6826;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.absences-empty h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  color: #374151;
+}
+
+.absences-empty p {
+  margin: 6px 0 18px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 800px) {
+  .absences-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .absences-form-panel {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .absences-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .absences-form-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}

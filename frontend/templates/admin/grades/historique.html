@@ -1,0 +1,103 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Historique des
+notes — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/grades.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="grades-page-heading">
+          <div class="grades-page-heading__title">
+            <div class="grades-page-heading__icon">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+
+            <div>
+              <h1>Historique des notes</h1>
+              <p>Historique chronologique des résultats</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="grades-panel">
+          <div class="grades-panel__header">
+            <h2>Historique</h2>
+
+            <p>Ensemble des notes enregistrées</p>
+          </div>
+
+          {% if grades %}
+
+          <div class="grades-table-wrapper">
+            <table class="grades-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Étudiant</th>
+                  <th>Matière</th>
+                  <th>Évaluation</th>
+                  <th>Session</th>
+                  <th>Année</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for grade in grades %}
+
+                <tr>
+                  <td>{{ grade.evaluation.date|date:"d/m/Y" }}</td>
+
+                  <td>
+                    {{ grade.student.matricule }} — {{ grade.student.nom }} {{
+                    grade.student.prenom }}
+                  </td>
+
+                  <td>{{ grade.evaluation.subject.nom }}</td>
+
+                  <td>{{ grade.evaluation.get_type_evaluation_display }}</td>
+
+                  <td>Session {{ grade.evaluation.session }}</td>
+
+                  <td>{{ grade.evaluation.annee_universitaire.libelle }}</td>
+
+                  <td>
+                    <strong>{{ grade.note }}/20</strong>
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+
+          <div class="grades-empty">
+            <div class="grades-empty__icon">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+
+            <h3>Aucun historique</h3>
+
+            <p>Aucune note n'est actuellement enregistrée.</p>
+          </div>
+
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

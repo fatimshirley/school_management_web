@@ -1,0 +1,205 @@
+{% extends "base/base.html" %} {% load static %} {% block title %} Tableau de
+bord — Administration {% endblock %} {% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/dashboard.css' %}" />
+
+{% endblock %} {% block content %}
+
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <!-- PAGE HEADING -->
+        <div class="page-heading">
+          <div>
+            <h1>Tableau de bord</h1>
+            <p>Vue générale de l'établissement</p>
+          </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <section class="dashboard-summary">
+          <!-- ÉTUDIANTS -->
+          <div class="summary-item">
+            <div class="summary-item__icon summary-item__icon--students">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div class="summary-item__content">
+              <span class="summary-item__label"> Étudiants </span>
+
+              <strong class="summary-item__value">
+                {{ total_students|default:"0" }}
+              </strong>
+            </div>
+          </div>
+
+          <!-- PROFESSEURS -->
+          <div class="summary-item">
+            <div class="summary-item__icon summary-item__icon--teachers">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+
+            <div class="summary-item__content">
+              <span class="summary-item__label"> Professeurs </span>
+
+              <strong class="summary-item__value">
+                {{ total_teachers|default:"0" }}
+              </strong>
+            </div>
+          </div>
+
+          <!-- MATIÈRES -->
+          <div class="summary-item">
+            <div class="summary-item__icon summary-item__icon--subjects">
+              <i class="fa-solid fa-book"></i>
+            </div>
+
+            <div class="summary-item__content">
+              <span class="summary-item__label"> Matières </span>
+
+              <strong class="summary-item__value">
+                {{ total_subjects|default:"0" }}
+              </strong>
+            </div>
+          </div>
+
+          <!-- ABSENCES -->
+          <div class="summary-item">
+            <div class="summary-item__icon summary-item__icon--absences">
+              <i class="fa-solid fa-calendar-xmark"></i>
+            </div>
+
+            <div class="summary-item__content">
+              <span class="summary-item__label"> Absences </span>
+
+              <strong class="summary-item__value">
+                {{ total_absences|default:"0" }}
+              </strong>
+            </div>
+          </div>
+        </section>
+
+        <!-- DASHBOARD GRID -->
+        <section class="dashboard-grid">
+          <!-- DERNIÈRES INSCRIPTIONS -->
+          <div class="dashboard-panel">
+            <div class="dashboard-panel__header">
+              <div class="dashboard-panel__title">
+                <div
+                  class="dashboard-panel__icon dashboard-panel__icon--students"
+                >
+                  <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <div>
+                  <h2>Dernières inscriptions</h2>
+
+                  <p>Les étudiants récemment enregistrés</p>
+                </div>
+              </div>
+
+              <a href="#"> Voir tout </a>
+            </div>
+
+            <div class="dashboard-panel__body">
+              {% if recent_students %}
+
+              <div class="simple-list">
+                {% for student in recent_students %}
+
+                <div class="simple-list__item">
+                  <div>
+                    <strong> {{ student.nom }} {{ student.prenom }} </strong>
+
+                    <span> {{ student.matricule }} </span>
+                  </div>
+
+                  <span> {{ student.niveau.code|default:"—" }} </span>
+                </div>
+
+                {% endfor %}
+              </div>
+
+              {% else %}
+
+              <div class="empty-state">
+                <div class="empty-state__icon">
+                  <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <p>Aucune inscription récente.</p>
+              </div>
+
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- ÉVALUATIONS RÉCENTES -->
+          <div class="dashboard-panel">
+            <div class="dashboard-panel__header">
+              <div class="dashboard-panel__title">
+                <div
+                  class="dashboard-panel__icon dashboard-panel__icon--evaluations"
+                >
+                  <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+
+                <div>
+                  <h2>Évaluations récentes</h2>
+
+                  <p>Dernières évaluations enregistrées</p>
+                </div>
+              </div>
+
+              <a href="#"> Voir tout </a>
+            </div>
+
+            <div class="dashboard-panel__body">
+              {% if recent_evaluations %}
+
+              <div class="simple-list">
+                {% for evaluation in recent_evaluations %}
+
+                <div class="simple-list__item">
+                  <div>
+                    <strong> {{ evaluation.subject.nom }} </strong>
+
+                    <span> {{ evaluation.get_type_evaluation_display }} </span>
+                  </div>
+
+                  <span> Session {{ evaluation.session }} </span>
+                </div>
+
+                {% endfor %}
+              </div>
+
+              {% else %}
+
+              <div class="empty-state">
+                <div class="empty-state__icon">
+                  <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+
+                <p>Aucune évaluation récente.</p>
+              </div>
+
+              {% endif %}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}
