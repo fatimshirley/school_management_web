@@ -179,6 +179,24 @@ urlpatterns = [
     ),
 
     path(
+        'admin/absences/<int:absence_id>/',
+        views.admin_absence_detail,
+        name='admin_absence_detail'
+    ),
+
+    path(
+        'admin/absences/<int:absence_id>/modifier/',
+        views.admin_absence_edit,
+        name='admin_absence_edit'
+    ),
+
+    path(
+        'admin/absences/<int:absence_id>/supprimer/',
+        views.admin_absence_delete,
+        name='admin_absence_delete'
+    ),
+
+    path(
         'admin/absences/<int:absence_id>/justifier/',
         views.admin_absence_justify,
         name='admin_absence_justify'
@@ -192,7 +210,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # GESTION ACADÉMIQUE
+    # FILIÈRES
     # ==================================================
 
     path(
@@ -202,10 +220,32 @@ urlpatterns = [
     ),
 
     path(
+        'admin/filieres/ajouter/',
+        views.admin_filiere_add,
+        name='admin_filiere_add'
+    ),
+
+
+    # ==================================================
+    # NIVEAUX
+    # ==================================================
+
+    path(
         'admin/niveaux/',
         views.admin_niveaux,
         name='admin_niveaux'
     ),
+
+    path(
+        'admin/niveaux/ajouter/',
+        views.admin_niveau_add,
+        name='admin_niveau_add'
+    ),
+
+
+    # ==================================================
+    # SEMESTRES
+    # ==================================================
 
     path(
         'admin/semestres/',
@@ -214,14 +254,43 @@ urlpatterns = [
     ),
 
     path(
+        'admin/semestres/ajouter/',
+        views.admin_semestre_add,
+        name='admin_semestre_add'
+    ),
+
+
+    # ==================================================
+    # ANNÉES UNIVERSITAIRES
+    # ==================================================
+
+    path(
         'admin/annees/',
         views.admin_annees,
         name='admin_annees'
     ),
 
     path(
+        'admin/annees/ajouter/',
+        views.admin_annee_add,
+        name='admin_annee_add'
+    ),
+
+
+    # ==================================================
+    # ARRIÉRÉS
+    # ==================================================
+
+    path(
         'admin/arrieres/',
         views.admin_arrieres,
         name='admin_arrieres'
     ),
+
+    path(
+        'admin/arrieres/ajouter/',
+        views.admin_arriere_add,
+        name='admin_arriere_add'
+    ),
+
 ]

@@ -1,28 +1,86 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
+
+from .models import UserProfile
+
+
+def redirection_par_role(request, user):
+    try:
+        profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        messages.error(
+            request,
+            "Aucun profil utilisateur n'est associé à ce compte."
+        )
+        logout(request)
+        return redirect('connexion')
+
+    if profile.role == 'admin':
+        return redirect('admin_dashboard')
+
+    if profile.role == 'professeur':
+        return redirect('professeur_dashboard')
+
+    if profile.role == 'etudiant':
+        return redirect('etudiant_dashboard')
+
+    messages.error(
+        request,
+        "Le rôle de votre compte est invalide."
+    )
+    logout(request)
+    return redirect('connexion')
 
 
 def connexion(request):
-    """
-    Gère la connexion des utilisateurs.
-    """
-
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirection_par_role(
+            request,
+            request.user
+        )
 
     if request.method == 'POST':
+        email = request.POST.get(
+            'username',
+            ''
+        ).strip().lower()
 
-        username = request.POST.get('username', '').strip()
-        password = request.POST.get('password', '')
+        password = request.POST.get(
+            'password',
+            ''
+        )
 
-        if not username or not password:
+        if not email or not password:
             messages.error(
                 request,
                 "Veuillez renseigner tous les champs."
             )
+            return render(
+                request,
+                'accounts/login.html'
+            )
 
+        try:
+            user_account = User.objects.get(
+                email__iexact=email
+            )
+        except User.DoesNotExist:
+            messages.error(
+                request,
+                "Adresse email ou mot de passe incorrect."
+            )
+            return render(
+                request,
+                'accounts/login.html'
+            )
+        except User.MultipleObjectsReturned:
+            messages.error(
+                request,
+                "Plusieurs comptes utilisent cette adresse email."
+            )
             return render(
                 request,
                 'accounts/login.html'
@@ -30,16 +88,25 @@ def connexion(request):
 
         user = authenticate(
             request,
-            username=username,
+            username=user_account.username,
             password=password
         )
 
         if user is None:
             messages.error(
                 request,
-                "Nom d'utilisateur ou mot de passe incorrect."
+                "Adresse email ou mot de passe incorrect."
+            )
+            return render(
+                request,
+                'accounts/login.html'
             )
 
+        if not user.is_active:
+            messages.error(
+                request,
+                "Ce compte est désactivé."
+            )
             return render(
                 request,
                 'accounts/login.html'
@@ -50,7 +117,10 @@ def connexion(request):
             user
         )
 
-        return redirect('dashboard')
+        return redirection_par_role(
+            request,
+            user
+        )
 
     return render(
         request,
@@ -60,10 +130,5 @@ def connexion(request):
 
 @login_required
 def deconnexion(request):
-    """
-    Déconnecte l'utilisateur.
-    """
-
     logout(request)
-
     return redirect('connexion')

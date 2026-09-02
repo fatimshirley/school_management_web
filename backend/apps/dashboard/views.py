@@ -133,30 +133,13 @@ def admin_student_add(request):
 
     if request.method == 'POST':
 
-        matricule = request.POST.get(
-            'matricule',
-            ''
-        ).strip()
-
-        nom = request.POST.get(
-            'nom',
-            ''
-        ).strip()
-
-        prenom = request.POST.get(
-            'prenom',
-            ''
-        ).strip()
-
-        age = request.POST.get(
-            'age',
-            ''
-        ).strip()
-
+        matricule = request.POST.get('matricule', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        prenom = request.POST.get('prenom', '').strip()
+        age = request.POST.get('age', '').strip()
         niveau_id = request.POST.get('niveau')
 
         if not matricule or not nom or not prenom or not age or not niveau_id:
-
             return render(
                 request,
                 'admin/students/ajouter.html',
@@ -169,7 +152,6 @@ def admin_student_add(request):
         try:
             age = int(age)
         except ValueError:
-
             return render(
                 request,
                 'admin/students/ajouter.html',
@@ -180,7 +162,6 @@ def admin_student_add(request):
             )
 
         if age <= 0:
-
             return render(
                 request,
                 'admin/students/ajouter.html',
@@ -190,10 +171,7 @@ def admin_student_add(request):
                 }
             )
 
-        if Student.objects.filter(
-            matricule=matricule
-        ).exists():
-
+        if Student.objects.filter(matricule=matricule).exists():
             return render(
                 request,
                 'admin/students/ajouter.html',
@@ -203,10 +181,7 @@ def admin_student_add(request):
                 }
             )
 
-        niveau = get_object_or_404(
-            Niveau,
-            id=niveau_id
-        )
+        niveau = get_object_or_404(Niveau, id=niveau_id)
 
         Student.objects.create(
             matricule=matricule,
@@ -256,30 +231,13 @@ def admin_student_edit(request, student_id):
 
     if request.method == 'POST':
 
-        matricule = request.POST.get(
-            'matricule',
-            ''
-        ).strip()
-
-        nom = request.POST.get(
-            'nom',
-            ''
-        ).strip()
-
-        prenom = request.POST.get(
-            'prenom',
-            ''
-        ).strip()
-
-        age = request.POST.get(
-            'age',
-            ''
-        ).strip()
-
+        matricule = request.POST.get('matricule', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        prenom = request.POST.get('prenom', '').strip()
+        age = request.POST.get('age', '').strip()
         niveau_id = request.POST.get('niveau')
 
         if not matricule or not nom or not prenom or not age or not niveau_id:
-
             return render(
                 request,
                 'admin/students/modifier.html',
@@ -293,7 +251,6 @@ def admin_student_edit(request, student_id):
         try:
             age = int(age)
         except ValueError:
-
             return render(
                 request,
                 'admin/students/modifier.html',
@@ -305,7 +262,6 @@ def admin_student_edit(request, student_id):
             )
 
         if age <= 0:
-
             return render(
                 request,
                 'admin/students/modifier.html',
@@ -316,12 +272,7 @@ def admin_student_edit(request, student_id):
                 }
             )
 
-        if Student.objects.filter(
-            matricule=matricule
-        ).exclude(
-            id=student.id
-        ).exists():
-
+        if Student.objects.filter(matricule=matricule).exclude(id=student.id).exists():
             return render(
                 request,
                 'admin/students/modifier.html',
@@ -340,10 +291,7 @@ def admin_student_edit(request, student_id):
 
         student.save()
 
-        return redirect(
-            'admin_student_detail',
-            student_id=student.id
-        )
+        return redirect('admin_student_detail', student_id=student.id)
 
     return render(
         request,
@@ -358,19 +306,13 @@ def admin_student_edit(request, student_id):
 @admin_required
 def admin_student_delete(request, student_id):
 
-    student = get_object_or_404(
-        Student,
-        id=student_id
-    )
+    student = get_object_or_404(Student, id=student_id)
 
     if request.method == 'POST':
         student.delete()
         return redirect('admin_students')
 
-    return redirect(
-        'admin_student_detail',
-        student_id=student.id
-    )
+    return redirect('admin_student_detail', student_id=student.id)
 
 
 # ==================================================
@@ -380,10 +322,7 @@ def admin_student_delete(request, student_id):
 @admin_required
 def admin_teachers(request):
 
-    teachers = (
-        Teacher.objects
-        .order_by('nom', 'prenom')
-    )
+    teachers = Teacher.objects.order_by('nom', 'prenom')
 
     return render(
         request,
@@ -399,23 +338,11 @@ def admin_teacher_add(request):
 
     if request.method == 'POST':
 
-        identifiant = request.POST.get(
-            'identifiant',
-            ''
-        ).strip()
-
-        nom = request.POST.get(
-            'nom',
-            ''
-        ).strip()
-
-        prenom = request.POST.get(
-            'prenom',
-            ''
-        ).strip()
+        identifiant = request.POST.get('identifiant', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        prenom = request.POST.get('prenom', '').strip()
 
         if not identifiant or not nom:
-
             return render(
                 request,
                 'admin/teachers/ajouter.html',
@@ -424,10 +351,7 @@ def admin_teacher_add(request):
                 }
             )
 
-        if Teacher.objects.filter(
-            identifiant=identifiant
-        ).exists():
-
+        if Teacher.objects.filter(identifiant=identifiant).exists():
             return render(
                 request,
                 'admin/teachers/ajouter.html',
@@ -444,19 +368,13 @@ def admin_teacher_add(request):
 
         return redirect('admin_teachers')
 
-    return render(
-        request,
-        'admin/teachers/ajouter.html'
-    )
+    return render(request, 'admin/teachers/ajouter.html')
 
 
 @admin_required
 def admin_teacher_detail(request, teacher_id):
 
-    teacher = get_object_or_404(
-        Teacher,
-        id=teacher_id
-    )
+    teacher = get_object_or_404(Teacher, id=teacher_id)
 
     return render(
         request,
@@ -470,30 +388,15 @@ def admin_teacher_detail(request, teacher_id):
 @admin_required
 def admin_teacher_edit(request, teacher_id):
 
-    teacher = get_object_or_404(
-        Teacher,
-        id=teacher_id
-    )
+    teacher = get_object_or_404(Teacher, id=teacher_id)
 
     if request.method == 'POST':
 
-        identifiant = request.POST.get(
-            'identifiant',
-            ''
-        ).strip()
-
-        nom = request.POST.get(
-            'nom',
-            ''
-        ).strip()
-
-        prenom = request.POST.get(
-            'prenom',
-            ''
-        ).strip()
+        identifiant = request.POST.get('identifiant', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        prenom = request.POST.get('prenom', '').strip()
 
         if not identifiant or not nom:
-
             return render(
                 request,
                 'admin/teachers/modifier.html',
@@ -503,12 +406,7 @@ def admin_teacher_edit(request, teacher_id):
                 }
             )
 
-        if Teacher.objects.filter(
-            identifiant=identifiant
-        ).exclude(
-            id=teacher.id
-        ).exists():
-
+        if Teacher.objects.filter(identifiant=identifiant).exclude(id=teacher.id).exists():
             return render(
                 request,
                 'admin/teachers/modifier.html',
@@ -524,10 +422,7 @@ def admin_teacher_edit(request, teacher_id):
 
         teacher.save()
 
-        return redirect(
-            'admin_teacher_detail',
-            teacher_id=teacher.id
-        )
+        return redirect('admin_teacher_detail', teacher_id=teacher.id)
 
     return render(
         request,
@@ -541,19 +436,13 @@ def admin_teacher_edit(request, teacher_id):
 @admin_required
 def admin_teacher_delete(request, teacher_id):
 
-    teacher = get_object_or_404(
-        Teacher,
-        id=teacher_id
-    )
+    teacher = get_object_or_404(Teacher, id=teacher_id)
 
     if request.method == 'POST':
         teacher.delete()
         return redirect('admin_teachers')
 
-    return redirect(
-        'admin_teacher_detail',
-        teacher_id=teacher.id
-    )
+    return redirect('admin_teacher_detail', teacher_id=teacher.id)
 
 
 # ==================================================
@@ -565,10 +454,7 @@ def admin_subjects(request):
 
     subjects = (
         Subject.objects
-        .select_related(
-            'semestre',
-            'semestre__niveau'
-        )
+        .select_related('semestre', 'semestre__niveau')
         .prefetch_related('teachers')
         .order_by('nom')
     )
@@ -588,39 +474,19 @@ def admin_subject_add(request):
     semestres = (
         Semestre.objects
         .select_related('niveau')
-        .order_by(
-            'niveau__code',
-            'nom'
-        )
+        .order_by('niveau__code', 'nom')
     )
 
-    teachers = Teacher.objects.order_by(
-        'nom',
-        'prenom'
-    )
+    teachers = Teacher.objects.order_by('nom', 'prenom')
 
     if request.method == 'POST':
 
-        nom = request.POST.get(
-            'nom',
-            ''
-        ).strip()
-
-        credits = request.POST.get(
-            'credits',
-            ''
-        ).strip()
-
-        semestre_id = request.POST.get(
-            'semestre'
-        )
-
-        teacher_ids = request.POST.getlist(
-            'teachers'
-        )
+        nom = request.POST.get('nom', '').strip()
+        credits = request.POST.get('credits', '').strip()
+        semestre_id = request.POST.get('semestre')
+        teacher_ids = request.POST.getlist('teachers')
 
         if not nom:
-
             return render(
                 request,
                 'admin/subjects/ajouter.html',
@@ -631,10 +497,7 @@ def admin_subject_add(request):
                 }
             )
 
-        if Subject.objects.filter(
-            nom=nom
-        ).exists():
-
+        if Subject.objects.filter(nom=nom).exists():
             return render(
                 request,
                 'admin/subjects/ajouter.html',
@@ -670,10 +533,7 @@ def admin_subject_detail(request, subject_id):
 
     subject = get_object_or_404(
         Subject.objects
-        .select_related(
-            'semestre',
-            'semestre__niveau'
-        )
+        .select_related('semestre', 'semestre__niveau')
         .prefetch_related('teachers'),
         id=subject_id
     )
@@ -690,47 +550,24 @@ def admin_subject_detail(request, subject_id):
 @admin_required
 def admin_subject_edit(request, subject_id):
 
-    subject = get_object_or_404(
-        Subject,
-        id=subject_id
-    )
+    subject = get_object_or_404(Subject, id=subject_id)
 
     semestres = (
         Semestre.objects
         .select_related('niveau')
-        .order_by(
-            'niveau__code',
-            'nom'
-        )
+        .order_by('niveau__code', 'nom')
     )
 
-    teachers = Teacher.objects.order_by(
-        'nom',
-        'prenom'
-    )
+    teachers = Teacher.objects.order_by('nom', 'prenom')
 
     if request.method == 'POST':
 
-        nom = request.POST.get(
-            'nom',
-            ''
-        ).strip()
-
-        credits = request.POST.get(
-            'credits',
-            ''
-        ).strip()
-
-        semestre_id = request.POST.get(
-            'semestre'
-        )
-
-        teacher_ids = request.POST.getlist(
-            'teachers'
-        )
+        nom = request.POST.get('nom', '').strip()
+        credits = request.POST.get('credits', '').strip()
+        semestre_id = request.POST.get('semestre')
+        teacher_ids = request.POST.getlist('teachers')
 
         if not nom:
-
             return render(
                 request,
                 'admin/subjects/modifier.html',
@@ -742,12 +579,7 @@ def admin_subject_edit(request, subject_id):
                 }
             )
 
-        if Subject.objects.filter(
-            nom=nom
-        ).exclude(
-            id=subject.id
-        ).exists():
-
+        if Subject.objects.filter(nom=nom).exclude(id=subject.id).exists():
             return render(
                 request,
                 'admin/subjects/modifier.html',
@@ -764,13 +596,9 @@ def admin_subject_edit(request, subject_id):
         subject.semestre_id = semestre_id or None
 
         subject.save()
-
         subject.teachers.set(teacher_ids)
 
-        return redirect(
-            'admin_subject_detail',
-            subject_id=subject.id
-        )
+        return redirect('admin_subject_detail', subject_id=subject.id)
 
     return render(
         request,
@@ -786,19 +614,13 @@ def admin_subject_edit(request, subject_id):
 @admin_required
 def admin_subject_delete(request, subject_id):
 
-    subject = get_object_or_404(
-        Subject,
-        id=subject_id
-    )
+    subject = get_object_or_404(Subject, id=subject_id)
 
     if request.method == 'POST':
         subject.delete()
         return redirect('admin_subjects')
 
-    return redirect(
-        'admin_subject_detail',
-        subject_id=subject.id
-    )
+    return redirect('admin_subject_detail', subject_id=subject.id)
 
 
 # ==================================================
@@ -816,10 +638,7 @@ def admin_grades(request):
             'evaluation__subject',
             'evaluation__annee_universitaire',
         )
-        .order_by(
-            '-evaluation__date',
-            'student__nom'
-        )
+        .order_by('-evaluation__date', 'student__nom')
     )
 
     return render(
@@ -834,17 +653,11 @@ def admin_grades(request):
 @admin_required
 def admin_grade_add(request):
 
-    students = (
-        Student.objects
-        .order_by('nom', 'prenom')
-    )
+    students = Student.objects.order_by('nom', 'prenom')
 
     evaluations = (
         Evaluation.objects
-        .select_related(
-            'subject',
-            'annee_universitaire'
-        )
+        .select_related('subject', 'annee_universitaire')
         .order_by('-date')
     )
 
@@ -855,7 +668,6 @@ def admin_grade_add(request):
         note = request.POST.get('note', '').strip()
 
         if not student_id or not evaluation_id or not note:
-
             return render(
                 request,
                 'admin/grades/saisir.html',
@@ -869,7 +681,6 @@ def admin_grade_add(request):
         try:
             note = float(note)
         except ValueError:
-
             return render(
                 request,
                 'admin/grades/saisir.html',
@@ -881,7 +692,6 @@ def admin_grade_add(request):
             )
 
         if note < 0 or note > 20:
-
             return render(
                 request,
                 'admin/grades/saisir.html',
@@ -895,9 +705,7 @@ def admin_grade_add(request):
         Grade.objects.update_or_create(
             student_id=student_id,
             evaluation_id=evaluation_id,
-            defaults={
-                'note': note,
-            }
+            defaults={'note': note}
         )
 
         return redirect('admin_grades')
@@ -923,10 +731,7 @@ def admin_grade_history(request):
             'evaluation__subject',
             'evaluation__annee_universitaire'
         )
-        .order_by(
-            'student__nom',
-            '-evaluation__date'
-        )
+        .order_by('student__nom', '-evaluation__date')
     )
 
     return render(
@@ -947,11 +752,7 @@ def admin_absences(request):
 
     absences = (
         Absence.objects
-        .select_related(
-            'student',
-            'evaluation',
-            'evaluation__subject',
-        )
+        .select_related('student', 'evaluation', 'evaluation__subject')
         .order_by('-date_absence')
     )
 
@@ -967,27 +768,16 @@ def admin_absences(request):
 @admin_required
 def admin_absence_add(request):
 
-    students = (
-        Student.objects
-        .order_by('nom', 'prenom')
-    )
-
-    evaluations = (
-        Evaluation.objects
-        .select_related('subject')
-        .order_by('-date')
-    )
+    students = Student.objects.order_by('nom', 'prenom')
+    evaluations = Evaluation.objects.select_related('subject').order_by('-date')
 
     if request.method == 'POST':
 
         student_id = request.POST.get('student')
         evaluation_id = request.POST.get('evaluation')
-        date_absence = request.POST.get(
-            'date_absence'
-        )
+        date_absence = request.POST.get('date_absence')
 
         if not student_id or not evaluation_id or not date_absence:
-
             return render(
                 request,
                 'admin/absences/enregistrer.html',
@@ -1017,27 +807,87 @@ def admin_absence_add(request):
 
 
 @admin_required
-def admin_absence_justify(request, absence_id):
+def admin_absence_detail(request, absence_id):
 
     absence = get_object_or_404(
-        Absence,
+        Absence.objects.select_related('student', 'evaluation', 'evaluation__subject'),
         id=absence_id
     )
+
+    return render(
+        request,
+        'admin/absences/detail.html',
+        {
+            'absence': absence,
+        }
+    )
+
+
+@admin_required
+def admin_absence_edit(request, absence_id):
+
+    absence = get_object_or_404(Absence, id=absence_id)
+    students = Student.objects.order_by('nom', 'prenom')
+    evaluations = Evaluation.objects.select_related('subject').order_by('-date')
+
+    if request.method == 'POST':
+
+        student_id = request.POST.get('student')
+        evaluation_id = request.POST.get('evaluation')
+        date_absence = request.POST.get('date_absence')
+
+        if not student_id or not evaluation_id or not date_absence:
+            return render(
+                request,
+                'admin/absences/modifier.html',
+                {
+                    'absence': absence,
+                    'students': students,
+                    'evaluations': evaluations,
+                    'error': 'Veuillez renseigner tous les champs.',
+                }
+            )
+
+        absence.student_id = student_id
+        absence.evaluation_id = evaluation_id
+        absence.date_absence = date_absence
+        absence.save()
+
+        return redirect('admin_absences')
+
+    return render(
+        request,
+        'admin/absences/modifier.html',
+        {
+            'absence': absence,
+            'students': students,
+            'evaluations': evaluations,
+        }
+    )
+
+
+@admin_required
+def admin_absence_delete(request, absence_id):
+
+    absence = get_object_or_404(Absence, id=absence_id)
+
+    if request.method == 'POST':
+        absence.delete()
+        return redirect('admin_absences')
+
+    return redirect('admin_absences')
+
+
+@admin_required
+def admin_absence_justify(request, absence_id):
+
+    absence = get_object_or_404(Absence, id=absence_id)
 
     if request.method == 'POST':
 
         absence.justifiee = True
-
-        absence.justification = request.POST.get(
-            'justification',
-            ''
-        ).strip()
-
-        absence.date_justification = (
-            request.POST.get('date_justification')
-            or None
-        )
-
+        absence.justification = request.POST.get('justification', '').strip()
+        absence.date_justification = request.POST.get('date_justification') or None
         absence.save()
 
         return redirect('admin_absences')
@@ -1054,25 +904,38 @@ def admin_absence_justify(request, absence_id):
 @admin_required
 def admin_absence_makeup(request, absence_id):
 
-    absence = get_object_or_404(
-        Absence,
-        id=absence_id
-    )
+    absence = get_object_or_404(Absence, id=absence_id)
 
     if request.method == 'POST':
 
+        note_rattrapage_str = request.POST.get('note_rattrapage', '').strip()
+        note_rattrapage = None
+
+        if note_rattrapage_str:
+            try:
+                note_rattrapage = float(note_rattrapage_str)
+                if note_rattrapage < 0 or note_rattrapage > 20:
+                    return render(
+                        request,
+                        'admin/absences/rattrapage.html',
+                        {
+                            'absence': absence,
+                            'error': 'La note doit être comprise entre 0 et 20.',
+                        }
+                    )
+            except ValueError:
+                return render(
+                    request,
+                    'admin/absences/rattrapage.html',
+                    {
+                        'absence': absence,
+                        'error': 'La note doit être un nombre valide.',
+                    }
+                )
+
         absence.rattrapage_effectue = True
-
-        absence.note_rattrapage = (
-            request.POST.get('note_rattrapage')
-            or None
-        )
-
-        absence.date_rattrapage = (
-            request.POST.get('date_rattrapage')
-            or None
-        )
-
+        absence.note_rattrapage = note_rattrapage
+        absence.date_rattrapage = request.POST.get('date_rattrapage') or None
         absence.save()
 
         return redirect('admin_absences')
@@ -1108,6 +971,50 @@ def admin_filieres(request):
     )
 
 
+@admin_required
+def admin_filiere_add(request):
+
+    niveaux = Niveau.objects.order_by('code')
+
+    if request.method == 'POST':
+        code = request.POST.get('code', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        niveaux_ids = request.POST.getlist('niveaux')
+
+        if not code or not nom:
+            return render(
+                request,
+                'admin/academic/filiere_ajouter.html',
+                {
+                    'niveaux': niveaux,
+                    'error': 'Le code et le nom de la filière sont obligatoires.',
+                }
+            )
+
+        if Filiere.objects.filter(code=code).exists():
+            return render(
+                request,
+                'admin/academic/filiere_ajouter.html',
+                {
+                    'niveaux': niveaux,
+                    'error': 'Une filière avec ce code existe déjà.',
+                }
+            )
+
+        filiere = Filiere.objects.create(code=code, nom=nom)
+        if niveaux_ids:
+            filiere.niveaux.set(niveaux_ids)
+
+        return redirect('admin_filieres')
+
+    return render(
+        request,
+        'admin/academic/filiere_ajouter.html',
+        {
+            'niveaux': niveaux,
+        }
+    )
+
 # ==================================================
 # NIVEAUX
 # ==================================================
@@ -1130,6 +1037,51 @@ def admin_niveaux(request):
     )
 
 
+@admin_required
+def admin_niveau_add(request):
+
+    filieres = Filiere.objects.order_by('nom')
+
+    if request.method == 'POST':
+        code = request.POST.get('code', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        filiere_ids = request.POST.getlist('filieres')
+
+        if not code or not nom:
+            return render(
+                request,
+                'admin/academic/niveau_ajouter.html',
+                {
+                    'filieres': filieres,
+                    'error': 'Le code et le nom du niveau sont obligatoires.',
+                }
+            )
+
+        if Niveau.objects.filter(code=code).exists():
+            return render(
+                request,
+                'admin/academic/niveau_ajouter.html',
+                {
+                    'filieres': filieres,
+                    'error': 'Un niveau avec ce code existe déjà.',
+                }
+            )
+
+        niveau = Niveau.objects.create(code=code, nom=nom)
+        if filiere_ids:
+            niveau.filieres.set(filiere_ids)
+
+        return redirect('admin_niveaux')
+
+    return render(
+        request,
+        'admin/academic/niveau_ajouter.html',
+        {
+            'filieres': filieres,
+        }
+    )
+
+
 # ==================================================
 # SEMESTRES
 # ==================================================
@@ -1140,10 +1092,7 @@ def admin_semestres(request):
     semestres = (
         Semestre.objects
         .select_related('niveau')
-        .order_by(
-            'niveau__code',
-            'nom'
-        )
+        .order_by('niveau__code', 'nom')
     )
 
     return render(
@@ -1151,6 +1100,43 @@ def admin_semestres(request):
         'admin/academic/semestres.html',
         {
             'semestres': semestres,
+        }
+    )
+
+
+@admin_required
+def admin_semestre_add(request):
+
+    niveaux = Niveau.objects.order_by('code')
+
+    if request.method == 'POST':
+        nom = request.POST.get('nom', '').strip()
+        niveau_id = request.POST.get('niveau')
+
+        if not nom or not niveau_id:
+            return render(
+                request,
+                'admin/academic/semestre_ajouter.html',
+                {
+                    'niveaux': niveaux,
+                    'error': 'Le nom du semestre et le niveau sont obligatoires.',
+                }
+            )
+
+        niveau = get_object_or_404(Niveau, id=niveau_id)
+
+        Semestre.objects.create(
+            nom=nom,
+            niveau=niveau
+        )
+
+        return redirect('admin_semestres')
+
+    return render(
+        request,
+        'admin/academic/semestre_ajouter.html',
+        {
+            'niveaux': niveaux,
         }
     )
 
@@ -1176,6 +1162,44 @@ def admin_annees(request):
     )
 
 
+@admin_required
+def admin_annee_add(request):
+
+    if request.method == 'POST':
+        libelle = request.POST.get('libelle', '').strip()
+        est_active = request.POST.get('est_active') == 'on'
+
+        if not libelle:
+            return render(
+                request,
+                'admin/academic/annee_ajouter.html',
+                {
+                    'error': "Le libellé de l'année universitaire est obligatoire.",
+                }
+            )
+
+        if AnneeUniversitaire.objects.filter(libelle=libelle).exists():
+            return render(
+                request,
+                'admin/academic/annee_ajouter.html',
+                {
+                    'error': 'Cette année universitaire existe déjà.',
+                }
+            )
+
+        if est_active:
+            AnneeUniversitaire.objects.filter(est_active=True).update(est_active=False)
+
+        AnneeUniversitaire.objects.create(
+            libelle=libelle,
+            est_active=est_active
+        )
+
+        return redirect('admin_annees')
+
+    return render(request, 'admin/academic/annee_ajouter.html')
+
+
 # ==================================================
 # ARRIÉRÉS
 # ==================================================
@@ -1185,15 +1209,8 @@ def admin_arrieres(request):
 
     arrieres = (
         Arriere.objects
-        .select_related(
-            'progression',
-            'progression__student',
-            'subject'
-        )
-        .order_by(
-            'statut',
-            'progression__student__nom'
-        )
+        .select_related('progression', 'progression__student', 'subject')
+        .order_by('statut', 'progression__student__nom')
     )
 
     return render(
@@ -1205,6 +1222,53 @@ def admin_arrieres(request):
     )
 
 
+@admin_required
+def admin_arriere_add(request):
+
+    progressions = (
+        Progression.objects
+        .select_related('student', 'annee_universitaire', 'niveau')
+        .order_by('student__nom', 'student__prenom')
+    )
+    subjects = Subject.objects.order_by('nom')
+
+    if request.method == 'POST':
+        progression_id = request.POST.get('progression')
+        subject_id = request.POST.get('subject')
+        statut = request.POST.get('statut', 'A_RATTRAPER')
+
+        if not progression_id or not subject_id:
+            return render(
+                request,
+                'admin/academic/arriere_ajouter.html',
+                {
+                    'progressions': progressions,
+                    'subjects': subjects,
+                    'error': 'L\'étudiant/progression et la matière sont obligatoires.',
+                }
+            )
+
+        progression = get_object_or_404(Progression, id=progression_id)
+        subject = get_object_or_404(Subject, id=subject_id)
+
+        Arriere.objects.create(
+            progression=progression,
+            subject=subject,
+            statut=statut
+        )
+
+        return redirect('admin_arrieres')
+
+    return render(
+        request,
+        'admin/academic/arriere_ajouter.html',
+        {
+            'progressions': progressions,
+            'subjects': subjects,
+        }
+    )
+
+
 # ==================================================
 # DASHBOARD PROFESSEUR
 # ==================================================
@@ -1212,9 +1276,7 @@ def admin_arrieres(request):
 @login_required
 def professeur_dashboard(request):
 
-    profile = UserProfile.objects.filter(
-        user=request.user
-    ).first()
+    profile = UserProfile.objects.filter(user=request.user).first()
 
     if profile is None:
         return redirect('connexion')
@@ -1222,10 +1284,7 @@ def professeur_dashboard(request):
     if profile.role != 'professeur':
         return redirect('dashboard')
 
-    return render(
-        request,
-        'professeur/dashboard/dashboard.html'
-    )
+    return render(request, 'professeur/dashboard/dashboard.html')
 
 
 # ==================================================
@@ -1235,9 +1294,7 @@ def professeur_dashboard(request):
 @login_required
 def etudiant_dashboard(request):
 
-    profile = UserProfile.objects.filter(
-        user=request.user
-    ).first()
+    profile = UserProfile.objects.filter(user=request.user).first()
 
     if profile is None:
         return redirect('connexion')
@@ -1245,7 +1302,4 @@ def etudiant_dashboard(request):
     if profile.role != 'etudiant':
         return redirect('dashboard')
 
-    return render(
-        request,
-        'etudiant/dashboard/dashboard.html'
-    )
+    return render(request, 'etudiant/dashboard/dashboard.html')
