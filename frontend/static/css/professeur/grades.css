@@ -1,0 +1,8 @@
+/* Notes Professeur Styles */
+.table input[type="text"], 
+.table input[type="number"] {
+    max-width: 120px;
+}
+.table td {
+    vertical-align: middle;
+}

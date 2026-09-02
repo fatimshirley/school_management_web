@@ -1,4 +1,20 @@
+{% load static %}
+
 <aside class="admin-sidebar">
+  <!-- ==================================================
+       HEADER (LOGO EN ROND + TITRE)
+  ================================================== -->
+  <div class="admin-sidebar__header">
+    <div class="admin-sidebar__logo-wrapper">
+      <img
+        src="{% static 'images/logo.png' %}"
+        alt="School Management Logo"
+        class="admin-sidebar__logo-img"
+      />
+    </div>
+    <span class="admin-sidebar__title">School Management</span>
+  </div>
+
   <nav class="admin-sidebar__nav">
     <!-- ==================================================
              PRINCIPAL

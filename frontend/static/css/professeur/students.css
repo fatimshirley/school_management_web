@@ -1,0 +1,4 @@
+/* Étudiants Professeur Styles */
+.table tbody tr:hover {
+    background-color: rgba(25, 135, 84, 0.05);
+}

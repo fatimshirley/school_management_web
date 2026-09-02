@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Saisir les Notes - Espace Professeur{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/professeur/grades.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'professeur/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'professeur/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <h2 class="mb-4">Saisie des Notes</h2>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- Formset ou tableau de saisie dynamique -->
+                        {{ formset.management_form }}
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Étudiant</th>
+                                    <th>Note (/20)</th>
+                                    <th>Observations</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for form in formset %}
+                                <tr>
+                                    <td>{{ form.etudiant.label }}</td>
+                                    <td>{{ form.note }}</td>
+                                    <td>{{ form.observation }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary mt-3">Enregistrer les notes</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+        {% include 'professeur/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

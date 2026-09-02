@@ -11,7 +11,6 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="admin-layout">
 
     {% include "admin/layout/header.html" %}
@@ -24,41 +23,35 @@
 
             <div class="admin-main__content">
 
-                <div class="academic-page-heading">
+                <div class="grades-page-heading">
 
-                    <div class="academic-page-heading__title">
-
-                        <div class="academic-page-heading__icon">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
+                    <div class="grades-page-heading__title">
 
                         <div>
                             <h1>Filières</h1>
                             <p>Filières disponibles dans l'établissement</p>
                         </div>
+                    </div>
 
+                    <div class="grades-heading-actions">
+                        <a href="{% url 'admin_filiere_add' %}" class="grades-btn grades-btn--primary">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Ajouter une filière</span>
+                        </a>
                     </div>
 
                 </div>
 
-                <section class="academic-panel">
+                <section class="grades-panel">
 
-                    <div class="academic-panel__header">
-
+                    <div class="grades-panel__header">
                         <h2>Liste des filières</h2>
-
-                        <p>
-                            Filières et niveaux associés
-                        </p>
-
+                        <p>Filières et niveaux associés</p>
                     </div>
 
                     {% if filieres %}
-
-                    <div class="academic-table-wrapper">
-
-                        <table class="academic-table">
-
+                    <div class="grades-table-wrapper">
+                        <table class="grades-table">
                             <thead>
                                 <tr>
                                     <th>Code</th>
@@ -66,48 +59,35 @@
                                     <th>Niveaux</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 {% for filiere in filieres %}
-
                                 <tr>
-
+                                    <td><strong>{{ filiere.code }}</strong></td>
+                                    <td>{{ filiere.nom }}</td>
                                     <td>
-                                        {{ filiere.code }}
-                                    </td>
-
-                                    <td>
-                                        {{ filiere.nom }}
-                                    </td>
-
-                                    <td>
-
                                         {% for niveau in filiere.niveaux.all %}
                                             {{ niveau.code }}{% if not forloop.last %}, {% endif %}
                                         {% empty %}
                                             —
                                         {% endfor %}
-
                                     </td>
-
                                 </tr>
-
                                 {% endfor %}
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                     {% else %}
-
-                    <div class="academic-empty">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <p>Aucune filière enregistrée.</p>
+                    <div class="grades-empty">
+                        <div class="grades-empty__icon">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <h3>Aucune filière</h3>
+                        <p>Aucune filière n'est actuellement enregistrée.</p>
+                        <a href="{% url 'admin_filiere_add' %}" class="grades-btn grades-btn--primary">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Ajouter une filière</span>
+                        </a>
                     </div>
-
                     {% endif %}
 
                 </section>
@@ -121,5 +101,4 @@
     </div>
 
 </div>
-
 {% endblock %}

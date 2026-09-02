@@ -1,0 +1,111 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Ajouter un semestre — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    {% include "admin/layout/header.html" %}
+    <div class="admin-layout__body">
+        {% include "admin/layout/sidebar.html" %}
+        <main class="admin-main">
+            <div class="admin-main__content">
+
+                <div class="academic-page-heading">
+                    <div class="academic-page-heading__title">
+                        <div>
+                            <h1>Ajouter / Configurer un semestre</h1>
+                            <p>Sélectionnez un niveau, une année, un semestre et définissez sa période.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="academic-form-panel">
+                    <div class="academic-form-panel__header">
+                        <h2>Nouveau Semestre</h2>
+                        <p>Remplissez les informations ci-dessous.</p>
+                    </div>
+
+                    {% if error %}
+                    <div class="academic-message academic-message--error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'admin_semestre_add' %}" class="academic-form">
+                        {% csrf_token %}
+                        <div class="academic-form-grid">
+                            
+                            <!-- Sélection du Niveau -->
+                            <div class="academic-form-group">
+                                <label for="niveau">Niveau académique *</label>
+                                <select id="niveau" name="niveau" required class="academic-select">
+                                    <option value="">Sélectionner un niveau</option>
+                                    {% for niveau in niveaux %}
+                                    <option value="{{ niveau.id }}">{{ niveau.code }} - {{ niveau.nom }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Sélection de l'Année Universitaire -->
+                            <div class="academic-form-group">
+                                <label for="annee_universitaire">Année universitaire *</label>
+                                <select id="annee_universitaire" name="annee_universitaire" required class="academic-select">
+                                    <option value="">Sélectionner une année</option>
+                                    {% for annee in annees %}
+                                    <option value="{{ annee.id }}">{{ annee }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Sélection du Semestre -->
+                            <div class="academic-form-group">
+                                <label for="nom">Semestre *</label>
+                                <select id="nom" name="nom" required class="academic-select">
+                                    <option value="">Sélectionner le semestre</option>
+                                    {% for key, value in semestre_choices %}
+                                    <option value="{{ key }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Date de début -->
+                            <div class="academic-form-group">
+                                <label for="date_debut">Date de début *</label>
+                                <input type="date" id="date_debut" name="date_debut" required>
+                            </div>
+
+                            <!-- Date de fin -->
+                            <div class="academic-form-group">
+                                <label for="date_fin">Date de fin *</label>
+                                <input type="date" id="date_fin" name="date_fin" required>
+                            </div>
+
+                        </div>
+
+                        <div class="academic-form-actions">
+                            <a href="{% url 'admin_semestres' %}" class="academic-btn academic-btn--secondary">
+                                Annuler
+                            </a>
+                            <button type="submit" class="academic-btn academic-btn--primary">
+                                <i class="fa-solid fa-check"></i>
+                                Enregistrer le semestre
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            {% include "admin/layout/footer.html" %}
+        </main>
+    </div>
+</div>
+{% endblock %}

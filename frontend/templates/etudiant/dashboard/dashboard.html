@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Portail Étudiant - Tableau de bord{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/etudiant/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'etudiant/layout/sidebar.html' %}
+
+    <div class="main-wrapper flex-grow-1">
+        {% include 'etudiant/layout/header.html' %}
+
+        <main class="main-content container-fluid py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 bg-primary text-white p-4">
+                        <h2 class="fw-bold">Bienvenue, {{ student.prenom|default:"Étudiant" }} {{ student.nom|default:"" }}</h2>
+                        <p class="mb-0">Matricule : <strong>{{ student.matricule|default:"N/A" }}</strong></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Cartes de raccourcis notes, absences, etc. -->
+        </main>
+
+        {% include 'etudiant/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Mon Profil - Portail Étudiant{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/etudiant/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'etudiant/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'etudiant/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <h2 class="mb-4">Mon Profil Étudiant</h2>
+            <div class="card shadow-sm border-0 p-4">
+                <p><strong>Nom :</strong> {{ student.nom }}</p>
+                <p><strong>Prénom :</strong> {{ student.prenom }}</p>
+                <p><strong>Matricule :</strong> {{ student.matricule }}</p>
+                <p><strong>Email :</strong> {{ request.user.email }}</p>
+                <p><strong>Niveau :</strong> {{ student.niveau }}</p>
+            </div>
+        </main>
+        {% include 'etudiant/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

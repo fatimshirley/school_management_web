@@ -1,10 +1,16 @@
-{% extends "base/base.html" %} {% load static %} {% block title %}Ajouter un
-professeur — Administration{% endblock %} {% block extra_css %}
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Ajouter un professeur — Administration{% endblock %}
+
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/teachers.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 
 <div class="admin-layout">
   {% include "admin/layout/header.html" %}
@@ -14,12 +20,10 @@ professeur — Administration{% endblock %} {% block extra_css %}
 
     <main class="admin-main">
       <div class="admin-main__content">
+        
         <div class="teachers-page-heading">
           <div class="teachers-page-heading__title">
-            <div class="teachers-page-heading__icon">
-              <i class="fa-solid fa-user-plus"></i>
-            </div>
-
+            
             <div>
               <h1>Ajouter un professeur</h1>
               <p>Enregistrer un nouveau professeur</p>
@@ -30,8 +34,7 @@ professeur — Administration{% endblock %} {% block extra_css %}
         <section class="teachers-form-panel">
           <div class="teachers-form-panel__header">
             <h2>Informations du professeur</h2>
-
-            <p>Les champs marqués d'un astérisque sont obligatoires.</p>
+            <p>Les champs marqués d'une icône <i class="fa-solid fa-asterisk" style="font-size: 10px; color: #ef4444;"></i> sont obligatoires.</p>
           </div>
 
           {% if error %}
@@ -41,47 +44,57 @@ professeur — Administration{% endblock %} {% block extra_css %}
           </div>
           {% endif %}
 
+          <!-- Formulaire correctement ouvert -->
           <form method="post" class="teachers-form">
             {% csrf_token %}
 
             <div class="teachers-form-grid">
+              
+              <!-- Champ Email -->
               <div class="teachers-form-group">
-                <label for="identifiant"> Identifiant * </label>
-
+                <label for="email">
+                  Email <i class="fa-solid fa-asterisk" style="font-size: 10px; color: #ef4444;" title="Champ obligatoire"></i>
+                </label>
                 <input
-                  type="text"
-                  id="identifiant"
-                  name="identifiant"
-                  value="{{ request.POST.identifiant|default:'' }}"
-                  placeholder="Ex. ENS2026001"
+                  type="email"
+                  id="email"
+                  name="email"
+                  value="{{ request.POST.email|default:'' }}"
+                  placeholder="Ex. nom@domaine.com"
                   required
                 />
               </div>
 
+              <!-- Champ Nom -->
               <div class="teachers-form-group">
-                <label for="nom"> Nom * </label>
-
+                <label for="nom">
+                  Nom <i class="fa-solid fa-asterisk" style="font-size: 10px; color: #ef4444;" title="Champ obligatoire"></i>
+                </label>
                 <input
                   type="text"
                   id="nom"
                   name="nom"
                   value="{{ request.POST.nom|default:'' }}"
+                  placeholder="Ex. Dupont"
                   required
                 />
               </div>
 
+              <!-- Champ Prénom -->
               <div class="teachers-form-group">
-                <label for="prenom"> Prénom </label>
-
+                <label for="prenom">Prénom</label>
                 <input
                   type="text"
                   id="prenom"
                   name="prenom"
                   value="{{ request.POST.prenom|default:'' }}"
+                  placeholder="Ex. Jean"
                 />
               </div>
+
             </div>
 
+            <!-- Actions (Boutons Annuler et Enregistrer qui manquaient dans votre rendu) -->
             <div class="teachers-form-actions">
               <a
                 href="{% url 'admin_teachers' %}"
@@ -96,7 +109,10 @@ professeur — Administration{% endblock %} {% block extra_css %}
                 Enregistrer
               </button>
             </div>
+
           </form>
+          <!-- Fin du formulaire -->
+
         </section>
       </div>
 

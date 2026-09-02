@@ -35,7 +35,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # ÉTUDIANTS
+    # ÉTUDIANTS (ADMIN)
     # ==================================================
 
     path(
@@ -70,7 +70,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # PROFESSEURS
+    # PROFESSEURS (ADMIN)
     # ==================================================
 
     path(
@@ -105,7 +105,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # MATIÈRES
+    # MATIÈRES (ADMIN)
     # ==================================================
 
     path(
@@ -140,7 +140,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # NOTES
+    # NOTES (ADMIN)
     # ==================================================
 
     path(
@@ -163,7 +163,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # ABSENCES
+    # ABSENCES (ADMIN)
     # ==================================================
 
     path(
@@ -210,7 +210,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # FILIÈRES
+    # FILIÈRES (ADMIN)
     # ==================================================
 
     path(
@@ -227,7 +227,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # NIVEAUX
+    # NIVEAUX (ADMIN)
     # ==================================================
 
     path(
@@ -236,15 +236,9 @@ urlpatterns = [
         name='admin_niveaux'
     ),
 
-    path(
-        'admin/niveaux/ajouter/',
-        views.admin_niveau_add,
-        name='admin_niveau_add'
-    ),
-
 
     # ==================================================
-    # SEMESTRES
+    # SEMESTRES (ADMIN)
     # ==================================================
 
     path(
@@ -259,9 +253,21 @@ urlpatterns = [
         name='admin_semestre_add'
     ),
 
+    path(
+        'admin/semestres/<int:semestre_id>/modifier/',
+        views.admin_semestre_edit,
+        name='admin_semestre_edit'
+    ),
+
+    path(
+        'admin/semestres/<int:semestre_id>/supprimer/',
+        views.admin_semestre_delete,
+        name='admin_semestre_delete'
+    ),
+
 
     # ==================================================
-    # ANNÉES UNIVERSITAIRES
+    # ANNÉES UNIVERSITAIRES (ADMIN)
     # ==================================================
 
     path(
@@ -278,7 +284,7 @@ urlpatterns = [
 
 
     # ==================================================
-    # ARRIÉRÉS
+    # ARRIÉRÉS (ADMIN)
     # ==================================================
 
     path(
@@ -291,6 +297,64 @@ urlpatterns = [
         'admin/arrieres/ajouter/',
         views.admin_arriere_add,
         name='admin_arriere_add'
+    ),
+
+
+    # ==================================================
+    # ESPACE PROFESSEUR
+    # ==================================================
+
+    path(
+        'professeur/notes/',
+        views.professeur_grades,
+        name='professeur_grades'
+    ),
+
+    path(
+        'professeur/notes/saisir/',
+        views.professeur_grade_add,
+        name='professeur_grade_add'
+    ),
+
+    path(
+        'professeur/absences/',
+        views.professeur_absences,
+        name='professeur_absences'
+    ),
+
+    path(
+        'professeur/absences/enregistrer/',
+        views.professeur_absence_add,
+        name='professeur_absence_add'
+    ),
+
+
+    # ==================================================
+    # ESPACE ÉTUDIANT
+    # ==================================================
+
+    path(
+        'etudiant/notes/',
+        views.etudiant_grades,
+        name='etudiant_grades'
+    ),
+
+    path(
+        'etudiant/absences/',
+        views.etudiant_absences,
+        name='etudiant_absences'
+    ),
+
+    path(
+        'etudiant/matieres/',
+        views.etudiant_subjects,
+        name='etudiant_subjects'
+    ),
+
+    path(
+        'etudiant/arrieres/',
+        views.etudiant_arrieres,
+        name='etudiant_arrieres'
     ),
 
 ]

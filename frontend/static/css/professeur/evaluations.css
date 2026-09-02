@@ -1,0 +1,9 @@
+/* Évaluations Professeur Styles */
+.table th {
+    font-weight: 600;
+    color: #495057;
+}
+.btn-success {
+    background-color: #198754;
+    border-color: #198754;
+}

@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Mes Matières - Portail Étudiant{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/etudiant/subjects.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'etudiant/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'etudiant/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <h2 class="mb-4">Matières de votre cursus</h2>
+            <div class="row g-4">
+                {% for subject in subjects %}
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">{{ subject.nom }}</h5>
+                            <p class="card-text text-muted">Coefficient : {{ subject.coefficient }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">Aucune matière enregistrée pour le moment.</p>
+                {% endfor %}
+            </div>
+        </main>
+        {% include 'etudiant/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

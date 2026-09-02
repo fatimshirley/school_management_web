@@ -1,11 +1,16 @@
-{% extends "base/base.html" %} {% load static %} {% block title %}Saisir une
-note — Administration{% endblock %} {% block extra_css %}
+{% extends "base/base.html" %} 
+{% load static %} 
+
+{% block title %}Saisir une note — Administration{% endblock %} 
+
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/grades.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %} 
 
+{% block content %}
 <div class="admin-layout">
   {% include "admin/layout/header.html" %}
 
@@ -16,10 +21,6 @@ note — Administration{% endblock %} {% block extra_css %}
       <div class="admin-main__content">
         <div class="grades-page-heading">
           <div class="grades-page-heading__title">
-            <div class="grades-page-heading__icon">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </div>
-
             <div>
               <h1>Saisir une note</h1>
               <p>Enregistrer ou modifier une note</p>
@@ -30,8 +31,7 @@ note — Administration{% endblock %} {% block extra_css %}
         <section class="grades-form-panel">
           <div class="grades-form-panel__header">
             <h2>Informations de la note</h2>
-
-            <p>Sélectionnez l'étudiant et l'évaluation concernés.</p>
+            <p>Sélectionnez l'étudiant, l'évaluation et la note concernée.</p>
           </div>
 
           {% if error %}
@@ -45,44 +45,41 @@ note — Administration{% endblock %} {% block extra_css %}
             {% csrf_token %}
 
             <div class="grades-form-grid">
+              <!-- Sélection de l'étudiant -->
               <div class="grades-form-group">
-                <label for="student"> Étudiant * </label>
-
+                <label for="student">
+                  Étudiant <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                </label>
                 <select id="student" name="student" required>
                   <option value="">Sélectionner un étudiant</option>
-
                   {% for student in students %}
-
                   <option value="{{ student.id }}">
-                    {{ student.matricule }} — {{ student.nom }} {{
-                    student.prenom }}
+                    {{ student.matricule }} — {{ student.nom }} {{ student.prenom }}
                   </option>
-
                   {% endfor %}
                 </select>
               </div>
 
+              <!-- Sélection dynamique de l'évaluation -->
               <div class="grades-form-group">
-                <label for="evaluation"> Évaluation * </label>
-
+                <label for="evaluation">
+                  Évaluation <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                </label>
                 <select id="evaluation" name="evaluation" required>
                   <option value="">Sélectionner une évaluation</option>
-
                   {% for evaluation in evaluations %}
-
                   <option value="{{ evaluation.id }}">
-                    {{ evaluation.subject.nom }} — {{
-                    evaluation.get_type_evaluation_display }} — Session {{
-                    evaluation.session }} — {{ evaluation.date|date:"d/m/Y" }}
+                    {{ evaluation.subject.nom }} — du {{ evaluation.date }} ({{ evaluation.annee_universitaire.libelle }})
                   </option>
-
                   {% endfor %}
                 </select>
               </div>
 
+              <!-- Saisie de la note -->
               <div class="grades-form-group">
-                <label for="note"> Note /20 * </label>
-
+                <label for="note">
+                  Note /20 <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                </label>
                 <input
                   type="number"
                   id="note"
@@ -118,5 +115,4 @@ note — Administration{% endblock %} {% block extra_css %}
     </main>
   </div>
 </div>
-
 {% endblock %}

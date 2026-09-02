@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Absences - Espace Professeur{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/professeur/absences.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'professeur/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'professeur/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Liste des Absences signalées</h2>
+                <a href="{% url 'professeur_absence_enregistrer' %}" class="btn btn-danger">
+                    <i class="fa-solid fa-user-xmark me-1"></i> Marquer une absence
+                </a>
+            </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Étudiant</th>
+                                <th>Matière</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for absence in absences %}
+                            <tr>
+                                <td>{{ absence.etudiant.nom }} {{ absence.etudiant.prenom }}</td>
+                                <td>{{ absence.matiere.nom }}</td>
+                                <td>{{ absence.date|date:"d/m/Y" }}</td>
+                                <td>
+                                    {% if absence.justifiee %}
+                                        <span class="badge bg-success">Justifiée</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Non justifiée</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">Aucune absence enregistrée.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        {% include 'professeur/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

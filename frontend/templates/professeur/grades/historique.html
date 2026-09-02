@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Historique des Notes - Espace Professeur{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/professeur/grades.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'professeur/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'professeur/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <h2 class="mb-4">Historique des notes attribuées</h2>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Étudiant</th>
+                                <th>Évaluation</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for grade in grades %}
+                            <tr>
+                                <td>{{ grade.date_saisie|date:"d/m/Y" }}</td>
+                                <td>{{ grade.etudiant.nom }} {{ grade.etudiant.prenom }}</td>
+                                <td>{{ grade.evaluation.titre }}</td>
+                                <td><strong>{{ grade.valeur }}/20</strong></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Aucun historique disponible.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        {% include 'professeur/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

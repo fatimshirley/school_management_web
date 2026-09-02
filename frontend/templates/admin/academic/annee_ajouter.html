@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Ajouter une année — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    {% include "admin/layout/header.html" %}
+    <div class="admin-layout__body">
+        {% include "admin/layout/sidebar.html" %}
+        <main class="admin-main">
+            <div class="admin-main__content">
+
+                <div class="academic-page-heading">
+                    <div class="academic-page-heading__title">
+                        
+                        <div>
+                            <h1>Ajouter une année universitaire</h1>
+                            <p>Création d'une nouvelle session d'études</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="academic-form-panel">
+                    <div class="academic-form-panel__header">
+                        <h2>Informations de l'année</h2>
+                        <p>Renseignez le libellé et les dates d'ouverture/fermeture.</p>
+                    </div>
+
+                    {% if error %}
+                    <div class="academic-message academic-message--error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'admin_annee_add' %}" class="academic-form">
+                        {% csrf_token %}
+                        <div class="academic-form-grid">
+                            <div class="academic-form-group">
+                                <label for="libelle">Libellé *</label>
+                                <input type="text" id="libelle" name="libelle" placeholder="Ex: 2025-2026" required>
+                            </div>
+
+                            <div class="academic-form-group">
+                                <label for="date_debut">Date de début *</label>
+                                <input type="date" id="date_debut" name="date_debut" required>
+                            </div>
+
+                            <div class="academic-form-group">
+                                <label for="date_fin">Date de fin *</label>
+                                <input type="date" id="date_fin" name="date_fin" required>
+                            </div>
+                        </div>
+
+                        <div class="academic-form-actions">
+                            <a href="{% url 'admin_annees' %}" class="academic-btn academic-btn--secondary">
+                                Annuler
+                            </a>
+                            <button type="submit" class="academic-btn academic-btn--primary">
+                                <i class="fa-solid fa-check"></i>
+                                Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            {% include "admin/layout/footer.html" %}
+        </main>
+    </div>
+</div>
+{% endblock %}

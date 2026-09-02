@@ -1,0 +1,80 @@
+{% load static %}
+
+<aside class="admin-sidebar">
+  <div class="admin-sidebar__header">
+    <div class="admin-sidebar__logo-wrapper">
+      <img
+        src="{% static 'images/logo.png' %}"
+        alt="School Management Logo"
+        class="admin-sidebar__logo-img"
+      />
+    </div>
+    <span class="admin-sidebar__title">Espace Professeur</span>
+  </div>
+
+  <nav class="admin-sidebar__nav">
+    <div class="admin-sidebar__section">
+      <span class="admin-sidebar__section-title"> PRINCIPAL </span>
+      <a
+        href="{% url 'professeur_dashboard' %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_dashboard' %} active {% endif %}"
+      >
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Tableau de bord</span>
+      </a>
+    </div>
+
+    <div class="admin-sidebar__section">
+      <span class="admin-sidebar__section-title"> GESTION </span>
+      <a
+        href="{% url 'professeur_evaluations' %}"
+        class="admin-sidebar__link {% if 'evaluations' in request.resolver_match.url_name %} active {% endif %}"
+      >
+        <i class="fa-solid fa-clipboard-list"></i>
+        <span>Évaluations</span>
+      </a>
+
+      <a
+        href="{% url 'professeur_grades' %}"
+        class="admin-sidebar__link {% if 'grades' in request.resolver_match.url_name %} active {% endif %}"
+      >
+        <i class="fa-solid fa-clipboard-check"></i>
+        <span>Notes</span>
+      </a>
+
+      <a
+        href="{% url 'professeur_absences' %}"
+        class="admin-sidebar__link {% if 'absences' in request.resolver_match.url_name %} active {% endif %}"
+      >
+        <i class="fa-solid fa-calendar-xmark"></i>
+        <span>Absences</span>
+      </a>
+
+      <a
+        href="{% url 'professeur_students' %}"
+        class="admin-sidebar__link {% if 'students' in request.resolver_match.url_name %} active {% endif %}"
+      >
+        <i class="fa-solid fa-user-graduate"></i>
+        <span>Étudiants</span>
+      </a>
+
+      <a
+        href="{% url 'professeur_subjects' %}"
+        class="admin-sidebar__link {% if 'subjects' in request.resolver_match.url_name %} active {% endif %}"
+      >
+        <i class="fa-solid fa-book"></i>
+        <span>Matières</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="admin-sidebar__bottom">
+    <form action="{% url 'logout' %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="admin-sidebar__logout border-0 bg-transparent w-100 text-start">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Déconnexion</span>
+      </button>
+    </form>
+  </div>
+</aside>

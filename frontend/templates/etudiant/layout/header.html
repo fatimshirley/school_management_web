@@ -1,0 +1,8 @@
+<header class="admin-header">
+  <div class="admin-header__title">
+    <h2>{% block header_title %}Tableau de bord{% endblock %}</h2>
+  </div>
+  <div class="admin-header__user">
+    <span><i class="fa-solid fa-user-graduate"></i> {{ request.user.email }}</span>
+  </div>
+</header>

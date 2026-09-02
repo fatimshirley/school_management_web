@@ -1,3 +1,6 @@
+/* ==================================================
+   ADMIN HEADER
+================================================== */
 .admin-header {
   height: 72px;
 
@@ -12,27 +15,17 @@
 
   position: fixed;
   top: 0;
-  left: 0;
+  left: 235px; /* Décalage pour laisser la place à la sidebar */
   right: 0;
 
   z-index: 1000;
 }
 
-/* --------------------------------------------------
-   BRAND
--------------------------------------------------- */
-
+/* BRAND */
 .admin-header__brand {
   display: flex;
   flex-direction: column;
   gap: 3px;
-}
-
-.admin-header__title {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #1e3a5f;
 }
 
 .admin-header__section {
@@ -40,10 +33,7 @@
   color: #6b7280;
 }
 
-/* --------------------------------------------------
-   ACCOUNT
--------------------------------------------------- */
-
+/* ACCOUNT */
 .admin-header__account {
   position: relative;
 }
@@ -105,10 +95,7 @@
   margin-left: 3px;
 }
 
-/* --------------------------------------------------
-   ACCOUNT MENU
--------------------------------------------------- */
-
+/* ACCOUNT MENU */
 .account-menu {
   position: absolute;
 
@@ -174,4 +161,86 @@
 
 .account-menu__logout {
   color: #b42318 !important;
+}
+
+
+/* ==================================================
+   ADMIN SIDEBAR
+================================================== */
+.admin-sidebar {
+  width: 235px;
+  height: 100vh;
+
+  position: fixed;
+  left: 0;
+  top: 0; /* Commencer tout en haut de la page */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+
+  overflow-y: auto;
+
+  z-index: 1001;
+}
+
+/* HEADER DU SIDEBAR (LOGO + TITRE) */
+.admin-sidebar__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  height: 72px; /* Aligné avec la hauteur du header principal */
+  box-sizing: border-box;
+}
+
+.admin-sidebar__logo-wrapper {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-sidebar__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e3a5f;
+  white-space: nowrap;
+}
+
+
+/* ==================================================
+   RESPONSIVE DESIGN (MEDIA QUERIES)
+================================================== */
+@media (max-width: 900px) {
+  .admin-sidebar {
+    width: 210px;
+  }
+  .admin-header {
+    left: 210px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-sidebar {
+    width: 190px;
+  }
+  .admin-header {
+    left: 190px;
+  }
 }

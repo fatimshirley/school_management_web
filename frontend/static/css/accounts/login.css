@@ -1,0 +1,218 @@
+/* ============================================================
+SCHOOL MANAGEMENT - LOGIN
+============================================================ */
+
+.login-page {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: #ffffff;
+}
+
+/* ============================================================
+CARD
+============================================================ */
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    background: #ffffff;
+    padding: 20px;
+}
+
+/* ============================================================
+HEADER
+============================================================ */
+
+.login-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.login-logo {
+    font-size: 32px;
+    color: #0d3b2e;
+    margin-bottom: 12px;
+}
+
+.login-header h1 {
+    margin: 0;
+    color: #0b1419;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.login-header p {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* ============================================================
+FORM
+============================================================ */
+
+.login-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ============================================================
+INPUT & TOGGLE PASSWORD
+============================================================ */
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    font-size: 16px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    height: 46px;
+    padding: 0 42px 0 42px; /* Marge à droite pour le bouton de mot de passe */
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1f2937;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.input-wrapper input::placeholder {
+    color: #9ca3af;
+}
+
+.input-wrapper input:focus {
+    border-color: #11382b;
+    box-shadow: 0 0 0 3px rgba(17, 56, 43, 0.1);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    color: #374151;
+}
+
+.toggle-password:focus {
+    outline: none;
+    color: #11382b;
+}
+
+/* ============================================================
+ERRORS & MESSAGES
+============================================================ */
+
+.login-messages,
+.form-errors,
+.field-error {
+    margin-top: 6px;
+    color: #dc2626;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.login-messages {
+    margin-bottom: 16px;
+}
+
+/* ============================================================
+BUTTON
+============================================================ */
+
+.login-button {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #0d3b2e;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.login-button:hover {
+    background: #092a21;
+}
+
+.login-button:active {
+    transform: translateY(1px);
+}
+
+/* ============================================================
+FOOTER
+============================================================ */
+
+.login-footer {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+/* ============================================================
+RESPONSIVE
+============================================================ */
+
+@media (max-width: 600px) {
+    .login-page {
+        padding: 20px 15px;
+    }
+
+    .login-header h1 {
+        font-size: 22px;
+    }
+}

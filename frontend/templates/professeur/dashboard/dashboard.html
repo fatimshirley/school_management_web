@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Espace Professeur - Tableau de bord{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/professeur/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'professeur/layout/sidebar.html' %}
+
+    <div class="main-wrapper flex-grow-1">
+        {% include 'professeur/layout/header.html' %}
+
+        <main class="main-content container-fluid py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 bg-success text-white p-4">
+                        <h2 class="fw-bold">Bienvenue, Professeur {{ teacher.nom|default:request.user.email }}</h2>
+                        <p class="mb-0">Gérez vos notes, évaluations et absences en toute simplicité.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Autres sections de statistiques du dashboard -->
+        </main>
+
+        {% include 'professeur/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

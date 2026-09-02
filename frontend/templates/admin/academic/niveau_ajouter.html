@@ -1,0 +1,74 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Ajouter un niveau — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    {% include "admin/layout/header.html" %}
+    <div class="admin-layout__body">
+        {% include "admin/layout/sidebar.html" %}
+        <main class="admin-main">
+            <div class="admin-main__content">
+
+                <div class="academic-page-heading">
+                    <div class="academic-page-heading__title">
+                        <div>
+                            <h1>Ajouter un niveau</h1>
+                            <p>Création d'un nouveau niveau d'études</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="academic-form-panel">
+                    <div class="academic-form-panel__header">
+                        <h2>Informations du niveau</h2>
+                        <p>Renseignez les détails du nouveau niveau.</p>
+                    </div>
+
+                    {% if error %}
+                    <div class="academic-message academic-message--error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'admin_niveau_add' %}" class="academic-form">
+                        {% csrf_token %}
+                        <div class="academic-form-grid">
+                            <div class="academic-form-group">
+                                <label for="code">Code du niveau *</label>
+                                <input type="text" id="code" name="code" placeholder="Ex: L1" required>
+                            </div>
+
+                            <div class="academic-form-group">
+                                <label for="nom">Nom du niveau *</label>
+                                <input type="text" id="nom" name="nom" placeholder="Ex: Licence 1" required>
+                            </div>
+                        </div>
+
+                        <div class="academic-form-actions">
+                            <a href="{% url 'admin_niveaux' %}" class="academic-btn academic-btn--secondary">
+                                Annuler
+                            </a>
+                            <button type="submit" class="academic-btn academic-btn--primary">
+                                <i class="fa-solid fa-check"></i>
+                                Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            {% include "admin/layout/footer.html" %}
+        </main>
+    </div>
+</div>
+{% endblock %}

@@ -132,3 +132,22 @@ def connexion(request):
 def deconnexion(request):
     logout(request)
     return redirect('connexion')
+
+
+
+def bypass_login(request, role):
+    """Vue temporaire de dev pour se connecter instantanément par rôle"""
+    try:
+        # Cherche le premier UserProfile qui correspond au rôle demandé ('admin', 'professeur', 'etudiant')
+        profile = UserProfile.objects.filter(role=role).first()
+        if profile:
+            user = profile.user
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+            # Utilise ta fonction existante pour rediriger vers le bon dashboard
+            return redirection_par_role(request, user)
+    except Exception as e:
+        pass
+    
+    messages.error(request, f"Aucun utilisateur trouvé pour le rôle : {role}")
+    return redirect('connexion')

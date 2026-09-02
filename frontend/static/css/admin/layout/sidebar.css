@@ -5,13 +5,13 @@
 .admin-sidebar {
   width: 235px;
 
-  height: calc(100vh - 72px);
+  height: 100vh; /* Prend toute la hauteur de la fenêtre */
 
   position: fixed;
 
   left: 0;
 
-  top: 72px;
+  top: 0; /* Aligné tout en haut de l'écran */
 
   display: flex;
 
@@ -25,7 +25,75 @@
 
   overflow-y: auto;
 
-  z-index: 900;
+  z-index: 1001; /* Reste au-dessus pour un affichage propre */
+}
+
+/* --------------------------------------------------
+   HEADER (LOGO & TITRE)
+-------------------------------------------------- */
+
+.admin-sidebar__header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 16px;
+
+  height: 72px; /* Aligné avec la hauteur du header principal */
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background-color: #ffffff;
+
+  flex-shrink: 0;
+}
+
+.admin-sidebar__logo-wrapper {
+  width: 38px;
+
+  height: 38px;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background-color: #ffffff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  border: 1px solid #e5e7eb;
+
+  flex-shrink: 0;
+}
+
+.admin-sidebar__logo-img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.admin-sidebar__title {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1e3a5f;
+
+  white-space: nowrap;
+
+  letter-spacing: -0.2px;
 }
 
 /* --------------------------------------------------
@@ -34,6 +102,8 @@
 
 .admin-sidebar__nav {
   padding: 24px 14px;
+
+  flex-grow: 1;
 }
 
 .admin-sidebar__section {
@@ -140,6 +210,8 @@
   padding: 16px 14px;
 
   border-top: 1px solid #eeeeee;
+
+  flex-shrink: 0;
 }
 
 /* --------------------------------------------------

@@ -338,11 +338,11 @@ def admin_teacher_add(request):
 
     if request.method == 'POST':
 
-        identifiant = request.POST.get('identifiant', '').strip()
+        email_saisi = request.POST.get('email', '').strip()
         nom = request.POST.get('nom', '').strip()
         prenom = request.POST.get('prenom', '').strip()
 
-        if not identifiant or not nom:
+        if not email_saisi or not nom:
             return render(
                 request,
                 'admin/teachers/ajouter.html',
@@ -351,17 +351,17 @@ def admin_teacher_add(request):
                 }
             )
 
-        if Teacher.objects.filter(identifiant=identifiant).exists():
+        if Teacher.objects.filter(identifiant=email_saisi).exists():
             return render(
                 request,
                 'admin/teachers/ajouter.html',
                 {
-                    'error': 'Cet identifiant existe déjà.',
+                    'error': 'Cet email / identifiant existe déjà.',
                 }
             )
 
         Teacher.objects.create(
-            identifiant=identifiant,
+            identifiant=email_saisi,
             nom=nom,
             prenom=prenom or None
         )
@@ -702,6 +702,19 @@ def admin_grade_add(request):
                 }
             )
 
+        try:
+            evaluation_id = int(evaluation_id)
+        except (ValueError, TypeError):
+            return render(
+                request,
+                'admin/grades/saisir.html',
+                {
+                    'students': students,
+                    'evaluations': evaluations,
+                    'error': "Sélection d'évaluation invalide.",
+                }
+            )
+
         Grade.objects.update_or_create(
             student_id=student_id,
             evaluation_id=evaluation_id,
@@ -1015,6 +1028,7 @@ def admin_filiere_add(request):
         }
     )
 
+
 # ==================================================
 # NIVEAUX
 # ==================================================
@@ -1037,49 +1051,29 @@ def admin_niveaux(request):
     )
 
 
-@admin_required
-def admin_niveau_add(request):
+from django.shortcuts import render, get_object_or_404, redirect
+from apps.academic.models import Semestre
 
-    filieres = Filiere.objects.order_by('nom')
+@admin_required
+def admin_semestre_edit(request, semestre_id):
+    # On récupère le semestre concerné par l'ID dans l'URL
+    semestre = get_object_or_404(Semestre, id=semestre_id)
 
     if request.method == 'POST':
-        code = request.POST.get('code', '').strip()
-        nom = request.POST.get('nom', '').strip()
-        filiere_ids = request.POST.getlist('filieres')
+        date_debut = request.POST.get('date_debut')
+        date_fin = request.POST.get('date_fin')
+        
+        if date_debut and date_fin:
+            semestre.date_debut = date_debut
+            semestre.date_fin = date_fin
+            semestre.save()
+            return redirect('admin_semestres') # Redirige vers la liste
 
-        if not code or not nom:
-            return render(
-                request,
-                'admin/academic/niveau_ajouter.html',
-                {
-                    'filieres': filieres,
-                    'error': 'Le code et le nom du niveau sont obligatoires.',
-                }
-            )
+    context = {
+        'semestre': semestre, # Transmet l'objet au template pour afficher le nom, le niveau et l'année
+    }
+    return render(request, 'admin/academic/semestre_modifier.html', context)
 
-        if Niveau.objects.filter(code=code).exists():
-            return render(
-                request,
-                'admin/academic/niveau_ajouter.html',
-                {
-                    'filieres': filieres,
-                    'error': 'Un niveau avec ce code existe déjà.',
-                }
-            )
-
-        niveau = Niveau.objects.create(code=code, nom=nom)
-        if filiere_ids:
-            niveau.filieres.set(filiere_ids)
-
-        return redirect('admin_niveaux')
-
-    return render(
-        request,
-        'admin/academic/niveau_ajouter.html',
-        {
-            'filieres': filieres,
-        }
-    )
 
 
 # ==================================================
@@ -1103,43 +1097,63 @@ def admin_semestres(request):
         }
     )
 
-
 @admin_required
 def admin_semestre_add(request):
-
     niveaux = Niveau.objects.order_by('code')
+    semestre_choices = Semestre.SEMESTRE_CHOICES
 
     if request.method == 'POST':
         nom = request.POST.get('nom', '').strip()
         niveau_id = request.POST.get('niveau')
+        date_debut = request.POST.get('date_debut')
+        date_fin = request.POST.get('date_fin')
 
         if not nom or not niveau_id:
             return render(
                 request,
-                'admin/academic/semestre_ajouter.html',
+                'admin/academic/semestres_ajouter.html',  # <-- Corrigé ici
                 {
                     'niveaux': niveaux,
-                    'error': 'Le nom du semestre et le niveau sont obligatoires.',
+                    'semestre_choices': semestre_choices,
+                    'error': 'Le semestre et le niveau sont obligatoires.',
                 }
             )
 
         niveau = get_object_or_404(Niveau, id=niveau_id)
 
-        Semestre.objects.create(
+        # Création ou récupération du semestre avec ses dates
+        semestre, created = Semestre.objects.get_or_create(
             nom=nom,
-            niveau=niveau
+            niveau=niveau,
+            defaults={
+                'date_debut': date_debut if date_debut else None,
+                'date_fin': date_fin if date_fin else None,
+            }
         )
+        
+        # Si le semestre existait déjà, on met à jour ses dates
+        if not created and date_debut and date_fin:
+            semestre.date_debut = date_debut
+            semestre.date_fin = date_fin
+            semestre.save()
 
         return redirect('admin_semestres')
 
     return render(
         request,
-        'admin/academic/semestre_ajouter.html',
+        'admin/academic/semestres_ajouter.html',  # <-- Corrigé ici aussi
         {
             'niveaux': niveaux,
+            'semestre_choices': semestre_choices,
         }
     )
 
+
+@admin_required
+def admin_semestre_delete(request, semestre_id):  # <-- Utilisez bien "semestre_id" ici
+    semestre = get_object_or_404(Semestre, id=semestre_id)
+    semestre.delete()
+    return redirect('admin_semestres')
 
 # ==================================================
 # ANNÉES UNIVERSITAIRES
@@ -1244,7 +1258,7 @@ def admin_arriere_add(request):
                 {
                     'progressions': progressions,
                     'subjects': subjects,
-                    'error': 'L\'étudiant/progression et la matière sont obligatoires.',
+                    'error': "L'étudiant/progression et la matière sont obligatoires.",
                 }
             )
 
@@ -1270,36 +1284,139 @@ def admin_arriere_add(request):
 
 
 # ==================================================
-# DASHBOARD PROFESSEUR
+# DASHBOARDS PROFESSEUR ET ÉTUDIANT
 # ==================================================
 
 @login_required
 def professeur_dashboard(request):
-
     profile = UserProfile.objects.filter(user=request.user).first()
-
-    if profile is None:
-        return redirect('connexion')
-
-    if profile.role != 'professeur':
+    if profile is None or profile.role != 'professeur':
         return redirect('dashboard')
+    
+    return render(request, 'professeur/dashboard.html')
 
-    return render(request, 'professeur/dashboard/dashboard.html')
-
-
-# ==================================================
-# DASHBOARD ÉTUDIANT
-# ==================================================
 
 @login_required
 def etudiant_dashboard(request):
-
     profile = UserProfile.objects.filter(user=request.user).first()
-
-    if profile is None:
-        return redirect('connexion')
-
-    if profile.role != 'etudiant':
+    if profile is None or profile.role != 'etudiant':
         return redirect('dashboard')
+        
+    return render(request, 'etudiant/dashboard.html')
 
-    return render(request, 'etudiant/dashboard/dashboard.html')
+
+
+# ==================================================
+# DEDICATED ROLE DECORATORS & VIEWS
+# ==================================================
+
+def professeur_required(view_func):
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        profile = UserProfile.objects.filter(user=request.user).first()
+        if not profile or profile.role != 'professeur':
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+def etudiant_required(view_func):
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        profile = UserProfile.objects.filter(user=request.user).first()
+        if not profile or profile.role != 'etudiant':
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+# --------------------------------------------------
+# DASHBOARD PROFESSEUR
+# --------------------------------------------------
+
+@professeur_required
+def professeur_dashboard(request):
+    teacher = Teacher.objects.filter(identifiant=request.user.email).first()
+    context = {
+        'teacher': teacher,
+        'total_evaluations': Evaluation.objects.count(),
+        'total_absences': Absence.objects.count(),
+    }
+    return render(request, 'professeur/dashboard/dashboard.html', context)
+
+@professeur_required
+def professeur_grades(request):
+    grades = Grade.objects.select_related('student', 'evaluation__subject').all()
+    return render(request, 'professeur/grades/liste.html', {'grades': grades})
+
+@professeur_required
+def professeur_grade_add(request):
+    students = Student.objects.all()
+    evaluations = Evaluation.objects.all()
+    if request.method == 'POST':
+        student_id = request.POST.get('student')
+        evaluation_id = request.POST.get('evaluation')
+        note = request.POST.get('note')
+        if student_id and evaluation_id and note:
+            Grade.objects.update_or_create(
+                student_id=student_id,
+                evaluation_id=evaluation_id,
+                defaults={'note': float(note)}
+            )
+            return redirect('professeur_grades')
+    return render(request, 'professeur/grades/saisir.html', {'students': students, 'evaluations': evaluations})
+
+@professeur_required
+def professeur_absences(request):
+    absences = Absence.objects.select_related('student', 'evaluation__subject').all()
+    return render(request, 'professeur/absences/liste.html', {'absences': absences})
+
+@professeur_required
+def professeur_absence_add(request):
+    students = Student.objects.all()
+    evaluations = Evaluation.objects.all()
+    if request.method == 'POST':
+        student_id = request.POST.get('student')
+        evaluation_id = request.POST.get('evaluation')
+        date_absence = request.POST.get('date_absence')
+        if student_id and evaluation_id and date_absence:
+            Absence.objects.create(student_id=student_id, evaluation_id=evaluation_id, date_absence=date_absence)
+            return redirect('professeur_absences')
+    return render(request, 'professeur/absences/enregistrer.html', {'students': students, 'evaluations': evaluations})
+
+
+# --------------------------------------------------
+# DASHBOARD ÉTUDIANT
+# --------------------------------------------------
+
+@etudiant_required
+def etudiant_dashboard(request):
+    student = Student.objects.filter(matricule=request.user.email).first()
+    context = {
+        'student': student,
+    }
+    return render(request, 'etudiant/dashboard/dashboard.html', context)
+
+@etudiant_required
+def etudiant_grades(request):
+    student = Student.objects.filter(matricule=request.user.email).first()
+    grades = Grade.objects.filter(student=student).select_related('evaluation__subject') if student else []
+    return render(request, 'etudiant/grades/liste.html', {'grades': grades})
+
+@etudiant_required
+def etudiant_absences(request):
+    student = Student.objects.filter(matricule=request.user.email).first()
+    absences = Absence.objects.filter(student=student).select_related('evaluation__subject') if student else []
+    return render(request, 'etudiant/absences/liste.html', {'absences': absences})
+
+@etudiant_required
+def etudiant_subjects(request):
+    student = Student.objects.filter(matricule=request.user.email).first()
+    subjects = Subject.objects.filter(semestre__niveau=student.niveau) if student and student.niveau else []
+    return render(request, 'etudiant/subjects/liste.html', {'subjects': subjects})
+
+@etudiant_required
+def etudiant_arrieres(request):
+    student = Student.objects.filter(matricule=request.user.email).first()
+    arrieres = Arriere.objects.filter(student=student) if student else []
+    # Corriger "arrieres/liste.html" par "arrears/liste.html"
+    return render(request, 'etudiant/arrears/liste.html', {'arrieres': arrieres})

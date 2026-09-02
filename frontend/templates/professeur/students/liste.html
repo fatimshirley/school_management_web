@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Mes Étudiants - Espace Professeur{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/professeur/students.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'professeur/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'professeur/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <h2 class="mb-4">Liste de mes étudiants</h2>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Matricule</th>
+                                <th>Nom & Prénom</th>
+                                <th>Niveau</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.matricule }}</td>
+                                <td>{{ student.nom }} {{ student.prenom }}</td>
+                                <td>{{ student.niveau }}</td>
+                                <td>
+                                    <a href="{% url 'professeur_student_detail' student.id %}" class="btn btn-sm btn-outline-info">Détails</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Aucun étudiant trouvé.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        {% include 'professeur/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

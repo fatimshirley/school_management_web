@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Détails Étudiant - Espace Professeur{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/professeur/students.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'professeur/layout/sidebar.html' %}
+    <div class="main-wrapper flex-grow-1">
+        {% include 'professeur/layout/header.html' %}
+        <main class="main-content container-fluid py-4">
+            <h2 class="mb-4">Fiche Étudiant : {{ student.nom }} {{ student.prenom }}</h2>
+            <div class="card shadow-sm border-0 p-4">
+                <p><strong>Matricule :</strong> {{ student.matricule }}</p>
+                <p><strong>Email :</strong> {{ student.user.email }}</p>
+                <p><strong>Niveau :</strong> {{ student.niveau }}</p>
+                <a href="{% url 'professeur_students' %}" class="btn btn-secondary mt-3">Retour à la liste</a>
+            </div>
+        </main>
+        {% include 'professeur/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

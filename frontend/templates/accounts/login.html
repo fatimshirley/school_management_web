@@ -1,35 +1,127 @@
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% extends "base/base.html" %}
+{% load static %}
 
-    <title>Connexion</title>
-  </head>
+{% block title %}Connexion - School Management{% endblock %}
 
-  <body>
-    <h1>Connexion</h1>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+{% endblock %}
 
-    {% if messages %} {% for message in messages %}
-    <p>{{ message }}</p>
-    {% endfor %} {% endif %}
+{% block content %}
+<div class="login-page">
+    <div class="login-card">
 
-    <form method="POST">
-      {% csrf_token %}
+        <div class="login-header">
+            <h1>School Management</h1>
+            <p>Connectez-vous à votre espace</p>
+        </div>
 
-      <div>
-        <label for="username"> Nom d'utilisateur </label>
+        {% if messages %}
+            <div class="login-messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-        <input type="text" id="username" name="username" required />
-      </div>
+        <form method="post" class="login-form">
+            {% csrf_token %}
 
-      <div>
-        <label for="password"> Mot de passe </label>
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <div>
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
 
-        <input type="password" id="password" name="password" required />
-      </div>
+            <div class="form-group">
+                <label for="id_username">
+                    Adresse email
+                </label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input
+                        type="email"
+                        name="username"
+                        id="id_username"
+                        class="login-input"
+                        placeholder="votre.email@example.com"
+                        autocomplete="email"
+                        value="{{ form.username.value|default:'' }}"
+                        required
+                    >
+                </div>
+                {% if form.username.errors %}
+                    <div class="field-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ form.username.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
 
-      <button type="submit">Se connecter</button>
-    </form>
-  </body>
-</html>
+            <div class="form-group">
+                <label for="id_password">
+                    Mot de passe
+                </label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input
+                        type="password"
+                        name="password"
+                        id="id_password"
+                        class="login-input"
+                        placeholder="Entrez votre mot de passe"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button type="button" id="togglePassword" class="toggle-password" aria-label="Afficher/Masquer le mot de passe">
+                        <i class="fa-solid fa-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+                {% if form.password.errors %}
+                    <div class="field-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ form.password.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="login-button">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Se connecter</span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Accès sécurisé à votre espace</span>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('id_password');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        if (togglePassword && passwordInput && toggleIcon) {
+            togglePassword.addEventListener('click', function () {
+                const isPassword = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                
+                toggleIcon.classList.toggle('fa-eye', !isPassword);
+                toggleIcon.classList.toggle('fa-eye-slash', isPassword);
+            });
+        }
+    });
+</script>
+{% endblock %}

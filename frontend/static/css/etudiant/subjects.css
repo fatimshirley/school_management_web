@@ -1,0 +1,5 @@
+/* Matières Étudiant Styles */
+.card {
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0,0,0,.125);
+}
