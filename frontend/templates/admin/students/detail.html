@@ -1,16 +1,16 @@
-{% extends "base/base.html" %} {% load static %} {% block title %} Détail
-étudiant — Administration {% endblock %} {% block extra_css %}
+{% extends "base/base.html" %} 
+{% load static %} 
 
+{% block title %} Détail étudiant — Administration {% endblock %} 
+
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
-
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
-
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
-
 <link rel="stylesheet" href="{% static 'css/admin/students.css' %}" />
+{% endblock %} 
 
-{% endblock %} {% block content %}
-
+{% block content %}
 <div class="admin-layout">
   {% include "admin/layout/header.html" %}
 
@@ -21,11 +21,8 @@
       <div class="admin-main__content">
         <div class="students-page-heading">
           <div class="students-page-heading__title">
-            
-
             <div>
               <h1>Détail de l'étudiant</h1>
-
               <p>Informations administratives</p>
             </div>
           </div>
@@ -57,7 +54,6 @@
 
             <div>
               <h2>{{ student.nom }} {{ student.prenom }}</h2>
-
               <p>{{ student.matricule }}</p>
             </div>
           </div>
@@ -65,7 +61,6 @@
           <div class="student-detail-grid">
             <div class="student-detail-item">
               <span class="student-detail-item__label"> Matricule </span>
-
               <span class="student-detail-item__value">
                 {{ student.matricule }}
               </span>
@@ -73,7 +68,6 @@
 
             <div class="student-detail-item">
               <span class="student-detail-item__label"> Nom </span>
-
               <span class="student-detail-item__value">
                 {{ student.nom }}
               </span>
@@ -81,7 +75,6 @@
 
             <div class="student-detail-item">
               <span class="student-detail-item__label"> Prénom </span>
-
               <span class="student-detail-item__value">
                 {{ student.prenom }}
               </span>
@@ -89,7 +82,6 @@
 
             <div class="student-detail-item">
               <span class="student-detail-item__label"> Âge </span>
-
               <span class="student-detail-item__value">
                 {{ student.age }} ans
               </span>
@@ -97,23 +89,37 @@
 
             <div class="student-detail-item">
               <span class="student-detail-item__label"> Niveau </span>
-
               <span class="student-detail-item__value">
-                {% if student.niveau %} {{ student.niveau.code }} — {{
-                student.niveau.nom }} {% else %} Non affecté {% endif %}
+                {% if student.niveau %} 
+                  {{ student.niveau.code }} — {{ student.niveau.nom }} 
+                {% else %} 
+                  Non affecté 
+                {% endif %}
               </span>
             </div>
 
-            <div class="student-detail-item">
-              <span class="student-detail-item__label">
-                Compte utilisateur
-              </span>
-
+            <!-- SECTION COMPTE UTILISATEUR AMÉLIORÉE -->
+            <div class="student-detail-item" style="grid-column: 1 / -1;">
+              <span class="student-detail-item__label"> Compte utilisateur & Identifiants </span>
               <span class="student-detail-item__value">
-                {% if student.user %} {{ student.user.username }} {% else %}
-                Aucun compte associé {% endif %}
+                {% if student.user %}
+                  <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #4f46e5;">
+                    <p style="margin: 0 0 5px 0;"><strong>Identifiant (Email / Username) :</strong> {{ student.user.email|default:student.user.username }}</p>
+                    <p style="margin: 0 0 5px 0;"><strong>Rôle système :</strong> {{ student.user.userprofile.get_role_display|default:"Étudiant" }}</p>
+                    <p style="margin: 0;"><strong>Statut :</strong> 
+                      {% if student.user.is_active %}
+                        <span style="color: green; font-weight: 600;">● Actif</span>
+                      {% else %}
+                        <span style="color: red; font-weight: 600;">● Inactif</span>
+                      {% endif %}
+                    </p>
+                  </div>
+                {% else %}
+                  <span style="color: #d97706; font-style: italic;">Aucun compte associé (Vérifiez la liaison avec le modèle User)</span>
+                {% endif %}
               </span>
             </div>
+            
           </div>
         </section>
       </div>
@@ -122,5 +128,4 @@
     </main>
   </div>
 </div>
-
 {% endblock %}
