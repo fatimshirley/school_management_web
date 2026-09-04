@@ -1,15 +1,17 @@
 {% extends "base/base.html" %} {% load static %} {% block title %} Détail
 étudiant — Administration {% endblock %} {% block extra_css %}
+
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/students.css' %}" />
 {% endblock %} {% block content %}
+
 <div class="admin-layout">
   {% include "admin/layout/header.html" %}
 
   <div class="admin-layout__body">
-    {% include "admin/layout/sidebar.html" %}
+    ``` {% include "admin/layout/sidebar.html" %}
 
     <main class="admin-main">
       <div class="admin-main__content">
@@ -26,13 +28,16 @@
               href="{% url 'admin_student_edit' student.id %}"
               class="students-btn students-btn--primary"
             >
-              <i class="fa-solid fa-pen"></i> Modifier
+              <i class="fa-solid fa-pen"></i>
+              Modifier
             </a>
+
             <a
               href="{% url 'admin_students' %}"
               class="students-btn students-btn--secondary"
             >
-              <i class="fa-solid fa-arrow-left"></i> Retour
+              <i class="fa-solid fa-arrow-left"></i>
+              Retour
             </a>
           </div>
         </div>
@@ -42,6 +47,7 @@
             <div class="student-profile-icon">
               <i class="fa-solid fa-user"></i>
             </div>
+
             <div>
               <h2>{{ student.nom }} {{ student.prenom }}</h2>
               <p>{{ student.matricule }}</p>
@@ -50,68 +56,89 @@
 
           <div class="student-detail-grid">
             <div class="student-detail-item">
-              <span class="student-detail-item__label">Matricule</span>
-              <span class="student-detail-item__value"
-                >{{ student.matricule }}</span
-              >
+              <span class="student-detail-item__label"> Matricule </span>
+
+              <span class="student-detail-item__value">
+                {{ student.matricule }}
+              </span>
             </div>
 
             <div class="student-detail-item">
-              <span class="student-detail-item__label">Nom</span>
-              <span class="student-detail-item__value">{{ student.nom }}</span>
+              <span class="student-detail-item__label"> Nom </span>
+
+              <span class="student-detail-item__value">
+                {{ student.nom }}
+              </span>
             </div>
 
             <div class="student-detail-item">
-              <span class="student-detail-item__label">Prénom</span>
-              <span class="student-detail-item__value"
-                >{{ student.prenom }}</span
-              >
+              <span class="student-detail-item__label"> Prénom </span>
+
+              <span class="student-detail-item__value">
+                {{ student.prenom }}
+              </span>
             </div>
 
             <div class="student-detail-item">
-              <span class="student-detail-item__label">Âge</span>
-              <span class="student-detail-item__value"
-                >{{ student.age }} ans</span
-              >
+              <span class="student-detail-item__label"> Âge </span>
+
+              <span class="student-detail-item__value">
+                {{ student.age }} ans
+              </span>
             </div>
 
-            <!-- Champ Filière propre -->
             <div class="student-detail-item">
-              <span class="student-detail-item__label">Filière</span>
-              <span class="student-detail-item__value"
-                >{{ student.filiere_display }}</span
-              >
+              <span class="student-detail-item__label"> Filière </span>
+
+              <span class="student-detail-item__value">
+                {{ student.filiere_display }}
+              </span>
             </div>
 
-            <!-- Champ Niveau propre -->
             <div class="student-detail-item">
-              <span class="student-detail-item__label">Niveau</span>
-              <span class="student-detail-item__value"
-                >{{ student.niveau_display }}</span
-              >
+              <span class="student-detail-item__label"> Niveau </span>
+
+              <span class="student-detail-item__value">
+                {{ student.niveau_display }}
+              </span>
             </div>
 
-            <!-- Compte utilisateur de connexion -->
             <div class="student-detail-item">
-              <span class="student-detail-item__label"
-                >Compte de connexion</span
-              >
+              <span class="student-detail-item__label">
+                Compte de connexion
+              </span>
+
               <span class="student-detail-item__value">
                 {% if student.user %}
-                <strong>Identifiant :</strong> {{ student.user.username }}<br />
-                <strong>Email :</strong> {{ student.user.email }}<br />
+
+                <strong>Identifiant :</strong>
+                {{ student.user.username }}
+                <br />
+
+                <strong>Email :</strong>
+                {{ student.user.email }}
+                <br />
+
                 {% if student.raw_password %}
+
                 <strong>Mot de passe temporaire :</strong>
-                <span style="color: #d9534f; font-weight: bold"
-                  >{{ student.raw_password }}</span
-                ><br />
-                <small style="color: #666"
-                  >(Communiquez ces informations à l'étudiant)</small
-                >
+
+                <span style="color: #d9534f; font-weight: bold">
+                  {{ student.raw_password }}
+                </span>
+
+                <br />
+
+                <small style="color: #666">
+                  (Communiquez ces informations à l'étudiant)
+                </small>
+
                 {% else %}
-                <small style="color: #666"
-                  >(Mot de passe déjà généré et sécurisé)</small
-                >
+
+                <small style="color: #666">
+                  (Mot de passe déjà généré et sécurisé)
+                </small>
+
                 {% endif %} {% else %} Aucun compte associé {% endif %}
               </span>
             </div>
@@ -121,6 +148,8 @@
 
       {% include "admin/layout/footer.html" %}
     </main>
+    ```
   </div>
 </div>
+
 {% endblock %}
