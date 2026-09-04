@@ -5,7 +5,6 @@ notes — Administration{% endblock %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/grades.css' %}" />
 {% endblock %} {% block content %}
-
 <div class="admin-layout">
   {% include "admin/layout/header.html" %}
 
@@ -16,19 +15,27 @@ notes — Administration{% endblock %} {% block extra_css %}
       <div class="admin-main__content">
         <div class="grades-page-heading">
           <div class="grades-page-heading__title">
-            
-
             <div>
               <h1>Historique des notes</h1>
               <p>Historique chronologique des résultats</p>
             </div>
+          </div>
+
+          <!-- Bouton de retour vers la liste des notes -->
+          <div class="grades-heading-actions">
+            <a
+              href="{% url 'admin_grades' %}"
+              class="grades-btn grades-btn--secondary"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              Retour à la liste
+            </a>
           </div>
         </div>
 
         <section class="grades-panel">
           <div class="grades-panel__header">
             <h2>Historique</h2>
-
             <p>Ensemble des notes enregistrées</p>
           </div>
 
@@ -50,28 +57,18 @@ notes — Administration{% endblock %} {% block extra_css %}
 
               <tbody>
                 {% for grade in grades %}
-
                 <tr>
                   <td>{{ grade.evaluation.date|date:"d/m/Y" }}</td>
-
-                  <td>
-                    {{ grade.student.matricule }} — {{ grade.student.nom }} {{
-                    grade.student.prenom }}
-                  </td>
-
+                  <!-- prettier-ignore -->
+                  <td>{{ grade.student.matricule }} — {{ grade.student.nom }} {{ grade.student.prenom }}</td>
                   <td>{{ grade.evaluation.subject.nom }}</td>
-
                   <td>{{ grade.evaluation.get_type_evaluation_display }}</td>
-
                   <td>Session {{ grade.evaluation.session }}</td>
-
                   <td>{{ grade.evaluation.annee_universitaire.libelle }}</td>
-
                   <td>
                     <strong>{{ grade.note }}/20</strong>
                   </td>
                 </tr>
-
                 {% endfor %}
               </tbody>
             </table>
@@ -83,9 +80,7 @@ notes — Administration{% endblock %} {% block extra_css %}
             <div class="grades-empty__icon">
               <i class="fa-solid fa-clock-rotate-left"></i>
             </div>
-
             <h3>Aucun historique</h3>
-
             <p>Aucune note n'est actuellement enregistrée.</p>
           </div>
 
@@ -97,5 +92,4 @@ notes — Administration{% endblock %} {% block extra_css %}
     </main>
   </div>
 </div>
-
 {% endblock %}

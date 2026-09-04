@@ -16,7 +16,6 @@ professeur — Administration{% endblock %} {% block extra_css %}
       <div class="admin-main__content">
         <div class="teachers-page-heading">
           <div class="teachers-page-heading__title">
-      
             <div>
               <h1>Détail du professeur</h1>
               <p>Informations du professeur</p>
@@ -28,16 +27,14 @@ professeur — Administration{% endblock %} {% block extra_css %}
               href="{% url 'admin_teacher_edit' teacher.id %}"
               class="teachers-btn teachers-btn--primary"
             >
-              <i class="fa-solid fa-pen"></i>
-              Modifier
+              <i class="fa-solid fa-pen"></i> Modifier
             </a>
 
             <a
               href="{% url 'admin_teachers' %}"
               class="teachers-btn teachers-btn--secondary"
             >
-              <i class="fa-solid fa-arrow-left"></i>
-              Retour
+              <i class="fa-solid fa-arrow-left"></i> Retour
             </a>
           </div>
         </div>
@@ -50,44 +47,52 @@ professeur — Administration{% endblock %} {% block extra_css %}
 
             <div>
               <h2>{{ teacher.nom }} {{ teacher.prenom|default:"" }}</h2>
-
               <p>{{ teacher.identifiant }}</p>
             </div>
           </div>
 
           <div class="teacher-detail-grid">
             <div class="teacher-detail-item">
-              <span class="teacher-detail-item__label"> Identifiant </span>
-
-              <span class="teacher-detail-item__value">
-                {{ teacher.identifiant }}
-              </span>
+              <span class="teacher-detail-item__label">Identifiant</span>
+              <span class="teacher-detail-item__value"
+                >{{ teacher.identifiant }}</span
+              >
             </div>
 
             <div class="teacher-detail-item">
-              <span class="teacher-detail-item__label"> Nom </span>
-
-              <span class="teacher-detail-item__value">
-                {{ teacher.nom }}
-              </span>
+              <span class="teacher-detail-item__label">Nom</span>
+              <span class="teacher-detail-item__value">{{ teacher.nom }}</span>
             </div>
 
             <div class="teacher-detail-item">
-              <span class="teacher-detail-item__label"> Prénom </span>
-
-              <span class="teacher-detail-item__value">
-                {{ teacher.prenom|default:"Non renseigné" }}
-              </span>
+              <span class="teacher-detail-item__label">Prénom</span>
+              <span class="teacher-detail-item__value"
+                >{{ teacher.prenom|default:"Non renseigné" }}</span
+              >
             </div>
 
+            <!-- Compte de connexion regroupé (identifiant, email et mot de passe temporaire) -->
             <div class="teacher-detail-item">
-              <span class="teacher-detail-item__label">
-                Compte utilisateur
-              </span>
-
+              <span class="teacher-detail-item__label"
+                >Compte de connexion</span
+              >
               <span class="teacher-detail-item__value">
-                {% if teacher.user %} {{ teacher.user.username }} {% else %}
-                Aucun compte associé {% endif %}
+                {% if teacher.user %}
+                <strong>Identifiant :</strong> {{ teacher.user.username }}<br />
+                <strong>Email :</strong> {{ teacher.user.email }}<br />
+                {% if teacher.raw_password %}
+                <strong>Mot de passe temporaire :</strong>
+                <span style="color: #d9534f; font-weight: bold"
+                  >{{ teacher.raw_password }}</span
+                ><br />
+                <small style="color: #666"
+                  >(Communiquez ces informations au professeur)</small
+                >
+                {% else %}
+                <small style="color: #666"
+                  >(Mot de passe déjà généré et sécurisé)</small
+                >
+                {% endif %} {% else %} Aucun compte associé {% endif %}
               </span>
             </div>
           </div>

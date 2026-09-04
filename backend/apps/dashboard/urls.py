@@ -1,9 +1,29 @@
 from django.urls import path
-
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 from . import views
 
+# Classe personnalisée qui déconnecte l'utilisateur et le redirige instantanément
+class CustomLogoutView(LogoutView):
+    http_method_names = ['get', 'post', 'options']
+
+    def dispatch(self, request, *args, **kwargs):
+        # Déconnecte l'utilisateur
+        logout(request)
+        # Redirige immédiatement vers la page de connexion admin (ou l'URL de votre choix)
+        return redirect('connexion')
 
 urlpatterns = [
+
+    # ==================================================
+    # DÉCONNEXION
+    # ==================================================
+    path(
+        'logout/',
+        CustomLogoutView.as_view(),
+        name='logout'
+    ),
 
     # ==================================================
     # DASHBOARDS
@@ -225,6 +245,18 @@ urlpatterns = [
         name='admin_filiere_add'
     ),
 
+    path(
+        'admin/filieres/modifier/<int:pk>/',
+        views.admin_filiere_edit,
+        name='admin_filiere_edit'
+    ),
+
+    path(
+        'admin/filieres/supprimer/<int:pk>/',
+        views.admin_filiere_delete,
+        name='admin_filiere_delete'
+    ),
+
 
     # ==================================================
     # NIVEAUX (ADMIN)
@@ -234,6 +266,24 @@ urlpatterns = [
         'admin/niveaux/',
         views.admin_niveaux,
         name='admin_niveaux'
+    ),
+
+    path(
+        'admin/niveaux/ajouter/',
+        views.admin_niveau_add,
+        name='admin_niveau_add'
+    ),
+
+    path(
+        'admin/niveaux/modifier/<int:pk>/',
+        views.admin_niveau_edit,
+        name='admin_niveau_edit'
+    ),
+
+    path(
+        'admin/niveaux/supprimer/<int:pk>/',
+        views.admin_niveau_delete,
+        name='admin_niveau_delete'
     ),
 
 
@@ -282,6 +332,18 @@ urlpatterns = [
         name='admin_annee_add'
     ),
 
+    path(
+        'admin/annees/modifier/<int:pk>/',
+        views.admin_annee_edit,
+        name='admin_annee_edit'
+    ),
+
+    path(
+        'admin/annees/supprimer/<int:pk>/',
+        views.admin_annee_delete,
+        name='admin_annee_delete'
+    ),
+
 
     # ==================================================
     # ARRIÉRÉS (ADMIN)
@@ -299,10 +361,40 @@ urlpatterns = [
         name='admin_arriere_add'
     ),
 
+    path(
+        'admin/arrieres/generer/',
+        views.admin_generer_arrieres_automatique,
+        name='admin_generer_arrieres'
+    ),
+
 
     # ==================================================
     # ESPACE PROFESSEUR
     # ==================================================
+
+    path(
+        'professeur/evaluations/',
+        views.professeur_evaluations,
+        name='professeur_evaluations'
+    ),
+
+    path(
+        'professeur/evaluations/ajouter/',
+        views.professeur_evaluation_ajouter,
+        name='professeur_evaluation_ajouter'
+    ),
+
+    path(
+        'professeur/etudiants/',
+        views.professeur_students,
+        name='professeur_students'
+    ),
+
+    path(
+        'professeur/matieres/',
+        views.professeur_subjects,
+        name='professeur_subjects'
+    ),
 
     path(
         'professeur/notes/',

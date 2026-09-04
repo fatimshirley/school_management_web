@@ -1,6 +1,15 @@
 {% load static %}
 
+<!-- Lien vers le fichier CSS de la sidebar -->
+<link
+  rel="stylesheet"
+  href="{% static 'css/professeur/layout/sidebar.css' %}"
+/>
+
 <aside class="admin-sidebar">
+  <!-- ==================================================
+       HEADER (LOGO EN ROND + TITRE)
+  ================================================== -->
   <div class="admin-sidebar__header">
     <div class="admin-sidebar__logo-wrapper">
       <img
@@ -13,8 +22,12 @@
   </div>
 
   <nav class="admin-sidebar__nav">
+    <!-- ==================================================
+         PRINCIPAL
+    ================================================== -->
     <div class="admin-sidebar__section">
       <span class="admin-sidebar__section-title"> PRINCIPAL </span>
+
       <a
         href="{% url 'professeur_dashboard' %}"
         class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_dashboard' %} active {% endif %}"
@@ -24,43 +37,52 @@
       </a>
     </div>
 
+    <!-- ==================================================
+         GESTION
+    ================================================== -->
     <div class="admin-sidebar__section">
       <span class="admin-sidebar__section-title"> GESTION </span>
+
+      <!-- ÉVALUATIONS -->
       <a
         href="{% url 'professeur_evaluations' %}"
-        class="admin-sidebar__link {% if 'evaluations' in request.resolver_match.url_name %} active {% endif %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_evaluations' or request.resolver_match.url_name == 'professeur_evaluation_add' %} active {% endif %}"
       >
         <i class="fa-solid fa-clipboard-list"></i>
         <span>Évaluations</span>
       </a>
 
+      <!-- NOTES -->
       <a
         href="{% url 'professeur_grades' %}"
-        class="admin-sidebar__link {% if 'grades' in request.resolver_match.url_name %} active {% endif %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_grades' or request.resolver_match.url_name == 'professeur_grade_add' or request.resolver_match.url_name == 'professeur_grade_history' %} active {% endif %}"
       >
         <i class="fa-solid fa-clipboard-check"></i>
         <span>Notes</span>
       </a>
 
+      <!-- ABSENCES -->
       <a
         href="{% url 'professeur_absences' %}"
-        class="admin-sidebar__link {% if 'absences' in request.resolver_match.url_name %} active {% endif %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_absences' or request.resolver_match.url_name == 'professeur_absence_add' %} active {% endif %}"
       >
         <i class="fa-solid fa-calendar-xmark"></i>
         <span>Absences</span>
       </a>
 
+      <!-- ÉTUDIANTS -->
       <a
         href="{% url 'professeur_students' %}"
-        class="admin-sidebar__link {% if 'students' in request.resolver_match.url_name %} active {% endif %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_students' or request.resolver_match.url_name == 'professeur_student_detail' %} active {% endif %}"
       >
         <i class="fa-solid fa-user-graduate"></i>
         <span>Étudiants</span>
       </a>
 
+      <!-- MATIÈRES -->
       <a
         href="{% url 'professeur_subjects' %}"
-        class="admin-sidebar__link {% if 'subjects' in request.resolver_match.url_name %} active {% endif %}"
+        class="admin-sidebar__link {% if request.resolver_match.url_name == 'professeur_subjects' %} active {% endif %}"
       >
         <i class="fa-solid fa-book"></i>
         <span>Matières</span>
@@ -68,10 +90,16 @@
     </div>
   </nav>
 
+  <!-- ==================================================
+       DÉCONNEXION
+  ================================================== -->
   <div class="admin-sidebar__bottom">
-    <form action="{% url 'logout' %}" method="POST">
+    <form action="#" method="POST">
       {% csrf_token %}
-      <button type="submit" class="admin-sidebar__logout border-0 bg-transparent w-100 text-start">
+      <button
+        type="submit"
+        class="admin-sidebar__logout border-0 bg-transparent w-100 text-start"
+      >
         <i class="fa-solid fa-right-from-bracket"></i>
         <span>Déconnexion</span>
       </button>

@@ -49,12 +49,21 @@ class Niveau(models.Model):
     def __str__(self):
         return self.nom
 
-
 class AnneeUniversitaire(models.Model):
 
     libelle = models.CharField(
         max_length=20,
         unique=True
+    )
+
+    date_debut = models.DateField(
+        null=True,
+        blank=True
+    )
+
+    date_fin = models.DateField(
+        null=True,
+        blank=True
     )
 
     active = models.BooleanField(
@@ -64,7 +73,7 @@ class AnneeUniversitaire(models.Model):
     def __str__(self):
         return self.libelle
 
-
+        
 class Semestre(models.Model):
 
     SEMESTRE_CHOICES = [

@@ -1,94 +1,125 @@
-{% extends "base/base.html" %}
-{% load static %}
-
-{% block title %}Niveaux — Administration{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends "base/base.html" %} {% load static %} {% block title %}Niveaux —
+Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
 <div class="admin-layout">
-    {% include "admin/layout/header.html" %}
-    
-    <div class="admin-layout__body">
-        {% include "admin/layout/sidebar.html" %}
+  {% include "admin/layout/header.html" %}
 
-        <main class="admin-main">
-            <div class="admin-main__content">
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
 
-                <!-- En-tête de la page avec le bouton d'ajout à droite -->
-                <div class="academic-page-heading">
-                    <div class="academic-page-heading__title">
-
-                        <div>
-                            <h1>Niveaux</h1>
-                            <p>Gestion des niveaux d'études</p>
-                        </div>
-                    </div>
-
-                    <!-- Actions d'en-tête -->
-                    <div class="academic-page-heading__actions">
-                        <a href="{% url 'admin_niveau_add' %}" class="academic-btn academic-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Ajouter un niveau</span>
-                        </a>
-                    </div>
-                </div>
-
-                <section class="academic-panel">
-                    <div class="academic-panel__header">
-                        <h2>Liste des niveaux</h2>
-                        <p>Niveaux enregistrés dans le système</p>
-                    </div>
-
-                    {% if niveaux %}
-                    <div class="academic-table-wrapper">
-                        <table class="academic-table">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Nom du niveau</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for niveau in niveaux %}
-                                <tr>
-                                    <td><strong>{{ niveau.code }}</strong></td>
-                                    <td>{{ niveau.nom }}</td>
-                                    <td>
-                                        <a href="#" class="academic-btn-icon" title="Modifier">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <!-- Affiché UNIQUEMENT si la liste est vide -->
-                    <div class="academic-empty">
-                        <div class="academic-empty__icon">
-                            <i class="fa-solid fa-layer-group"></i>
-                        </div>
-                        <h3>Aucun niveau</h3>
-                        <p>Aucun niveau n'est actuellement enregistré.</p>
-                        <a href="{% url 'admin_niveau_add' %}" class="academic-btn academic-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Ajouter un niveau</span>
-                        </a>
-                    </div>
-                    {% endif %}
-                </section>
-
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <!-- En-tête de la page avec le bouton d'ajout à droite -->
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div>
+              <h1>Niveaux</h1>
+              <p>Gestion des niveaux d'études</p>
             </div>
-            {% include "admin/layout/footer.html" %}
-        </main>
-    </div>
+          </div>
+
+          <!-- Actions d'en-tête -->
+          <div class="academic-page-heading__actions">
+            <a
+              href="{% url 'admin_niveau_add' %}"
+              class="academic-btn academic-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              <span>Ajouter un niveau</span>
+            </a>
+          </div>
+        </div>
+
+        <section class="academic-panel">
+          <div class="academic-panel__header">
+            <h2>Liste des niveaux</h2>
+            <p>Niveaux enregistrés dans le système</p>
+          </div>
+
+          {% if niveaux %}
+          <div class="academic-table-wrapper">
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Nom du niveau</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for niveau in niveaux %}
+                <tr>
+                  <td><strong>{{ niveau.code }}</strong></td>
+                  <td>{{ niveau.nom }}</td>
+                  <td>
+                    <div
+                      class="academic-actions"
+                      style="display: flex; gap: 10px; align-items: center"
+                    >
+                      <!-- Bouton Modifier -->
+                      <a
+                        href="{% url 'admin_niveau_edit' niveau.id %}"
+                        class="academic-btn-icon"
+                        title="Modifier"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </a>
+
+                      <!-- Formulaire et Bouton Supprimer avec alerte -->
+                      <form
+                        action="{% url 'admin_niveau_delete' niveau.id %}"
+                        method="POST"
+                        style="display: inline"
+                        onsubmit="return confirm('Voulez-vous vraiment supprimer le niveau {{ niveau.nom }} ?');"
+                      >
+                        {% csrf_token %}
+                        <button
+                          type="submit"
+                          class="academic-btn-icon"
+                          title="Supprimer"
+                          style="
+                            color: #e74c3c;
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            padding: 0;
+                          "
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <!-- Affiché UNIQUEMENT si la liste est vide -->
+          <div class="academic-empty">
+            <div class="academic-empty__icon">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h3>Aucun niveau</h3>
+            <p>Aucun niveau n'est actuellement enregistré.</p>
+            <a
+              href="{% url 'admin_niveau_add' %}"
+              class="academic-btn academic-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              <span>Ajouter un niveau</span>
+            </a>
+          </div>
+          {% endif %}
+        </section>
+      </div>
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
 </div>
 {% endblock %}

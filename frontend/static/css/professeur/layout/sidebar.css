@@ -1,0 +1,222 @@
+/* ==================================================
+    SIDEBAR PROFESSEUR STYLES
+================================================== */
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 235px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Header (Logo + Titre) */
+.admin-sidebar__header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.admin-sidebar__logo-wrapper {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f3f4f6;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-sidebar__title {
+  font-size: 13px;
+  font-weight: 650;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+/* Navigation */
+.admin-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 12px;
+}
+
+.admin-sidebar__section {
+  margin-bottom: 24px;
+}
+
+.admin-sidebar__section:last-child {
+  margin-bottom: 0;
+}
+
+.admin-sidebar__section-title {
+  display: block;
+  padding: 0 10px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+/* Links */
+.admin-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+.admin-sidebar__link span {
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.admin-sidebar__link i {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__link:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.admin-sidebar__link:hover i {
+  color: #111827;
+}
+
+.admin-sidebar__link.active {
+  background-color: #eef3f8;
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+.admin-sidebar__link.active i {
+  color: #1e3a5f;
+}
+
+/* Bottom / Logout */
+.admin-sidebar__bottom {
+  padding: 16px 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.admin-sidebar__logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #dc2626;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  text-decoration: none;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.admin-sidebar__logout span {
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.admin-sidebar__logout i {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__logout:hover {
+  background-color: #ffeeef;
+  color: #b91c1c;
+}
+
+/* ==================================================
+    MODE RÉDUIT (COLLAPSED)
+================================================== */
+.admin-sidebar.is-collapsed {
+  width: 72px;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__title,
+.admin-sidebar.is-collapsed .admin-sidebar__section-title,
+.admin-sidebar.is-collapsed .admin-sidebar__link span,
+.admin-sidebar.is-collapsed .admin-sidebar__logout span {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  display: none;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__header {
+  padding: 0;
+  justify-content: center;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__link,
+.admin-sidebar.is-collapsed .admin-sidebar__logout {
+  justify-content: center;
+  padding: 10px 0;
+}
+
+/* ==================================================
+    CONTENU PRINCIPAL (ÉVITE LE CACHAGE SOUS LA SIDEBAR)
+================================================== */
+.admin-main,
+.main-content {
+  margin-left: 235px; /* Décale le contenu de la largeur de la sidebar */
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 24px;
+}
+
+/* S'adapte automatiquement si la sidebar est réduite */
+.admin-sidebar.is-collapsed ~ .admin-main,
+.admin-sidebar.is-collapsed ~ .main-content {
+  margin-left: 72px;
+}

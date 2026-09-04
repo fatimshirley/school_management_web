@@ -1,0 +1,155 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Modifier une
+filière — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="grades-page-heading">
+          <div class="grades-page-heading__title">
+            <div>
+              <h1>Modifier une filière</h1>
+              <p>
+                Mettre à jour les informations de la filière : {{ filiere.nom }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <section class="grades-panel" style="max-width: 600px; margin: 0 auto">
+          <div class="grades-panel__header">
+            <h2>Formulaire de modification</h2>
+            <p>Modifiez le code, le nom ou les niveaux associés</p>
+          </div>
+
+          {% if error %}
+          <div
+            class="grades-alert grades-alert--error"
+            style="margin-bottom: 20px"
+          >
+            <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+          </div>
+          {% endif %}
+
+          <form method="POST" class="academic-form">
+            {% csrf_token %}
+
+            <div class="grades-form-group" style="margin-bottom: 20px">
+              <label
+                for="code"
+                style="display: block; margin-bottom: 8px; font-weight: 600"
+                >Code de la filière *</label
+              >
+              <input
+                type="text"
+                id="code"
+                name="code"
+                value="{{ filiere.code }}"
+                required
+                class="grades-input"
+              />
+            </div>
+
+            <div class="grades-form-group" style="margin-bottom: 20px">
+              <label
+                for="nom"
+                style="display: block; margin-bottom: 8px; font-weight: 600"
+                >Nom de la filière *</label
+              >
+              <input
+                type="text"
+                id="nom"
+                name="nom"
+                value="{{ filiere.nom }}"
+                required
+                class="grades-input"
+              />
+            </div>
+
+            <div class="grades-form-group" style="margin-bottom: 25px">
+              <label
+                style="display: block; margin-bottom: 8px; font-weight: 600"
+                >Niveaux associés</label
+              >
+              <div
+                class="grades-checkbox-group-container"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                  max-height: 200px;
+                  overflow-y: auto;
+                  border: 1px solid #ddd;
+                  padding: 12px;
+                  border-radius: 4px;
+                "
+              >
+                {% for niveau in niveaux %}
+                <label
+                  class="grades-checkbox-label"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    cursor: pointer;
+                  "
+                >
+                  <input
+                    type="checkbox"
+                    name="niveaux"
+                    value="{{ niveau.id }}"
+                    {%
+                    if
+                    niveau
+                    in
+                    filiere.niveaux.all
+                    %}checked{%
+                    endif
+                    %}
+                  />
+                  <span
+                    ><strong>{{ niveau.code }}</strong> - {{ niveau.nom }}</span
+                  >
+                </label>
+                {% empty %}
+                <p class="grades-empty-text">Aucun niveau disponible.</p>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div
+              class="grades-form-actions"
+              style="
+                display: flex;
+                gap: 15px;
+                justify-content: flex-end;
+                margin-top: 20px;
+              "
+            >
+              <a
+                href="{% url 'admin_filieres' %}"
+                class="grades-btn grades-btn--secondary"
+              >
+                Annuler
+              </a>
+              <button type="submit" class="grades-btn grades-btn--primary">
+                <i class="fa-solid fa-save"></i> Enregistrer les modifications
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+{% endblock %}

@@ -1,16 +1,10 @@
-{% extends "base/base.html" %}
-{% load static %}
-
-{% block title %}Ajouter un professeur — Administration{% endblock %}
-
-{% block extra_css %}
+{% extends "base/base.html" %} {% load static %} {% block title %}Ajouter un
+professeur — Administration{% endblock %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/teachers.css' %}" />
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 
 <div class="admin-layout">
   {% include "admin/layout/header.html" %}
@@ -20,10 +14,8 @@
 
     <main class="admin-main">
       <div class="admin-main__content">
-        
         <div class="teachers-page-heading">
           <div class="teachers-page-heading__title">
-            
             <div>
               <h1>Ajouter un professeur</h1>
               <p>Enregistrer un nouveau professeur</p>
@@ -34,7 +26,7 @@
         <section class="teachers-form-panel">
           <div class="teachers-form-panel__header">
             <h2>Informations du professeur</h2>
-            <p>Les champs marqués d'une icône <i class="fa-solid fa-asterisk" style="font-size: 10px; color: #ef4444;"></i> sont obligatoires.</p>
+            <p>Veuillez renseigner les informations ci-dessous.</p>
           </div>
 
           {% if error %}
@@ -44,32 +36,13 @@
           </div>
           {% endif %}
 
-          <!-- Formulaire correctement ouvert -->
           <form method="post" class="teachers-form">
             {% csrf_token %}
 
             <div class="teachers-form-grid">
-              
-              <!-- Champ Email -->
+              <!-- Champ Nom (toujours obligatoire grâce à 'required') -->
               <div class="teachers-form-group">
-                <label for="email">
-                  Email <i class="fa-solid fa-asterisk" style="font-size: 10px; color: #ef4444;" title="Champ obligatoire"></i>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value="{{ request.POST.email|default:'' }}"
-                  placeholder="Ex. nom@domaine.com"
-                  required
-                />
-              </div>
-
-              <!-- Champ Nom -->
-              <div class="teachers-form-group">
-                <label for="nom">
-                  Nom <i class="fa-solid fa-asterisk" style="font-size: 10px; color: #ef4444;" title="Champ obligatoire"></i>
-                </label>
+                <label for="nom">Nom</label>
                 <input
                   type="text"
                   id="nom"
@@ -80,7 +53,7 @@
                 />
               </div>
 
-              <!-- Champ Prénom -->
+              <!-- Champ Prénom (optionnel) -->
               <div class="teachers-form-group">
                 <label for="prenom">Prénom</label>
                 <input
@@ -91,10 +64,9 @@
                   placeholder="Ex. Jean"
                 />
               </div>
-
             </div>
 
-            <!-- Actions (Boutons Annuler et Enregistrer qui manquaient dans votre rendu) -->
+            <!-- Actions -->
             <div class="teachers-form-actions">
               <a
                 href="{% url 'admin_teachers' %}"
@@ -109,10 +81,7 @@
                 Enregistrer
               </button>
             </div>
-
           </form>
-          <!-- Fin du formulaire -->
-
         </section>
       </div>
 

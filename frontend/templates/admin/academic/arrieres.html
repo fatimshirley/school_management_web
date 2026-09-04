@@ -1,84 +1,100 @@
-{% extends "base/base.html" %}
-{% load static %}
-
-{% block title %}Arriérés — Administration{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends "base/base.html" %} {% load static %} {% block title %}Arriérés —
+Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
 <div class="admin-layout">
-    {% include "admin/layout/header.html" %}
-    <div class="admin-layout__body">
-        {% include "admin/layout/sidebar.html" %}
-        <main class="admin-main">
-            <div class="admin-main__content">
-
-                <div class="academic-page-heading">
-                    <div class="academic-page-heading__title">
-                        
-                        <div>
-                            <h1>Arriérés</h1>
-                            <p>Gestion des matières non validées par les étudiants</p>
-                        </div>
-                    </div>
-                    <div class="academic-heading-actions">
-                        <a href="{% url 'admin_arriere_add' %}" class="academic-btn academic-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            Déclarer un arriéré
-                        </a>
-                    </div>
-                </div>
-
-                <section class="academic-panel">
-                    <div class="academic-panel__header">
-                        <h2>Liste des arriérés</h2>
-                        <p>Arriérés enregistrés dans le système</p>
-                    </div>
-
-                    {% if arrieres %}
-                    <div class="academic-table-wrapper">
-                        <table class="academic-table">
-                            <thead>
-                                <tr>
-                                    <th>Étudiant</th>
-                                    <th>Matière</th>
-                                    <th>Année d'origine</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for arriere in arrieres %}
-                                <tr>
-                                    <td>{{ arriere.student.nom }} {{ arriere.student.prenom }}</td>
-                                    <td>{{ arriere.matiere.nom }}</td>
-                                    <td>{{ arriere.annee_universitaire.libelle }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="academic-empty">
-                        <div class="academic-empty__icon">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <h3>Aucun arriéré</h3>
-                        <p>Aucun arriéré n'est actuellement enregistré.</p>
-                        <a href="{% url 'admin_arriere_add' %}" class="academic-btn academic-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            Déclarer un arriéré
-                        </a>
-                    </div>
-                    {% endif %}
-                </section>
-
+  {% include "admin/layout/header.html" %}
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div>
+              <h1>Arriérés</h1>
+              <p>Gestion des matières non validées par les étudiants</p>
             </div>
-            {% include "admin/layout/footer.html" %}
-        </main>
-    </div>
+          </div>
+          <div class="academic-heading-actions">
+            <!-- Bouton pour déclencher la génération automatique -->
+            <a
+              href="{% url 'admin_generer_arrieres' %}"
+              class="academic-btn academic-btn--secondary"
+              onclick="
+                return confirm(
+                  'Voulez-vous lancer la génération automatique des arriérés ?',
+                );
+              "
+            >
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              Générer automatiquement
+            </a>
+            <a
+              href="{% url 'admin_arriere_add' %}"
+              class="academic-btn academic-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              Déclarer un arriéré
+            </a>
+          </div>
+        </div>
+
+        <section class="academic-panel">
+          <div class="academic-panel__header">
+            <h2>Liste des arriérés</h2>
+            <p>Arriérés enregistrés dans le système</p>
+          </div>
+
+          {% if arrieres %}
+          <div class="academic-table-wrapper">
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Étudiant</th>
+                  <th>Matière</th>
+                  <th>Année d'origine</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for arriere in arrieres %}
+                <tr>
+                  <!-- Correction des chemins via progression -->
+                  <td>
+                    {{ arriere.progression.student.nom }} {{
+                    arriere.progression.student.prenom }}
+                  </td>
+                  <td>{{ arriere.subject.nom }}</td>
+                  <td>{{ arriere.progression.annee_universitaire.libelle }}</td>
+                  <td>{{ arriere.statut }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="academic-empty">
+            <div class="academic-empty__icon">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3>Aucun arriéré</h3>
+            <p>Aucun arriéré n'est actuellement enregistré.</p>
+            <a
+              href="{% url 'admin_arriere_add' %}"
+              class="academic-btn academic-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              Déclarer un arriéré
+            </a>
+          </div>
+          {% endif %}
+        </section>
+      </div>
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
 </div>
 {% endblock %}

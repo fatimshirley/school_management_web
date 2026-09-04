@@ -1,7 +1,4 @@
-{% extends "base/base.html" %} 
-{% load static %} 
-
-{% block title %}Saisir une note — Administration{% endblock %} 
+{% extends "base/base.html" %} {% load static %} {% block title %}Saisir une note — Administration{% endblock %} 
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
@@ -31,7 +28,9 @@
         <section class="grades-form-panel">
           <div class="grades-form-panel__header">
             <h2>Informations de la note</h2>
-            <p>Sélectionnez l'étudiant, l'évaluation et la note concernée.</p>
+            <p>
+              Sélectionnez l'étudiant, la matière, le type d'évaluation, la session et la note.
+            </p>
           </div>
 
           {% if error %}
@@ -48,7 +47,8 @@
               <!-- Sélection de l'étudiant -->
               <div class="grades-form-group">
                 <label for="student">
-                  Étudiant <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                  Étudiant
+                  <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
                 </label>
                 <select id="student" name="student" required>
                   <option value="">Sélectionner un étudiant</option>
@@ -60,25 +60,52 @@
                 </select>
               </div>
 
-              <!-- Sélection dynamique de l'évaluation -->
+              <!-- Sélection de la matière -->
               <div class="grades-form-group">
-                <label for="evaluation">
-                  Évaluation <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                <label for="subject">
+                  Matière
+                  <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
                 </label>
-                <select id="evaluation" name="evaluation" required>
-                  <option value="">Sélectionner une évaluation</option>
-                  {% for evaluation in evaluations %}
-                  <option value="{{ evaluation.id }}">
-                    {{ evaluation.subject.nom }} — du {{ evaluation.date }} ({{ evaluation.annee_universitaire.libelle }})
-                  </option>
+                <select id="subject" name="subject" required>
+                  <option value="">Sélectionner une matière</option>
+                  {% for subject in subjects %}
+                  <option value="{{ subject.id }}">{{ subject.nom }}</option>
                   {% endfor %}
+                </select>
+              </div>
+
+              <!-- Sélection directe du Type d'évaluation -->
+              <div class="grades-form-group">
+                <label for="type_evaluation">
+                  Type d'évaluation
+                  <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                </label>
+                <select id="type_evaluation" name="type_evaluation" required>
+                  <option value="">Sélectionner un type</option>
+                  <option value="cc1">Contrôle continu 1</option>
+                  <option value="cc2">Contrôle continu 2</option>
+                  <option value="devoir">Devoir</option>
+                  <option value="examen">Examen final</option>
+                </select>
+              </div>
+
+              <!-- Sélection de la session -->
+              <div class="grades-form-group">
+                <label for="session">
+                  Session
+                  <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                </label>
+                <select id="session" name="session" required>
+                  <option value="1">Session 1</option>
+                  <option value="2">Session 2</option>
                 </select>
               </div>
 
               <!-- Saisie de la note -->
               <div class="grades-form-group">
                 <label for="note">
-                  Note /20 <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
+                  Note /20
+                  <i class="fa-solid fa-asterisk" style="font-size: 8px; vertical-align: super; color: #e74c3c;"></i>
                 </label>
                 <input
                   type="number"
@@ -94,10 +121,7 @@
             </div>
 
             <div class="grades-form-actions">
-              <a
-                href="{% url 'admin_grades' %}"
-                class="grades-btn grades-btn--secondary"
-              >
+              <a href="{% url 'admin_grades' %}" class="grades-btn grades-btn--secondary">
                 <i class="fa-solid fa-arrow-left"></i>
                 Annuler
               </a>

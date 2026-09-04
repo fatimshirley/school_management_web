@@ -1,0 +1,76 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Supprimer un
+niveau — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
+<div class="admin-layout">
+  {% include "admin/layout/header.html" %}
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div>
+              <h1>Confirmer la suppression</h1>
+              <p>Suppression d'un niveau d'études du système</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="academic-form-panel"
+          style="max-width: 600px; margin: 0 auto; text-align: center"
+        >
+          <div class="academic-form-panel__header">
+            <i
+              class="fa-solid fa-triangle-exclamation"
+              style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px"
+            ></i>
+            <h2>Êtes-vous sûr de vouloir supprimer ce niveau ?</h2>
+            <p style="margin-top: 10px">
+              Vous êtes sur le point de supprimer le niveau :
+              <strong>{{ niveau.nom }}</strong> (Code :
+              <code>{{ niveau.code }}</code>).<br />
+              Cette action est irréversible.
+            </p>
+          </div>
+
+          <form method="post" class="academic-form" style="margin-top: 30px">
+            {% csrf_token %}
+            <div
+              class="academic-form-actions"
+              style="display: flex; justify-content: center; gap: 15px"
+            >
+              <a
+                href="{% url 'admin_niveaux' %}"
+                class="academic-btn academic-btn--secondary"
+              >
+                Annuler
+              </a>
+              <button
+                type="submit"
+                class="academic-btn academic-btn--danger"
+                style="
+                  background-color: #e74c3c;
+                  color: white;
+                  border: none;
+                  padding: 10px 20px;
+                  border-radius: 4px;
+                  cursor: pointer;
+                "
+              >
+                <i class="fa-solid fa-trash"></i>
+                Oui, supprimer
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
+</div>
+{% endblock %}

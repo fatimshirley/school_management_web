@@ -16,8 +16,6 @@ une absence — Administration{% endblock %} {% block extra_css %}
       <div class="admin-main__content">
         <div class="absences-page-heading">
           <div class="absences-page-heading__title">
-            
-
             <div>
               <h1>Enregistrer une absence</h1>
               <p>Déclarer l'absence d'un étudiant</p>
@@ -42,6 +40,7 @@ une absence — Administration{% endblock %} {% block extra_css %}
             {% csrf_token %}
 
             <div class="absences-form-grid">
+              <!-- Sélection de l'étudiant -->
               <div class="absences-form-group">
                 <label for="student"> Étudiant * </label>
 
@@ -49,34 +48,44 @@ une absence — Administration{% endblock %} {% block extra_css %}
                   <option value="">Sélectionner un étudiant</option>
 
                   {% for student in students %}
-
+                  <!-- prettier-ignore -->
                   <option value="{{ student.id }}">
-                    {{ student.matricule }} — {{ student.nom }} {{
-                    student.prenom }}
+                    {{ student.matricule }} — {{ student.nom }} {{ student.prenom }}
                   </option>
-
                   {% endfor %}
                 </select>
               </div>
 
+              <!-- Sélection de la matière -->
               <div class="absences-form-group">
-                <label for="evaluation"> Évaluation * </label>
+                <label for="subject"> Matière * </label>
 
-                <select id="evaluation" name="evaluation" required>
-                  <option value="">Sélectionner une évaluation</option>
+                <select id="subject" name="subject" required>
+                  <option value="">Sélectionner une matière</option>
 
-                  {% for evaluation in evaluations %}
-
-                  <option value="{{ evaluation.id }}">
-                    {{ evaluation.subject.nom }} — {{
-                    evaluation.get_type_evaluation_display }} — {{
-                    evaluation.date|date:"d/m/Y" }}
+                  {% for subject in subjects %}
+                  <!-- prettier-ignore -->
+                  <option value="{{ subject.id }}">
+                    {{ subject.nom }}
                   </option>
-
                   {% endfor %}
                 </select>
               </div>
 
+              <!-- Sélection directe du Type d'évaluation -->
+              <div class="absences-form-group">
+                <label for="type_evaluation"> Type d'évaluation * </label>
+
+                <select id="type_evaluation" name="type_evaluation" required>
+                  <option value="">Sélectionner un type</option>
+                  <option value="cc1">Contrôle continu 1</option>
+                  <option value="cc2">Contrôle continu 2</option>
+                  <option value="devoir">Devoir</option>
+                  <option value="examen">Examen final</option>
+                </select>
+              </div>
+
+              <!-- Date de l'absence -->
               <div class="absences-form-group">
                 <label for="date_absence"> Date de l'absence * </label>
 

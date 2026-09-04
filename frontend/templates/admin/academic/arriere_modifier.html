@@ -1,0 +1,99 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Modifier un arriéré — Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    {% include "admin/layout/header.html" %}
+    <div class="admin-layout__body">
+        {% include "admin/layout/sidebar.html" %}
+        <main class="admin-main">
+            <div class="admin-main__content">
+
+                <div class="academic-page-heading">
+                    <div class="academic-page-heading__title">
+                        <div>
+                            <h1>Modifier l'arriéré</h1>
+                            <p>Mise à jour de la matière à rattraper pour l'étudiant</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="academic-form-panel">
+                    <div class="academic-form-panel__header">
+                        <h2>Informations de l'arriéré</h2>
+                        <p>Modifiez l'étudiant, la progression ou la matière.</p>
+                    </div>
+
+                    {% if error %}
+                    <div class="academic-message academic-message--error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="academic-form">
+                        {% csrf_token %}
+                        <div class="academic-form-grid">
+                            <!-- Progression / Étudiant -->
+                            <div class="academic-form-group">
+                                <label for="progression">Étudiant et Année (Progression) *</label>
+                                <select id="progression" name="progression" required>
+                                    <option value="">Sélectionnez un étudiant</option>
+                                    {% for p in progressions %}
+                                        <option value="{{ p.id }}" {% if p.id == arriere.progression.id %}selected{% endif %}>
+                                            {{ p.student.matricule }} - {{ p.student.nom }} {{ p.student.prenom }} ({{ p.annee_universitaire.libelle }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Matière -->
+                            <div class="academic-form-group">
+                                <label for="subject">Matière *</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Sélectionnez une matière</option>
+                                    {% for s in subjects %}
+                                        <option value="{{ s.id }}" {% if s.id == arriere.subject.id %}selected{% endif %}>
+                                            {{ s.nom }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Statut (Optionnel si vous gérez aussi le statut) -->
+                            <div class="academic-form-group">
+                                <label for="statut">Statut *</label>
+                                <select id="statut" name="statut" required>
+                                    <option value="A_RATTRAPER" {% if arriere.statut == 'A_RATTRAPER' %}selected{% endif %}>À rattraper</option>
+                                    <option value="VALIDE" {% if arriere.statut == 'VALIDE' %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="academic-form-actions">
+                            <a href="{% url 'admin_arrieres' %}" class="academic-btn academic-btn--secondary">
+                                Annuler
+                            </a>
+                            <button type="submit" class="academic-btn academic-btn--primary">
+                                <i class="fa-solid fa-save"></i>
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            {% include "admin/layout/footer.html" %}
+        </main>
+    </div>
+</div>
+{% endblock %}

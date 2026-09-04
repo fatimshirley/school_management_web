@@ -1,104 +1,136 @@
-{% extends "base/base.html" %}
-{% load static %}
+{% extends "base/base.html" %} 
+{% load static %} 
 
-{% block title %}Filières — Administration{% endblock %}
+{% block title %}Filières — Administration{% endblock %} 
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
-{% endblock %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} 
 
 {% block content %}
 <div class="admin-layout">
+  {% include "admin/layout/header.html" %}
 
-    {% include "admin/layout/header.html" %}
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
 
-    <div class="admin-layout__body">
-
-        {% include "admin/layout/sidebar.html" %}
-
-        <main class="admin-main">
-
-            <div class="admin-main__content">
-
-                <div class="grades-page-heading">
-
-                    <div class="grades-page-heading__title">
-
-                        <div>
-                            <h1>Filières</h1>
-                            <p>Filières disponibles dans l'établissement</p>
-                        </div>
-                    </div>
-
-                    <div class="grades-heading-actions">
-                        <a href="{% url 'admin_filiere_add' %}" class="grades-btn grades-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Ajouter une filière</span>
-                        </a>
-                    </div>
-
-                </div>
-
-                <section class="grades-panel">
-
-                    <div class="grades-panel__header">
-                        <h2>Liste des filières</h2>
-                        <p>Filières et niveaux associés</p>
-                    </div>
-
-                    {% if filieres %}
-                    <div class="grades-table-wrapper">
-                        <table class="grades-table">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Filière</th>
-                                    <th>Niveaux</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for filiere in filieres %}
-                                <tr>
-                                    <td><strong>{{ filiere.code }}</strong></td>
-                                    <td>{{ filiere.nom }}</td>
-                                    <td>
-                                        {% for niveau in filiere.niveaux.all %}
-                                            {{ niveau.code }}{% if not forloop.last %}, {% endif %}
-                                        {% empty %}
-                                            —
-                                        {% endfor %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="grades-empty">
-                        <div class="grades-empty__icon">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
-                        <h3>Aucune filière</h3>
-                        <p>Aucune filière n'est actuellement enregistrée.</p>
-                        <a href="{% url 'admin_filiere_add' %}" class="grades-btn grades-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Ajouter une filière</span>
-                        </a>
-                    </div>
-                    {% endif %}
-
-                </section>
-
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="grades-page-heading">
+          <div class="grades-page-heading__title">
+            <div>
+              <h1>Filières</h1>
+              <p>Filières disponibles dans l'établissement</p>
             </div>
+          </div>
 
-            {% include "admin/layout/footer.html" %}
+          <div class="grades-heading-actions">
+            <a
+              href="{% url 'admin_filiere_add' %}"
+              class="grades-btn grades-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              <span>Ajouter une filière</span>
+            </a>
+          </div>
+        </div>
 
-        </main>
+        <section class="grades-panel">
+          <div class="grades-panel__header">
+            <h2>Liste des filières</h2>
+            <p>Filières et niveaux associés</p>
+          </div>
 
-    </div>
+          {% if filieres %}
+          <div class="grades-table-wrapper">
+            <table class="grades-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Filière</th>
+                  <th>Niveaux</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for filiere in filieres %}
+                <tr>
+                  <td><strong>{{ filiere.code }}</strong></td>
+                  <td>{{ filiere.nom }}</td>
+                  <td>
+                    {% if filiere.niveaux.all %}
+                      {% for niveau in filiere.niveaux.all %}
+                        {{ niveau.code }}{% if not forloop.last %}, {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      —
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div style="display: flex; gap: 10px; align-items: center">
+                      <!-- Bouton Modifier -->
+                      <a
+                        href="{% url 'admin_filiere_edit' filiere.id %}"
+                        class="academic-btn-icon"
+                        title="Modifier"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </a>
 
+                      <!-- Formulaire et Bouton Supprimer avec alerte -->
+                      <form
+                        action="{% url 'admin_filiere_delete' filiere.id %}"
+                        method="POST"
+                        style="display: inline"
+                        onsubmit="return confirm('Voulez-vous vraiment supprimer la filière {{ filiere.nom }} ?');"
+                      >
+                        {% csrf_token %}
+                        <button
+                          type="submit"
+                          class="academic-btn-icon"
+                          title="Supprimer"
+                          style="
+                            color: #e74c3c;
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            padding: 0;
+                          "
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="grades-empty">
+            <div class="grades-empty__icon">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h3>Aucune filière</h3>
+            <p>Aucune filière n'est actuellement enregistrée.</p>
+            <a
+              href="{% url 'admin_filiere_add' %}"
+              class="grades-btn grades-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              <span>Ajouter une filière</span>
+            </a>
+          </div>
+          {% endif %}
+        </section>
+      </div>
+
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
 </div>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import redirect, render
 
 from .models import UserProfile
@@ -43,17 +44,18 @@ def connexion(request):
         )
 
     if request.method == 'POST':
-        email = request.POST.get(
+        # On récupère la valeur entrée (qui peut être un matricule, un identifiant ou un email)
+        identifiant_ou_email = request.POST.get(
             'username',
             ''
-        ).strip().lower()
+        ).strip()
 
         password = request.POST.get(
             'password',
             ''
         )
 
-        if not email or not password:
+        if not identifiant_ou_email or not password:
             messages.error(
                 request,
                 "Veuillez renseigner tous les champs."
@@ -63,14 +65,15 @@ def connexion(request):
                 'accounts/login.html'
             )
 
+        # Recherche de l'utilisateur par Username (Matricule/Identifiant) OU par Email
         try:
             user_account = User.objects.get(
-                email__iexact=email
+                Q(username__iexact=identifiant_ou_email) | Q(email__iexact=identifiant_ou_email)
             )
         except User.DoesNotExist:
             messages.error(
                 request,
-                "Adresse email ou mot de passe incorrect."
+                "Identifiant, adresse email ou mot de passe incorrect."
             )
             return render(
                 request,
@@ -79,13 +82,14 @@ def connexion(request):
         except User.MultipleObjectsReturned:
             messages.error(
                 request,
-                "Plusieurs comptes utilisent cette adresse email."
+                "Plusieurs comptes correspondent à ces informations."
             )
             return render(
                 request,
                 'accounts/login.html'
             )
 
+        # Authentification avec le vrai username trouvé en base
         user = authenticate(
             request,
             username=user_account.username,
@@ -95,7 +99,7 @@ def connexion(request):
         if user is None:
             messages.error(
                 request,
-                "Adresse email ou mot de passe incorrect."
+                "Identifiant, adresse email ou mot de passe incorrect."
             )
             return render(
                 request,
@@ -134,17 +138,14 @@ def deconnexion(request):
     return redirect('connexion')
 
 
-
 def bypass_login(request, role):
     """Vue temporaire de dev pour se connecter instantanément par rôle"""
     try:
-        # Cherche le premier UserProfile qui correspond au rôle demandé ('admin', 'professeur', 'etudiant')
         profile = UserProfile.objects.filter(role=role).first()
         if profile:
             user = profile.user
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
-            # Utilise ta fonction existante pour rediriger vers le bon dashboard
             return redirection_par_role(request, user)
     except Exception as e:
         pass

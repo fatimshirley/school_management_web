@@ -1,92 +1,130 @@
-{% extends "base/base.html" %}
-{% load static %}
-
-{% block title %}Années universitaires — Administration{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends "base/base.html" %} {% load static %} {% block title %}Années
+universitaires — Administration{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin/academic.css' %}" />
+{% endblock %} {% block content %}
 <div class="admin-layout">
-    {% include "admin/layout/header.html" %}
-    <div class="admin-layout__body">
-        {% include "admin/layout/sidebar.html" %}
-        <main class="admin-main">
-            <div class="admin-main__content">
-
-                <div class="academic-page-heading">
-                    <div class="academic-page-heading__title">
-                       
-                        <div>
-                            <h1>Années universitaires</h1>
-                            <p>Gestion des sessions et périodes académiques</p>
-                        </div>
-                    </div>
-                    <div class="academic-heading-actions">
-                        <a href="{% url 'admin_annee_add' %}" class="academic-btn academic-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            Ajouter une année
-                        </a>
-                    </div>
-                </div>
-
-                <section class="academic-panel">
-                    <div class="academic-panel__header">
-                        <h2>Liste des années universitaires</h2>
-                        <p>Périodes enregistrées dans le système</p>
-                    </div>
-
-                    {% if annees %}
-                    <div class="academic-table-wrapper">
-                        <table class="academic-table">
-                            <thead>
-                                <tr>
-                                    <th>Libellé</th>
-                                    <th>Date de début</th>
-                                    <th>Date de fin</th>
-                                    <th>Statut</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for annee in annees %}
-                                <tr>
-                                    <td>{{ annee.libelle }}</td>
-                                    <td>{{ annee.date_debut|date:"d/m/Y" }}</td>
-                                    <td>{{ annee.date_fin|date:"d/m/Y" }}</td>
-                                    <td>
-                                        {% if annee.est_active %}
-                                            <span class="academic-status academic-status--active">En cours</span>
-                                        {% else %}
-                                            <span class="academic-status academic-status--inactive">Clôturée</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="academic-empty">
-                        <div class="academic-empty__icon">
-                            <i class="fa-solid fa-calendar-days"></i>
-                        </div>
-                        <h3>Aucune année universitaire</h3>
-                        <p>Aucune année n'est actuellement enregistrée.</p>
-                        <a href="{% url 'admin_annee_add' %}" class="academic-btn academic-btn--primary">
-                            <i class="fa-solid fa-plus"></i>
-                            Ajouter une année
-                        </a>
-                    </div>
-                    {% endif %}
-                </section>
-
+  {% include "admin/layout/header.html" %}
+  <div class="admin-layout__body">
+    {% include "admin/layout/sidebar.html" %}
+    <main class="admin-main">
+      <div class="admin-main__content">
+        <div class="academic-page-heading">
+          <div class="academic-page-heading__title">
+            <div>
+              <h1>Années universitaires</h1>
+              <p>Gestion des sessions et périodes académiques</p>
             </div>
-            {% include "admin/layout/footer.html" %}
-        </main>
-    </div>
+          </div>
+          <div class="academic-heading-actions">
+            <a
+              href="{% url 'admin_annee_add' %}"
+              class="academic-btn academic-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              Ajouter une année
+            </a>
+          </div>
+        </div>
+
+        <section class="academic-panel">
+          <div class="academic-panel__header">
+            <h2>Liste des années universitaires</h2>
+            <p>Périodes enregistrées dans le système</p>
+          </div>
+
+          {% if annees %}
+          <div class="academic-table-wrapper">
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Libellé</th>
+                  <th>Date de début</th>
+                  <th>Date de fin</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for annee in annees %}
+                <tr>
+                  <td>{{ annee.libelle }}</td>
+                  <td>{{ annee.date_debut|date:"d/m/Y" }}</td>
+                  <td>{{ annee.date_fin|date:"d/m/Y" }}</td>
+                  <td>
+                    {% if annee.active %}
+                    <span class="academic-status academic-status--active"
+                      >En cours</span
+                    >
+                    {% else %}
+                    <span class="academic-status academic-status--inactive"
+                      >Clôturée</span
+                    >
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div style="display: flex; gap: 10px; align-items: center">
+                      <!-- Bouton Modifier -->
+                      <a
+                        href="{% url 'admin_annee_edit' annee.id %}"
+                        class="academic-btn-icon"
+                        title="Modifier"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </a>
+
+                      <!-- Formulaire et Bouton Supprimer avec alerte -->
+                      <form
+                        action="{% url 'admin_annee_delete' annee.id %}"
+                        method="POST"
+                        style="display: inline"
+                        onsubmit="return confirm('Voulez-vous vraiment supprimer l\'année universitaire {{ annee.libelle }} ?');"
+                      >
+                        {% csrf_token %}
+                        <button
+                          type="submit"
+                          class="academic-btn-icon"
+                          title="Supprimer"
+                          style="
+                            color: #e74c3c;
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            padding: 0;
+                          "
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="academic-empty">
+            <div class="academic-empty__icon">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <h3>Aucune année universitaire</h3>
+            <p>Aucune année n'est actuellement enregistrée.</p>
+            <a
+              href="{% url 'admin_annee_add' %}"
+              class="academic-btn academic-btn--primary"
+            >
+              <i class="fa-solid fa-plus"></i>
+              Ajouter une année
+            </a>
+          </div>
+          {% endif %}
+        </section>
+      </div>
+      {% include "admin/layout/footer.html" %}
+    </main>
+  </div>
 </div>
 {% endblock %}

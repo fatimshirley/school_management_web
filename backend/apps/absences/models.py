@@ -2,10 +2,17 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from apps.students.models import Student
-from apps.grades.models import Evaluation
+from apps.subjects.models import Subject  # Assurez-vous que le chemin d'import est correct selon votre projet
 
 
 class Absence(models.Model):
+
+    TYPE_EVALUATION_CHOICES = [
+        ('cc1', 'Contrôle continu 1'),
+        ('cc2', 'Contrôle continu 2'),
+        ('devoir', 'Devoir'),
+        ('examen', 'Examen final'),
+    ]
 
     student = models.ForeignKey(
         Student,
@@ -13,10 +20,18 @@ class Absence(models.Model):
         related_name='absences'
     )
 
-    evaluation = models.ForeignKey(
-        Evaluation,
+    subject = models.ForeignKey(
+        Subject,
         on_delete=models.CASCADE,
-        related_name='absences'
+        related_name='absences',
+        null=True,
+        blank=True
+    )
+
+    type_evaluation = models.CharField(
+        max_length=50,
+        choices=TYPE_EVALUATION_CHOICES,
+        default='cc1'
     )
 
     date_absence = models.DateField()
@@ -56,11 +71,5 @@ class Absence(models.Model):
     )
 
     def __str__(self):
-
         statut = "Justifiée" if self.justifiee else "Non justifiée"
-
-        return (
-            f"{self.student.matricule} - "
-            f"{self.evaluation} - "
-            f"{statut}"
-        )
+        return f"{self.student.matricule} - {self.subject.nom} ({self.get_type_evaluation_display()}) - {statut}"
