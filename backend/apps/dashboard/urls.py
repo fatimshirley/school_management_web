@@ -1,24 +1,25 @@
-from django.urls import path
-from django.contrib.auth.views import LogoutView
 from django.contrib.auth import logout
+from django.contrib.auth.views import LogoutView
 from django.shortcuts import redirect
+from django.urls import path
+
 from . import views
 
-# Classe personnalisée qui déconnecte l'utilisateur et le redirige instantanément
+
 class CustomLogoutView(LogoutView):
     http_method_names = ['get', 'post', 'options']
 
     def dispatch(self, request, *args, **kwargs):
-        # Déconnecte l'utilisateur
         logout(request)
-        # Redirige immédiatement vers la page de connexion admin (ou l'URL de votre choix)
         return redirect('connexion')
+
 
 urlpatterns = [
 
     # ==================================================
     # DÉCONNEXION
     # ==================================================
+
     path(
         'logout/',
         CustomLogoutView.as_view(),
@@ -52,7 +53,6 @@ urlpatterns = [
         views.etudiant_dashboard,
         name='etudiant_dashboard'
     ),
-
 
     # ==================================================
     # ÉTUDIANTS (ADMIN)
@@ -88,7 +88,6 @@ urlpatterns = [
         name='admin_student_delete'
     ),
 
-
     # ==================================================
     # PROFESSEURS (ADMIN)
     # ==================================================
@@ -122,7 +121,6 @@ urlpatterns = [
         views.admin_teacher_delete,
         name='admin_teacher_delete'
     ),
-
 
     # ==================================================
     # MATIÈRES (ADMIN)
@@ -181,7 +179,6 @@ urlpatterns = [
         name='admin_grade_history'
     ),
 
-
     # ==================================================
     # ABSENCES (ADMIN)
     # ==================================================
@@ -228,7 +225,6 @@ urlpatterns = [
         name='admin_absence_makeup'
     ),
 
-
     # ==================================================
     # FILIÈRES (ADMIN)
     # ==================================================
@@ -256,7 +252,6 @@ urlpatterns = [
         views.admin_filiere_delete,
         name='admin_filiere_delete'
     ),
-
 
     # ==================================================
     # NIVEAUX (ADMIN)
@@ -286,7 +281,6 @@ urlpatterns = [
         name='admin_niveau_delete'
     ),
 
-
     # ==================================================
     # SEMESTRES (ADMIN)
     # ==================================================
@@ -314,7 +308,6 @@ urlpatterns = [
         views.admin_semestre_delete,
         name='admin_semestre_delete'
     ),
-
 
     # ==================================================
     # ANNÉES UNIVERSITAIRES (ADMIN)
@@ -344,7 +337,6 @@ urlpatterns = [
         name='admin_annee_delete'
     ),
 
-
     # ==================================================
     # ARRIÉRÉS (ADMIN)
     # ==================================================
@@ -367,9 +359,8 @@ urlpatterns = [
         name='admin_generer_arrieres'
     ),
 
-
     # ==================================================
-    # ESPACE PROFESSEUR
+    # ESPACE PROFESSEUR — ÉVALUATIONS
     # ==================================================
 
     path(
@@ -385,16 +376,52 @@ urlpatterns = [
     ),
 
     path(
+        'professeur/evaluations/<int:pk>/',
+        views.professeur_evaluation_detail,
+        name='professeur_evaluation_detail'
+    ),
+
+    path(
+        'professeur/evaluations/<int:pk>/modifier/',
+        views.professeur_evaluation_modifier,
+        name='professeur_evaluation_modifier'
+    ),
+
+    path(
+        'professeur/evaluations/<int:pk>/supprimer/',
+        views.professeur_evaluation_supprimer,
+        name='professeur_evaluation_supprimer'
+    ),
+
+    # ==================================================
+    # ESPACE PROFESSEUR — ÉTUDIANTS
+    # ==================================================
+
+    path(
         'professeur/etudiants/',
         views.professeur_students,
         name='professeur_students'
     ),
 
     path(
+        'professeur/etudiants/<int:pk>/',
+        views.professeur_student_detail,
+        name='professeur_student_detail'
+    ),
+
+    # ==================================================
+    # ESPACE PROFESSEUR — MATIÈRES
+    # ==================================================
+
+    path(
         'professeur/matieres/',
         views.professeur_subjects,
         name='professeur_subjects'
     ),
+
+    # ==================================================
+    # ESPACE PROFESSEUR — NOTES
+    # ==================================================
 
     path(
         'professeur/notes/',
@@ -409,6 +436,16 @@ urlpatterns = [
     ),
 
     path(
+        'professeur/notes/historique/',
+        views.professeur_grade_history,
+        name='professeur_grade_history'
+    ),
+
+    # ==================================================
+    # ESPACE PROFESSEUR — ABSENCES
+    # ==================================================
+
+    path(
         'professeur/absences/',
         views.professeur_absences,
         name='professeur_absences'
@@ -420,15 +457,26 @@ urlpatterns = [
         name='professeur_absence_add'
     ),
 
-
     # ==================================================
     # ESPACE ÉTUDIANT
     # ==================================================
 
     path(
+        'etudiant/profil/',
+        views.etudiant_profile,
+        name='etudiant_profile'
+    ),
+
+    path(
         'etudiant/notes/',
         views.etudiant_grades,
         name='etudiant_grades'
+    ),
+
+    path(
+        'etudiant/resultats/',
+        views.etudiant_results,
+        name='etudiant_results'
     ),
 
     path(
@@ -448,5 +496,4 @@ urlpatterns = [
         views.etudiant_arrieres,
         name='etudiant_arrieres'
     ),
-
 ]

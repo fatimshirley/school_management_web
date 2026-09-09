@@ -44,6 +44,19 @@ class Evaluation(models.Model):
 
     date = models.DateField()
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'subject',
+                    'annee_universitaire',
+                    'type_evaluation',
+                    'session',
+                ],
+                name='unique_subject_evaluation_session'
+            )
+        ]
+
     def __str__(self):
         return (
             f"{self.subject.nom} - "
@@ -74,6 +87,17 @@ class Grade(models.Model):
             MaxValueValidator(20)
         ]
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'student',
+                    'evaluation',
+                ],
+                name='unique_student_evaluation_grade'
+            )
+        ]
 
     def __str__(self):
         return (

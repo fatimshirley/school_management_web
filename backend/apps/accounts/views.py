@@ -1,13 +1,15 @@
 from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db import transaction
 from django.shortcuts import redirect, render
 
 from .models import UserProfile
 from apps.students.models import Student
+from apps.teachers.models import Teacher
 from apps.academic.models import Niveau, Filiere
 
 
@@ -47,8 +49,7 @@ def connexion(request):
         )
 
     if request.method == 'POST':
-        # On récupère la valeur entrée (qui peut être un matricule, un identifiant ou un email)
-        identifiant_ou_email = request.POST.get(
+        identifiant = request.POST.get(
             'username',
             ''
         ).strip()
@@ -58,7 +59,7 @@ def connexion(request):
             ''
         )
 
-        if not identifiant_ou_email or not password:
+        if not identifiant or not password:
             messages.error(
                 request,
                 "Veuillez renseigner tous les champs."
@@ -68,36 +69,87 @@ def connexion(request):
                 'accounts/login.html'
             )
 
-        # Recherche de l'utilisateur par Username (Matricule/Identifiant) OU par Email
+        user = None
+
+        # ==================================================
+        # CONNEXION ÉTUDIANT AVEC LE MATRICULE
+        # ==================================================
+
         try:
-            user_account = User.objects.get(
-                Q(username__iexact=identifiant_ou_email) | Q(email__iexact=identifiant_ou_email)
-            )
-        except User.DoesNotExist:
-            messages.error(
-                request,
-                "Identifiant, adresse email ou mot de passe incorrect."
-            )
-            return render(
-                request,
-                'accounts/login.html'
-            )
-        except User.MultipleObjectsReturned:
-            messages.error(
-                request,
-                "Plusieurs comptes correspondent à ces informations."
-            )
-            return render(
-                request,
-                'accounts/login.html'
+            student = (
+                Student.objects
+                .select_related('user')
+                .get(
+                    matricule__iexact=identifiant
+                )
             )
 
-        # Authentification avec le vrai username trouvé en base
-        user = authenticate(
-            request,
-            username=user_account.username,
-            password=password
-        )
+            if student.user:
+                user = authenticate(
+                    request,
+                    username=student.user.username,
+                    password=password
+                )
+
+        except Student.DoesNotExist:
+            pass
+
+        # ==================================================
+        # CONNEXION PROFESSEUR AVEC L'IDENTIFIANT
+        # ==================================================
+
+        if user is None:
+            try:
+                teacher = (
+                    Teacher.objects
+                    .select_related('user')
+                    .get(
+                        identifiant__iexact=identifiant
+                    )
+                )
+
+                if teacher.user:
+                    user = authenticate(
+                        request,
+                        username=teacher.user.username,
+                        password=password
+                    )
+
+            except Teacher.DoesNotExist:
+                pass
+
+        # ==================================================
+        # CONNEXION AVEC L'EMAIL
+        # ==================================================
+
+        if user is None:
+            try:
+                user_account = User.objects.get(
+                    email__iexact=identifiant
+                )
+
+                user = authenticate(
+                    request,
+                    username=user_account.username,
+                    password=password
+                )
+
+            except User.DoesNotExist:
+                pass
+
+            except User.MultipleObjectsReturned:
+                messages.error(
+                    request,
+                    "Plusieurs comptes utilisent cette adresse email."
+                )
+                return render(
+                    request,
+                    'accounts/login.html'
+                )
+
+        # ==================================================
+        # IDENTIFIANT OU MOT DE PASSE INCORRECT
+        # ==================================================
 
         if user is None:
             messages.error(
@@ -109,6 +161,10 @@ def connexion(request):
                 'accounts/login.html'
             )
 
+        # ==================================================
+        # COMPTE DÉSACTIVÉ
+        # ==================================================
+
         if not user.is_active:
             messages.error(
                 request,
@@ -118,6 +174,10 @@ def connexion(request):
                 request,
                 'accounts/login.html'
             )
+
+        # ==================================================
+        # CONNEXION
+        # ==================================================
 
         login(
             request,
@@ -142,26 +202,68 @@ def deconnexion(request):
 
 
 def bypass_login(request, role):
-    """Vue temporaire de dev pour se connecter instantanément par rôle"""
-    try:
-        profile = UserProfile.objects.filter(role=role).first()
-        if profile:
-            user = profile.user
-            user.backend = 'django.contrib.auth.backends.ModelBackend'
-            login(request, user)
-            return redirection_par_role(request, user)
-    except Exception as e:
-        pass
+    if role not in [
+        'admin',
+        'professeur',
+        'etudiant'
+    ]:
+        messages.error(
+            request,
+            "Rôle invalide."
+        )
+        return redirect('connexion')
 
-    messages.error(request, f"Aucun utilisateur trouvé pour le rôle : {role}")
+    try:
+        profile = (
+            UserProfile.objects
+            .select_related('user')
+            .filter(role=role)
+            .first()
+        )
+
+        if profile and profile.user:
+            user = profile.user
+
+            if not user.is_active:
+                messages.error(
+                    request,
+                    "Ce compte est désactivé."
+                )
+                return redirect('connexion')
+
+            user.backend = (
+                'django.contrib.auth.backends.ModelBackend'
+            )
+
+            login(
+                request,
+                user
+            )
+
+            return redirection_par_role(
+                request,
+                user
+            )
+
+    except Exception:
+        messages.error(
+            request,
+            "Impossible d'effectuer la connexion temporaire."
+        )
+        return redirect('connexion')
+
+    messages.error(
+        request,
+        f"Aucun utilisateur trouvé pour le rôle : {role}"
+    )
+
     return redirect('connexion')
 
 
 @login_required
 def admin_student_add(request):
-    """Vue pour ajouter un étudiant avec filière, niveau, génération automatique du matricule et du compte"""
-    niveaux = Niveau.objects.all()
-    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.all().order_by('code')
+    filieres = Filiere.objects.all().order_by('code')
 
     context = {
         'niveaux': niveaux,
@@ -169,47 +271,117 @@ def admin_student_add(request):
     }
 
     if request.method == 'POST':
-        nom = request.POST.get('nom', '').strip()
-        prenom = request.POST.get('prenom', '').strip()
-        age_str = request.POST.get('age', '').strip()
-        filiere_id = request.POST.get('filiere', '').strip()
-        niveau_id = request.POST.get('niveau', '').strip()
+        nom = request.POST.get(
+            'nom',
+            ''
+        ).strip()
 
-        # Validation de base pour éviter les alertes de champs vides
+        prenom = request.POST.get(
+            'prenom',
+            ''
+        ).strip()
+
+        age_str = request.POST.get(
+            'age',
+            ''
+        ).strip()
+
+        filiere_id = request.POST.get(
+            'filiere',
+            ''
+        ).strip()
+
+        niveau_id = request.POST.get(
+            'niveau',
+            ''
+        ).strip()
+
         if not nom or not prenom or not age_str or not filiere_id or not niveau_id:
-            context['error'] = "Veuillez renseigner tous les champs obligatoires."
-            return render(request, 'admin/students/student_add.html', context)
+            context['error'] = (
+                "Veuillez renseigner tous les champs obligatoires."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
 
-        # Validation de l'âge (doit être un entier positif)
         try:
             age = int(age_str)
         except ValueError:
-            context['error'] = "L'âge doit être un nombre entier."
-            return render(request, 'admin/students/student_add.html', context)
+            context['error'] = (
+                "L'âge doit être un nombre entier."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
 
         if age <= 0:
-            context['error'] = "L'âge doit être supérieur à 0."
-            return render(request, 'admin/students/student_add.html', context)
+            context['error'] = (
+                "L'âge doit être supérieur à 0."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
 
         try:
-            filiere = Filiere.objects.get(id=filiere_id)
-            niveau = Niveau.objects.get(id=niveau_id)
-        except (Filiere.DoesNotExist, Niveau.DoesNotExist):
-            context['error'] = "La filière ou le niveau sélectionné est invalide."
-            return render(request, 'admin/students/student_add.html', context)
+            filiere = Filiere.objects.get(
+                id=filiere_id
+            )
 
-        # --- GÉNÉRATION AUTOMATIQUE DU MATRICULE UNIQUE ---
-        # Format : Année (ex: 26) + Code Filière (ex: INFO) + Code Niveau (ex: L1) + Séquence (ex: 001)
+            niveau = Niveau.objects.get(
+                id=niveau_id
+            )
+
+        except Filiere.DoesNotExist:
+            context['error'] = (
+                "La filière sélectionnée est invalide."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
+
+        except Niveau.DoesNotExist:
+            context['error'] = (
+                "Le niveau sélectionné est invalide."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
+
         current_year_short = datetime.now().strftime('%y')
+
         filiere_code = filiere.code.upper()
         niveau_code = niveau.code.upper()
-        prefix = f"{current_year_short}{filiere_code}{niveau_code}"
 
-        last_student = Student.objects.filter(matricule__startswith=prefix).order_by('-matricule').first()
+        prefix = (
+            f"{current_year_short}"
+            f"{filiere_code}"
+            f"{niveau_code}"
+        )
+
+        last_student = (
+            Student.objects
+            .filter(
+                matricule__startswith=prefix
+            )
+            .order_by('-matricule')
+            .first()
+        )
 
         if last_student:
             try:
-                last_seq = int(last_student.matricule[len(prefix):])
+                last_seq = int(
+                    last_student.matricule[len(prefix):]
+                )
                 new_seq = last_seq + 1
             except ValueError:
                 new_seq = 1
@@ -217,39 +389,129 @@ def admin_student_add(request):
             new_seq = 1
 
         matricule = f"{prefix}{new_seq:03d}"
-        # --------------------------------------------------
 
-        # Création des identifiants uniques de connexion
-        username = matricule.lower()
-        email = f"{username}@school.mg"
-        default_password = f"Pass{matricule}!"
+        if Student.objects.filter(
+            matricule__iexact=matricule
+        ).exists():
+            context['error'] = (
+                "Le matricule généré existe déjà. "
+                "Veuillez réessayer."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
 
-        # Création de l'utilisateur Django de base
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=default_password,
-            first_name=prenom,
-            last_name=nom
+        try:
+            with transaction.atomic():
+                student = Student.objects.create(
+                    matricule=matricule,
+                    nom=nom,
+                    prenom=prenom,
+                    age=age,
+                    filiere=filiere,
+                    niveau=niveau
+                )
+
+                profile, created = UserProfile.objects.get_or_create(
+                    user=student.user
+                )
+
+                profile.role = 'etudiant'
+                profile.save()
+
+        except Exception:
+            context['error'] = (
+                "Impossible d'enregistrer l'étudiant."
+            )
+            return render(
+                request,
+                'admin/students/student_add.html',
+                context
+            )
+
+        messages.success(
+            request,
+            f"Étudiant enregistré ! "
+            f"Matricule : {student.matricule} "
+            f"| Mot de passe : {student.raw_password}"
         )
 
-        # Attribution du rôle via le profil
-        if hasattr(user, 'userprofile'):
-            user.userprofile.role = 'etudiant'
-            user.userprofile.save()
-
-        # Création de l'étudiant lié au compte avec sa filière et son niveau
-        Student.objects.create(
-            user=user,
-            matricule=matricule,
-            nom=nom,
-            prenom=prenom,
-            age=age,
-            filiere=filiere,
-            niveau=niveau
+        return redirect(
+            'admin_students'
         )
 
-        messages.success(request, f"Étudiant enregistré ! Matricule généré : {matricule}")
-        return redirect('admin_students')
+    return render(
+        request,
+        'admin/students/student_add.html',
+        context
+    )
 
-    return render(request, 'admin/students/student_add.html', context)
+
+@login_required
+def admin_teacher_add(request):
+    context = {}
+
+    if request.method == 'POST':
+        nom = request.POST.get(
+            'nom',
+            ''
+        ).strip()
+
+        prenom = request.POST.get(
+            'prenom',
+            ''
+        ).strip()
+
+        if not nom:
+            context['error'] = (
+                "Veuillez renseigner le nom du professeur."
+            )
+            return render(
+                request,
+                'admin/teachers/ajouter.html',
+                context
+            )
+
+        try:
+            with transaction.atomic():
+                teacher = Teacher.objects.create(
+                    nom=nom,
+                    prenom=prenom or None
+                )
+
+                profile, created = UserProfile.objects.get_or_create(
+                    user=teacher.user
+                )
+
+                profile.role = 'professeur'
+                profile.save()
+
+        except Exception:
+            context['error'] = (
+                "Impossible d'enregistrer le professeur."
+            )
+            return render(
+                request,
+                'admin/teachers/ajouter.html',
+                context
+            )
+
+        messages.success(
+            request,
+            f"Professeur enregistré ! "
+            f"Identifiant : {teacher.identifiant} "
+            f"| Email : {teacher.user.email} "
+            f"| Mot de passe : {teacher.raw_password}"
+        )
+
+        return redirect(
+            'admin_teachers'
+        )
+
+    return render(
+        request,
+        'admin/teachers/ajouter.html',
+        context
+    )
