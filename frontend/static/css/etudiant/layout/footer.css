@@ -1,0 +1,50 @@
+/* ============================================================
+   ÉTUDIANT — FOOTER
+   ============================================================ */
+
+.admin-footer {
+    margin-left: 235px;
+
+    padding: 20px 32px;
+
+    background-color: #ffffff;
+
+    border-top: 1px solid #e5e7eb;
+
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+}
+
+.admin-footer p {
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 13px;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLETTE
+   ============================================================ */
+
+@media (max-width: 900px) {
+    .admin-footer {
+        margin-left: 210px;
+
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+    .admin-footer {
+        margin-left: 72px;
+
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+}

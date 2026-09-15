@@ -1,170 +1,219 @@
-{% extends "base/base.html" %} {% load static %} {% block title %}Absences —
-Administration{% endblock %} {% block extra_css %}
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Détail de l'absence — Administration{% endblock %}
+
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
 <link rel="stylesheet" href="{% static 'css/admin/absences.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
+
 <div class="admin-layout">
-  {% include "admin/layout/header.html" %}
 
-  <div class="admin-layout__body">
-    {% include "admin/layout/sidebar.html" %}
+    {% include "admin/layout/header.html" %}
 
-    <main class="admin-main">
-      <div class="admin-main__content">
-        <!-- EN-TÊTE DE LA PAGE -->
-        <div class="grades-page-heading">
-          <div class="grades-page-heading__title">
-            <div>
-              <h1>Absences</h1>
-              <p>Suivi et gestion des absences aux évaluations</p>
-            </div>
-          </div>
+    <div class="admin-layout__body">
 
-          <div class="grades-heading-actions">
-            <a
-              href="{% url 'admin_absence_add' %}"
-              class="grades-btn grades-btn--primary"
-            >
-              <i class="fa-solid fa-plus"></i>
-              Enregistrer une absence
-            </a>
-          </div>
-        </div>
+        {% include "admin/layout/sidebar.html" %}
 
-        <!-- PANNEAU CONTENANT LA LISTE -->
-        <section class="grades-panel">
-          <div class="grades-panel__header">
-            <h2>Liste des absences</h2>
-            <p>Absences enregistrées dans le système</p>
-          </div>
+        <main class="admin-main">
 
-          {% if absences %}
+            <div class="admin-main__content">
 
-          <div class="grades-table-wrapper">
-            <table class="grades-table">
-              <thead>
-                <tr>
-                  <th>Matricule</th>
-                  <th>Étudiant</th>
-                  <th>Matière</th>
-                  <th>Évaluation</th>
-                  <th>Date d'absence</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+                <div class="grades-page-heading">
 
-              <tbody>
-                {% for absence in absences %}
-
-                <tr>
-                  <td>{{ absence.student.matricule }}</td>
-
-                  <td>
-                    {{ absence.student.nom }} {{ absence.student.prenom }}
-                  </td>
-
-                  <!-- Affichage de la matière -->
-                  <td>{{ absence.subject.nom }}</td>
-
-                  <!-- Affichage du type d'évaluation -->
-                  <td>{{ absence.get_type_evaluation_display }}</td>
-
-                  <td>{{ absence.date_absence|date:"d/m/Y" }}</td>
-
-                  <td>
-                    {% if absence.rattrapage_effectue %}
-                    <span class="badge badge--success">
-                      Rattrapée ({{ absence.note_rattrapage }}/20)
-                    </span>
-                    {% elif absence.justifiee %}
-                    <span class="badge badge--info"> Justifiée </span>
-                    {% else %}
-                    <span class="badge badge--danger"> Non justifiée </span>
-                    {% endif %}
-                  </td>
-
-                  <td>
-                    <div class="absence-actions">
-                      <!-- Détail -->
-                      <a
-                        href="{% url 'admin_absence_detail' absence.id %}"
-                        class="absence-action"
-                        title="Détails"
-                      >
-                        <i class="fa-solid fa-eye"></i>
-                      </a>
-
-                      <!-- Modifier -->
-                      <a
-                        href="{% url 'admin_absence_edit' absence.id %}"
-                        class="absence-action"
-                        title="Modifier"
-                      >
-                        <i class="fa-solid fa-pen"></i>
-                      </a>
-
-                      <!-- Justifier (Si pas encore justifiée) -->
-                      {% if not absence.justifiee %}
-                      <a
-                        href="{% url 'admin_absence_justify' absence.id %}"
-                        class="absence-action"
-                        title="Justifier"
-                      >
-                        <i class="fa-solid fa-file-signature"></i>
-                      </a>
-                      {% endif %}
-
-                      <!-- Rattrapage (Si justifiée et non encore rattrapée) -->
-                      <!-- prettier-ignore -->
-                      {% if absence.justifiee and not absence.rattrapage_effectue %}
-                      <a
-                        href="{% url 'admin_absence_makeup' absence.id %}"
-                        class="absence-action"
-                        title="Rattrapage"
-                      >
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                      </a>
-                      {% endif %}
+                    <div class="grades-page-heading__title">
+                        <div>
+                            <h1>Détail de l'absence</h1>
+                            <p>
+                                Informations détaillées concernant cette absence
+                            </p>
+                        </div>
                     </div>
-                  </td>
-                </tr>
 
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+                    <div class="grades-heading-actions">
+                        <a
+                            href="{% url 'admin_absences' %}"
+                            class="grades-btn"
+                        >
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Retour aux absences
+                        </a>
+                    </div>
 
-          {% else %}
+                </div>
 
-          <!-- ÉTAT VIDE -->
-          <div class="grades-empty">
-            <div class="grades-empty__icon">
-              <i class="fa-solid fa-user-clock"></i>
+
+                <section class="grades-panel">
+
+                    <div class="grades-panel__header">
+                        <h2>Informations sur l'absence</h2>
+                        <p>
+                            Détails de l'absence enregistrée
+                        </p>
+                    </div>
+
+
+                    <div class="absence-detail">
+
+                        <div class="absence-detail__item">
+                            <span class="absence-detail__label">
+                                Matricule
+                            </span>
+
+                            <strong class="absence-detail__value">
+                                {{ absence.student.matricule }}
+                            </strong>
+                        </div>
+
+
+                        <div class="absence-detail__item">
+                            <span class="absence-detail__label">
+                                Étudiant
+                            </span>
+
+                            <strong class="absence-detail__value">
+                                {{ absence.student.nom }}
+                                {{ absence.student.prenom }}
+                            </strong>
+                        </div>
+
+
+                        <div class="absence-detail__item">
+                            <span class="absence-detail__label">
+                                Matière
+                            </span>
+
+                            <strong class="absence-detail__value">
+                                {{ absence.subject.nom }}
+                            </strong>
+                        </div>
+
+
+                        <div class="absence-detail__item">
+                            <span class="absence-detail__label">
+                                Type d'évaluation
+                            </span>
+
+                            <strong class="absence-detail__value">
+                                {{ absence.get_type_evaluation_display }}
+                            </strong>
+                        </div>
+
+
+                        <div class="absence-detail__item">
+                            <span class="absence-detail__label">
+                                Date d'absence
+                            </span>
+
+                            <strong class="absence-detail__value">
+                                {{ absence.date_absence|date:"d/m/Y" }}
+                            </strong>
+                        </div>
+
+
+                        <div class="absence-detail__item">
+                            <span class="absence-detail__label">
+                                Statut
+                            </span>
+
+                            <div class="absence-detail__value">
+
+                                {% if absence.rattrapage_effectue %}
+
+                                    <span class="badge badge--success">
+                                        Rattrapée
+                                    </span>
+
+                                {% elif absence.justifiee %}
+
+                                    <span class="badge badge--info">
+                                        Justifiée
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge badge--danger">
+                                        Non justifiée
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+
+                        {% if absence.rattrapage_effectue %}
+
+                        <div class="absence-detail__item">
+
+                            <span class="absence-detail__label">
+                                Note de rattrapage
+                            </span>
+
+                            <strong class="absence-detail__value">
+                                {{ absence.note_rattrapage }}/20
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="absence-detail__actions">
+
+                        <a
+                            href="{% url 'admin_absence_edit' absence.id %}"
+                            class="grades-btn"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                            Modifier
+                        </a>
+
+
+                        {% if not absence.justifiee %}
+
+                        <a
+                            href="{% url 'admin_absence_justify' absence.id %}"
+                            class="grades-btn grades-btn--primary"
+                        >
+                            <i class="fa-solid fa-file-signature"></i>
+                            Justifier
+                        </a>
+
+                        {% endif %}
+
+
+                        {% if absence.justifiee and not absence.rattrapage_effectue %}
+
+                        <a
+                            href="{% url 'admin_absence_makeup' absence.id %}"
+                            class="grades-btn grades-btn--primary"
+                        >
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            Rattrapage
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
             </div>
 
-            <h3>Aucune absence</h3>
+            {% include "admin/layout/footer.html" %}
 
-            <p>Aucune absence n'est actuellement enregistrée.</p>
+        </main>
 
-            <a
-              href="{% url 'admin_absence_add' %}"
-              class="grades-btn grades-btn--primary"
-            >
-              <i class="fa-solid fa-plus"></i>
-              Enregistrer une absence
-            </a>
-          </div>
+    </div>
 
-          {% endif %}
-        </section>
-      </div>
-
-      {% include "admin/layout/footer.html" %}
-    </main>
-  </div>
 </div>
 
 {% endblock %}

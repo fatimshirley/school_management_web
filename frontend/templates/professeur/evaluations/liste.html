@@ -1,87 +1,317 @@
-{% extends 'base/base.html' %} {% load static %} {% block title %}Mes
-Évaluations — Espace Professeur{% endblock %} {% block css %}
-<link rel="stylesheet" href="{% static 'css/professeur/evaluations.css' %}" />
-<style>
-  /* Sécurité anti-bug : Force l'affichage même si le fichier CSS externe ne charge pas */
-  .admin-main {
-    margin-left: 235px !important;
-    padding-top: 85px !important;
-    box-sizing: border-box !important;
-  }
-  @media (max-width: 992px) {
-    .admin-main {
-      margin-left: 0 !important;
-    }
-  }
-</style>
-{% endblock %} {% block content %}
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}
+Mes évaluations — Espace Professeur
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/evaluations.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
 <div class="admin-layout">
-  {% include 'professeur/layout/header.html' %}
-  <div class="admin-layout__body">
+
+```
+{% include 'professeur/layout/header.html' %}
+
+<div class="admin-layout__body">
+
     {% include 'professeur/layout/sidebar.html' %}
+
     <main class="admin-main">
-      <div class="admin-main__content">
-        <div class="academic-page-heading">
-          <div>
-            <h1>Liste des Évaluations</h1>
-            <p>Consultez et gérez vos évaluations par matière</p>
-          </div>
-          <a
-            href="{% url 'professeur_evaluation_ajouter' %}"
-            class="academic-btn academic-btn--primary"
-          >
-            <i class="fa-solid fa-plus"></i> Nouvelle Évaluation
-          </a>
+
+        <div class="admin-main__content">
+
+            <!-- =====================================================
+                 EN-TÊTE DE PAGE
+            ====================================================== -->
+
+            <div class="academic-page-heading">
+
+                <div>
+
+                    <h1>
+                        Mes évaluations
+                    </h1>
+
+                    <p>
+                        Consultez et gérez les évaluations associées à vos matières.
+                    </p>
+
+                </div>
+
+                <div class="academic-page-heading__actions">
+
+                    <a
+                        href="{% url 'professeur_evaluation_ajouter' %}"
+                        class="academic-btn academic-btn--primary"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Nouvelle évaluation
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 LISTE DES ÉVALUATIONS
+            ====================================================== -->
+
+            <div class="academic-panel">
+
+                <div class="academic-panel__header">
+
+                    <div>
+
+                        <h2>
+                            Liste des évaluations
+                        </h2>
+
+                        <p>
+                            Retrouvez ici toutes les évaluations que vous avez créées.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if evaluations %}
+
+                    <div class="academic-table-wrapper">
+
+                        <table class="academic-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Matière
+                                    </th>
+
+                                    <th>
+                                        Type
+                                    </th>
+
+                                    <th>
+                                        Session
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for evaluation in evaluations %}
+
+                                    <tr>
+
+                                        <!-- =================================================
+                                             MATIÈRE
+                                        ================================================== -->
+
+                                        <td>
+
+                                            <span class="evaluation-subject">
+                                                {{ evaluation.subject.nom }}
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- =================================================
+                                             TYPE
+                                        ================================================== -->
+
+                                        <td>
+
+                                            <span class="evaluation-type">
+                                                {{ evaluation.get_type_evaluation_display }}
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- =================================================
+                                             SESSION
+                                        ================================================== -->
+
+                                        <td>
+
+                                            <span class="evaluation-session">
+                                                Session {{ evaluation.session }}
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- =================================================
+                                             DATE
+                                        ================================================== -->
+
+                                        <td>
+
+                                            <span class="evaluation-date">
+                                                {{ evaluation.date|date:"d/m/Y" }}
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- =================================================
+                                             ACTIONS
+                                        ================================================== -->
+
+                                        <td>
+
+                                            <div class="academic-actions">
+
+                                                <!-- VOIR -->
+
+                                                <a
+                                                    href="{% url 'professeur_evaluation_detail' evaluation.pk %}"
+                                                    class="academic-btn-icon"
+                                                    title="Voir l'évaluation"
+                                                    aria-label="Voir l'évaluation de {{ evaluation.subject.nom }}"
+                                                >
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+
+
+                                                <!-- MODIFIER -->
+
+                                                <a
+                                                    href="{% url 'professeur_evaluation_modifier' evaluation.pk %}"
+                                                    class="academic-btn-icon"
+                                                    title="Modifier l'évaluation"
+                                                    aria-label="Modifier l'évaluation de {{ evaluation.subject.nom }}"
+                                                >
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </a>
+
+
+                                                <!-- SUPPRIMER -->
+
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'professeur_evaluation_supprimer' evaluation.pk %}"
+                                                    onsubmit="return confirmerSuppressionEvaluation('{{ evaluation.subject.nom|escapejs }}', '{{ evaluation.get_type_evaluation_display|escapejs }}');"
+                                                    style="display: inline;"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="academic-btn-icon academic-btn-icon--danger"
+                                                        title="Supprimer l'évaluation"
+                                                        aria-label="Supprimer l'évaluation de {{ evaluation.subject.nom }}"
+                                                    >
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <!-- =====================================================
+                         ÉTAT VIDE
+                    ====================================================== -->
+
+                    <div class="academic-empty">
+
+                        <div class="academic-empty__icon">
+
+                            <i class="fa-solid fa-clipboard-list"></i>
+
+                        </div>
+
+                        <strong>
+                            Aucune évaluation
+                        </strong>
+
+                        <span>
+                            Aucune évaluation n'est enregistrée pour le moment.
+                        </span>
+
+                        <a
+                            href="{% url 'professeur_evaluation_ajouter' %}"
+                            class="academic-btn academic-btn--primary"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Créer une évaluation
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
         </div>
 
-        <div class="academic-panel">
-          <div class="academic-table-wrapper">
-            <table class="academic-table">
-              <thead>
-                <tr>
-                  <th>Intitulé</th>
-                  <th>Matière</th>
-                  <th>Date</th>
-                  <th>Coefficient</th>
-                  <th style="text-align: right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for evaluation in evaluations %}
-                <tr>
-                  <td style="font-weight: 600; color: #0f172a">
-                    {{ evaluation.titre }}
-                  </td>
-                  <td>{{ evaluation.matiere.nom }}</td>
-                  <td>{{ evaluation.date|date:"d/m/Y" }}</td>
-                  <td>{{ evaluation.coefficient }}</td>
-                  <td style="text-align: right">
-                    <a
-                      href="#"
-                      class="academic-btn-icon"
-                      title="Voir les détails"
-                    >
-                      <i class="fa-solid fa-eye"></i>
-                    </a>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td
-                    colspan="5"
-                    style="text-align: center; padding: 40px; color: #64748b"
-                  >
-                    Aucune évaluation enregistrée pour le moment.
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      {% include 'professeur/layout/footer.html' %}
+
+        {% include 'professeur/layout/footer.html' %}
+
     </main>
-  </div>
+
 </div>
+```
+
+</div>
+
+<!-- ============================================================
+     CONFIRMATION DE SUPPRESSION
+============================================================ -->
+
+<script>
+
+function confirmerSuppressionEvaluation(matiere, typeEvaluation) {
+
+    return confirm(
+        "Voulez-vous vraiment supprimer cette évaluation ?\n\n" +
+        "Matière : " + matiere + "\n" +
+        "Type : " + typeEvaluation + "\n\n" +
+        "Cette action est irréversible."
+    );
+
+}
+
+</script>
+
 {% endblock %}

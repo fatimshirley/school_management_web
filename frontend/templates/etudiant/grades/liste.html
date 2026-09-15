@@ -3,45 +3,310 @@
 
 {% block title %}Mes Notes - Portail Étudiant{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/etudiant/grades.css' %}">
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/grades.css' %}"
+>
+
 {% endblock %}
 
+
 {% block content %}
+
 <div class="app-container">
+
+    <!-- ==================================================
+         SIDEBAR
+    =================================================== -->
+
     {% include 'etudiant/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
+
+
+    <!-- ==================================================
+         CONTENU PRINCIPAL
+    =================================================== -->
+
+    <div class="main-wrapper">
+
+        <!-- ==================================================
+             HEADER
+        =================================================== -->
+
         {% include 'etudiant/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Mes Notes par Matière</h2>
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Matière</th>
-                                <th>Évaluation</th>
-                                <th>Note</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for grade in grades %}
-                            <tr>
-                                <td>{{ grade.evaluation.matiere.nom }}</td>
-                                <td>{{ grade.evaluation.titre }}</td>
-                                <td><strong>{{ grade.valeur }}/20</strong></td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">Aucune note disponible pour le moment.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+
+        <!-- ==================================================
+             CONTENU
+        =================================================== -->
+
+        <main class="student-grades">
+
+
+            <!-- ==================================================
+                 EN-TÊTE
+            =================================================== -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="page-header__eyebrow">
+                        ESPACE ÉTUDIANT
+                    </span>
+
+                    <h1>
+                        Mes notes
+                    </h1>
+
+                    <p>
+                        Consultez vos notes obtenues aux différentes évaluations.
+                    </p>
+
                 </div>
+
             </div>
+
+
+            <!-- ==================================================
+                 RÉSUMÉ
+            =================================================== -->
+
+            <section class="grades-summary">
+
+                <div class="grades-summary__item">
+
+                    <span class="grades-summary__label">
+                        Nombre de notes
+                    </span>
+
+                    <strong class="grades-summary__value">
+                        {{ grades|length }}
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 LISTE DES NOTES
+            =================================================== -->
+
+            <section class="grades-section">
+
+
+                <!-- EN-TÊTE -->
+
+                <div class="grades-section__header">
+
+                    <div>
+
+                        <h2>
+                            Liste des notes
+                        </h2>
+
+                        <p>
+                            Retrouvez vos évaluations et les résultats obtenus.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TABLEAU -->
+
+                <div class="grades-table-wrapper">
+
+                    <table class="grades-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Matière
+                                </th>
+
+                                <th>
+                                    Évaluation
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Note
+                                </th>
+
+                                <th class="grades-table__action-column">
+                                    Détail
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for grade in grades %}
+
+                            <tr>
+
+
+                                <!-- MATIÈRE -->
+
+                                <td>
+
+                                    <span class="grades-table__subject">
+
+                                        {{ grade.evaluation.subject.nom|default:"Matière non renseignée" }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ÉVALUATION -->
+
+                                <td>
+
+                                    <span class="grades-table__evaluation">
+
+                                        {{ grade.evaluation.get_type_evaluation_display }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- DATE -->
+
+                                <td>
+
+                                    <span class="grades-table__date">
+
+                                        {% if grade.evaluation.date %}
+
+                                            {{ grade.evaluation.date|date:"d/m/Y" }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- NOTE -->
+
+                                <td>
+
+                                    <span class="grades-table__grade">
+
+                                        {{ grade.note }}/20
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- DÉTAIL -->
+
+                                <td class="grades-table__action-column">
+
+                                    <a
+                                        href="{% url 'etudiant_grade_detail' grade.id %}"
+                                        class="grades-table__action"
+                                        title="Détail de la note"
+                                        aria-label="Détail de la note"
+                                    >
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </a>
+
+                                </td>
+
+
+                            </tr>
+
+
+                            {% empty %}
+
+
+                            <!-- AUCUNE NOTE -->
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="grades-table__empty"
+                                >
+
+                                    <div class="grades-empty">
+
+                                        <i class="fa-regular fa-file-lines"></i>
+
+                                        <strong>
+                                            Aucune note disponible
+                                        </strong>
+
+                                        <span>
+                                            Vos notes apparaîtront ici dès qu'elles seront publiées.
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
         </main>
+
+
+        <!-- ==================================================
+             FOOTER
+        =================================================== -->
+
         {% include 'etudiant/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

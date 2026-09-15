@@ -3,25 +3,278 @@
 
 {% block title %}Détail Note - Portail Étudiant{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/etudiant/grades.css' %}">
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/grades.css' %}"
+>
+
 {% endblock %}
 
+
 {% block content %}
+
 <div class="app-container">
+
+    <!-- ==================================================
+         SIDEBAR
+    =================================================== -->
+
     {% include 'etudiant/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
+
+
+    <!-- ==================================================
+         CONTENU PRINCIPAL
+    =================================================== -->
+
+    <div class="main-wrapper">
+
+        <!-- ==================================================
+             HEADER
+        =================================================== -->
+
         {% include 'etudiant/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Détails de la note</h2>
-            <div class="card shadow-sm border-0 p-4">
-                <p><strong>Évaluation :</strong> {{ grade.evaluation.titre }}</p>
-                <p><strong>Note :</strong> {{ grade.valeur }}/20</p>
-                <p><strong>Observation :</strong> {{ grade.observation|default:"Aucune observation" }}</p>
-                <a href="{% url 'etudiant_grades' %}" class="btn btn-secondary mt-3">Retour</a>
+
+
+        <!-- ==================================================
+             CONTENU
+        =================================================== -->
+
+        <main class="student-grades">
+
+            <!-- ==================================================
+                 FIL D'ARIANE
+            =================================================== -->
+
+            <div class="grade-detail-breadcrumb">
+
+                <a href="{% url 'etudiant_grades' %}">
+                    Mes notes
+                </a>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+                <span>
+                    Détail
+                </span>
+
             </div>
+
+
+            <!-- ==================================================
+                 EN-TÊTE
+            =================================================== -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="page-header__eyebrow">
+                        ESPACE ÉTUDIANT
+                    </span>
+
+                    <h1>
+                        Détail de la note
+                    </h1>
+
+                    <p>
+                        Consultez les informations relatives à cette évaluation.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 DÉTAIL DE LA NOTE
+            =================================================== -->
+
+            <section class="grade-detail">
+
+
+                <!-- ==================================================
+                     EN-TÊTE DE L'ÉVALUATION
+                =================================================== -->
+
+                <div class="grade-detail__header">
+
+                    <div>
+
+                        <span class="grade-detail__label">
+                            ÉVALUATION
+                        </span>
+
+                        <h2>
+                            {{ grade.evaluation.get_type_evaluation_display }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     INFORMATIONS
+                =================================================== -->
+
+                <div class="grade-detail__information">
+
+
+                    <!-- MATIÈRE -->
+
+                    <div class="grade-detail__item">
+
+                        <span class="grade-detail__item-label">
+                            Matière
+                        </span>
+
+                        <span class="grade-detail__item-value">
+                            {{ grade.evaluation.subject.nom|default:"Matière non renseignée" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- TYPE D'ÉVALUATION -->
+
+                    <div class="grade-detail__item">
+
+                        <span class="grade-detail__item-label">
+                            Type d'évaluation
+                        </span>
+
+                        <span class="grade-detail__item-value">
+                            {{ grade.evaluation.get_type_evaluation_display }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- SESSION -->
+
+                    <div class="grade-detail__item">
+
+                        <span class="grade-detail__item-label">
+                            Session
+                        </span>
+
+                        <span class="grade-detail__item-value">
+                            Session {{ grade.evaluation.session }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="grade-detail__item">
+
+                        <span class="grade-detail__item-label">
+                            Date de l'évaluation
+                        </span>
+
+                        <span class="grade-detail__item-value">
+
+                            {% if grade.evaluation.date %}
+
+                                {{ grade.evaluation.date|date:"d/m/Y" }}
+
+                            {% else %}
+
+                                Non renseignée
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- NOTE -->
+
+                    <div class="grade-detail__item">
+
+                        <span class="grade-detail__item-label">
+                            Note obtenue
+                        </span>
+
+                        <span class="grade-detail__item-value grade-detail__item-value--grade">
+
+                            {{ grade.note }}/20
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- ÉTUDIANT -->
+
+                    <div class="grade-detail__item">
+
+                        <span class="grade-detail__item-label">
+                            Étudiant
+                        </span>
+
+                        <span class="grade-detail__item-value">
+                            {{ student.prenom }} {{ student.nom }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==================================================
+                     RETOUR
+                =================================================== -->
+
+                <div class="grade-detail__footer">
+
+                    <a
+                        href="{% url 'etudiant_grades' %}"
+                        class="grade-detail__back"
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Retour à mes notes
+
+                    </a>
+
+                </div>
+
+
+            </section>
+
         </main>
+
+
+        <!-- ==================================================
+             FOOTER
+        =================================================== -->
+
         {% include 'etudiant/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

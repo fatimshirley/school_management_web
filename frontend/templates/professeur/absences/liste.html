@@ -1,60 +1,244 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Gestion des Absences - Espace Professeur{% endblock %}
+{% block title %}Gestion des absences — Espace Professeur{% endblock %}
 
-{% block css %}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/professeur/absences.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="app-container">
-    {% include 'professeur/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'professeur/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Liste des Absences signalées</h2>
-                <a href="{% url 'professeur_absence_add' %}" class="btn btn-danger"></a>
-                    <i class="fa-solid fa-user-xmark me-1"></i> Marquer une absence
-                </a>
-            </div>
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <table class="table align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Étudiant</th>
-                                <th>Matière</th>
-                                <th>Date</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for absence in absences %}
-                            <tr>
-                                <td>{{ absence.etudiant.nom }} {{ absence.etudiant.prenom }}</td>
-                                <td>{{ absence.matiere.nom }}</td>
-                                <td>{{ absence.date|date:"d/m/Y" }}</td>
-                                <td>
-                                    {% if absence.justifiee %}
-                                        <span class="badge bg-success">Justifiée</span>
-                                    {% else %}
-                                        <span class="badge bg-danger">Non justifiée</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center text-muted py-4">Aucune absence enregistrée.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+<div class="admin-layout">
+
+    {% include 'professeur/layout/header.html' %}
+
+    <div class="admin-layout__body">
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <!-- =====================================================
+                     EN-TÊTE
+                ====================================================== -->
+
+                <div class="academic-page-heading">
+
+                    <div>
+
+                        <h1>Gestion des absences</h1>
+
+                        <p>
+                            Consultez les absences enregistrées dans vos matières.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{% url 'professeur_absence_add' %}"
+                        class="academic-btn academic-btn--danger"
+                    >
+
+                        <i class="fa-solid fa-user-xmark"></i>
+
+                        Marquer une absence
+
+                    </a>
+
                 </div>
+
+
+                <!-- =====================================================
+                     TABLEAU
+                ====================================================== -->
+
+                <div class="academic-panel">
+
+                    <div class="academic-panel-header">
+
+                        <div>
+
+                            <h2>Absences signalées</h2>
+
+                            <p>
+                                Liste des absences concernant les étudiants
+                                de vos matières.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="academic-panel-body academic-panel-body--table">
+
+                        <div class="academic-table-wrapper">
+
+                            <table class="academic-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Étudiant
+                                        </th>
+
+                                        <th>
+                                            Matière
+                                        </th>
+
+                                        <th>
+                                            Date
+                                        </th>
+
+                                        <th>
+                                            Statut
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    {% for absence in absences %}
+
+                                        <tr>
+
+                                            <!-- =========================
+                                                 ÉTUDIANT
+                                            ========================== -->
+
+                                            <td>
+
+                                                <div class="absence-student">
+
+                                                    <strong>
+                                                        {{ absence.student.nom }}
+                                                        {{ absence.student.prenom }}
+                                                    </strong>
+
+                                                    {% if absence.student.matricule %}
+
+                                                        <span>
+                                                            {{ absence.student.matricule }}
+                                                        </span>
+
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </td>
+
+
+                                            <!-- =========================
+                                                 MATIÈRE
+                                            ========================== -->
+
+                                            <td>
+
+                                                <span class="absence-subject">
+                                                    {{ absence.subject.nom }}
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- =========================
+                                                 DATE
+                                            ========================== -->
+
+                                            <td>
+
+                                                <span class="absence-date">
+                                                    {{ absence.date_absence|date:"d/m/Y" }}
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- =========================
+                                                 STATUT
+                                            ========================== -->
+
+                                            <td>
+
+                                                {% if absence.justifiee %}
+
+                                                    <span class="absence-status absence-status--justified">
+
+                                                        <i class="fa-solid fa-circle-check"></i>
+
+                                                        Justifiée
+
+                                                    </span>
+
+                                                {% else %}
+
+                                                    <span class="absence-status absence-status--unjustified">
+
+                                                        <i class="fa-solid fa-circle-xmark"></i>
+
+                                                        Non justifiée
+
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% empty %}
+
+                                        <tr>
+
+                                            <td
+                                                colspan="4"
+                                                class="academic-table-empty"
+                                            >
+
+                                                <i class="fa-solid fa-calendar-xmark"></i>
+
+                                                <h3>
+                                                    Aucune absence enregistrée
+                                                </h3>
+
+                                                <p>
+                                                    Aucune absence n'a encore été
+                                                    enregistrée dans vos matières.
+                                                </p>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
+
+
+            {% include 'professeur/layout/footer.html' %}
+
         </main>
-        {% include 'professeur/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

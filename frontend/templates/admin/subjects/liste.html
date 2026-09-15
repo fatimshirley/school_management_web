@@ -1,152 +1,393 @@
 {% extends "base/base.html" %}
+
 {% load static %}
 
-{% block title %} Matières — Administration {% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}" />
-<link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}" />
-<link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}" />
-<link rel="stylesheet" href="{% static 'css/admin/subjects.css' %}" />
+{% block title %}
+    Matières — Administration
 {% endblock %}
 
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/admin/subjects.css' %}"
+>
+
+{% endblock %}
+
+
 {% block content %}
+
 <div class="admin-layout">
-  {% include "admin/layout/header.html" %}
 
-  <div class="admin-layout__body">
-    {% include "admin/layout/sidebar.html" %}
+    {% include "admin/layout/header.html" %}
 
-    <main class="admin-main">
-      <div class="admin-main__content">
-        <div class="subjects-page-heading">
-          <div class="subjects-page-heading__title">
 
-            <div>
-              <h1>Matières</h1>
-              <p>Gestion des matières d'enseignement</p>
-            </div>
-          </div>
+    <div class="admin-layout__body">
 
-          <a href="{% url 'admin_subject_add' %}" class="subjects-btn subjects-btn--primary">
-            <i class="fa-solid fa-plus"></i>
-            Ajouter une matière
-          </a>
-        </div>
+        {% include "admin/layout/sidebar.html" %}
 
-        <section class="subjects-panel">
-          <div class="subjects-panel__header">
-            <div>
-              <h2>Liste des matières</h2>
-              <p>
-                {{ subjects|length }} matière{{ subjects|length|pluralize }} enregistrée{{ subjects|length|pluralize }}
-              </p>
-            </div>
-          </div>
 
-          {% if subjects %}
-          <div class="subjects-table-wrapper">
-            <table class="subjects-table">
-              <thead>
-                <tr>
-                  <th>Matière</th>
-                  <th>Crédits</th>
-                  <th>Semestre</th>
-                  <th>Niveau</th>
-                  <th>Professeurs</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+        <main class="admin-main">
 
-              <tbody>
-                {% for subject in subjects %}
-                <tr>
-                  <td class="subject-name">{{ subject.nom }}</td>
+            <div class="admin-main__content">
 
-                  <td>
-                    {% if subject.credits %}
-                      {{ subject.credits }}
-                    {% else %}
-                      —
-                    {% endif %}
-                  </td>
 
-                  <td>
-                    {% if subject.semestre %}
-                      {{ subject.semestre.nom }}
-                    {% else %}
-                      —
-                    {% endif %}
-                  </td>
+                <!-- ==================================================
+                     EN-TÊTE
+                ================================================== -->
 
-                  <td>
-                    {% if subject.semestre and subject.semestre.niveau %}
-                      {{ subject.semestre.niveau.code }}
-                    {% else %}
-                      —
-                    {% endif %}
-                  </td>
+                <div class="subjects-page-heading">
 
-                  <td>
-                    {% with teachers=subject.teachers.all %}
-                      {% if teachers %}
-                        {% for teacher in teachers %}
-                          {{ teacher.nom }} {{ teacher.prenom|default:"" }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                      {% else %}
-                        —
-                      {% endif %}
-                    {% endwith %}
-                  </td>
+                    <div class="subjects-page-heading__title">
 
-                  <td>
-                    <div class="subject-actions">
-                      <a href="{% url 'admin_subject_detail' subject.id %}" class="subject-action" title="Voir">
-                        <i class="fa-solid fa-eye"></i>
-                      </a>
+                        <div>
 
-                      <a href="{% url 'admin_subject_edit' subject.id %}" class="subject-action" title="Modifier">
-                        <i class="fa-solid fa-pen"></i>
-                      </a>
+                            <h1>
+                                Matières
+                            </h1>
 
-                      <form method="post" action="{% url 'admin_subject_delete' subject.id %}">
-                        {% csrf_token %}
-                        <button
-                          type="submit"
-                          class="subject-action subject-action--danger"
-                          title="Supprimer"
-                          onclick="return confirm('Voulez-vous vraiment supprimer cette matière ?');"
-                        >
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </form>
+                            <p>
+                                Gestion des matières d'enseignement
+                            </p>
+
+                        </div>
+
                     </div>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <div class="subjects-empty">
-            <div class="subjects-empty__icon">
-              <i class="fa-solid fa-book"></i>
+
+
+                    <a
+                        href="{% url 'admin_subject_add' %}"
+                        class="subjects-btn subjects-btn--primary"
+                    >
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Ajouter une matière
+
+                    </a>
+
+                </div>
+
+
+                <!-- ==================================================
+                     LISTE
+                ================================================== -->
+
+                <section class="subjects-panel">
+
+
+                    <div class="subjects-panel__header">
+
+                        <div>
+
+                            <h2>
+                                Liste des matières
+                            </h2>
+
+                            <p>
+                                {{ enseignements|length }}
+                                affectation{{ enseignements|length|pluralize }}
+                                enregistrée{{ enseignements|length|pluralize }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if enseignements %}
+
+
+                    <div class="subjects-table-wrapper">
+
+                        <table class="subjects-table">
+
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Matière
+                                    </th>
+
+                                    <th>
+                                        Crédits
+                                    </th>
+
+                                    <th>
+                                        Semestre
+                                    </th>
+
+                                    <th>
+                                        Niveau
+                                    </th>
+
+                                    <th>
+                                        Filière
+                                    </th>
+
+                                    <th>
+                                        Professeur
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                {% for enseignement in enseignements %}
+
+                                <tr>
+
+
+                                    <!-- MATIÈRE -->
+
+                                    <td class="subject-name">
+
+                                        {{ enseignement.subject.nom }}
+
+                                    </td>
+
+
+                                    <!-- CRÉDITS -->
+
+                                    <td>
+
+                                        {% if enseignement.subject.credits %}
+
+                                            {{ enseignement.subject.credits }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- SEMESTRE -->
+
+                                    <td>
+
+                                        {% if enseignement.semestre %}
+
+                                            {{ enseignement.semestre.nom }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- NIVEAU -->
+
+                                    <td>
+
+                                        {% if enseignement.semestre.niveau %}
+
+                                            {{ enseignement.semestre.niveau.code }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- FILIÈRE -->
+
+                                    <td>
+
+                                        {% if enseignement.filiere %}
+
+                                            {{ enseignement.filiere.code }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- PROFESSEUR -->
+
+                                    <td>
+
+                                        {% if enseignement.teacher %}
+
+                                            {{ enseignement.teacher.nom }}
+                                            {{ enseignement.teacher.prenom|default:"" }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- ACTIONS -->
+
+                                    <td>
+
+                                        <div class="subject-actions">
+
+
+                                            <a
+                                                href="{% url 'admin_subject_detail' enseignement.subject.id %}"
+                                                class="subject-action"
+                                                title="Voir"
+                                            >
+
+                                                <i class="fa-solid fa-eye"></i>
+
+                                            </a>
+
+
+                                            <a
+                                                href="{% url 'admin_subject_edit' enseignement.subject.id %}"
+                                                class="subject-action"
+                                                title="Modifier"
+                                            >
+
+                                                <i class="fa-solid fa-pen"></i>
+
+                                            </a>
+
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'admin_subject_delete' enseignement.subject.id %}"
+                                            >
+
+                                                {% csrf_token %}
+
+
+                                                <button
+                                                    type="submit"
+                                                    class="subject-action subject-action--danger"
+                                                    title="Supprimer"
+                                                    onclick="return confirm('Voulez-vous vraiment supprimer cette matière ?');"
+                                                >
+
+                                                    <i class="fa-solid fa-trash"></i>
+
+                                                </button>
+
+                                            </form>
+
+
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+
+                    {% else %}
+
+
+                    <!-- ==================================================
+                         AUCUNE AFFECTATION
+                    ================================================== -->
+
+                    <div class="subjects-empty">
+
+
+                        <div class="subjects-empty__icon">
+
+                            <i class="fa-solid fa-book"></i>
+
+                        </div>
+
+
+                        <h3>
+                            Aucune matière
+                        </h3>
+
+
+                        <p>
+                            Aucune affectation de matière n'est actuellement enregistrée.
+                        </p>
+
+
+                        <a
+                            href="{% url 'admin_subject_add' %}"
+                            class="subjects-btn subjects-btn--primary"
+                        >
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Ajouter une matière
+
+                        </a>
+
+
+                    </div>
+
+
+                    {% endif %}
+
+
+                </section>
+
+
             </div>
 
-            <h3>Aucune matière</h3>
-            <p>Aucune matière n'est actuellement enregistrée.</p>
 
-            <a href="{% url 'admin_subject_add' %}" class="subjects-btn subjects-btn--primary">
-              <i class="fa-solid fa-plus"></i>
-              Ajouter une matière
-            </a>
-          </div>
-          {% endif %}
-        </section>
-      </div>
+            {% include "admin/layout/footer.html" %}
 
-      {% include "admin/layout/footer.html" %}
-    </main>
-  </div>
+
+        </main>
+
+
+    </div>
+
 </div>
+
 {% endblock %}

@@ -1,49 +1,363 @@
 {% extends 'base/base.html' %}
+
 {% load static %}
 
-{% block title %}Saisir les Notes - Espace Professeur{% endblock %}
+{% block title %}Saisie des notes — Espace Professeur{% endblock %}
 
-{% block css %}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/professeur/grades.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="app-container">
-    {% include 'professeur/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'professeur/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Saisie des Notes</h2>
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <!-- Formset ou tableau de saisie dynamique -->
-                        {{ formset.management_form }}
-                        <table class="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Étudiant</th>
-                                    <th>Note (/20)</th>
-                                    <th>Observations</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for form in formset %}
-                                <tr>
-                                    <td>{{ form.etudiant.label }}</td>
-                                    <td>{{ form.note }}</td>
-                                    <td>{{ form.observation }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <button type="submit" class="btn btn-primary mt-3">Enregistrer les notes</button>
-                    </form>
+
+<div class="admin-layout">
+
+    {% include 'professeur/layout/header.html' %}
+
+    <div class="admin-layout__body">
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <!-- =====================================================
+                     EN-TÊTE
+                ====================================================== -->
+
+                <div class="academic-page-heading">
+
+                    <div>
+                        <h1>Saisir les notes</h1>
+
+                        <p>
+                            Attribuez les notes des étudiants pour une évaluation.
+                        </p>
+                    </div>
+
+                    <a
+                        href="{% url 'professeur_grades' %}"
+                        class="academic-btn academic-btn--secondary"
+                    >
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Retour aux notes
+                    </a>
+
                 </div>
+
+
+                <!-- =====================================================
+                     MESSAGE D'ERREUR
+                ====================================================== -->
+
+                {% if error %}
+
+                    <div class="academic-form-errors">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        <span>
+                            {{ error }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =====================================================
+                     SÉLECTION DE L'ÉVALUATION
+                ====================================================== -->
+
+                <div class="academic-panel academic-grade-form-panel">
+
+                    <div class="academic-panel-header">
+
+                        <div>
+
+                            <h2>Évaluation</h2>
+
+                            <p>
+                                Sélectionnez l'évaluation pour laquelle
+                                vous souhaitez saisir les notes.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="academic-panel-body">
+
+                        <form
+                            method="GET"
+                            class="academic-form"
+                        >
+
+                            <div class="academic-form-grid">
+
+                                <div class="academic-form-group academic-form-group--full">
+ 
+
+                                    <select
+                                        name="evaluation"
+                                        id="evaluation"
+                                        required
+                                        onchange="this.form.submit()"
+                                    >
+
+                                        <option value="">
+                                            Sélectionner une évaluation
+                                        </option>
+
+                                        {% for evaluation in evaluations %}
+
+                                            <option
+                                                value="{{ evaluation.id }}"
+                                                {% if selected_evaluation and selected_evaluation.id == evaluation.id %}
+                                                    selected
+                                                {% endif %}
+                                            >
+
+                                                {{ evaluation.subject.nom }}
+                                                —
+                                                {{ evaluation.get_type_evaluation_display }}
+                                                —
+                                                Session {{ evaluation.session }}
+                                                —
+                                                {{ evaluation.date|date:"d/m/Y" }}
+
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+
+                        <!-- =================================================
+                             SAISIE DES NOTES
+                        ================================================== -->
+
+                        {% if selected_evaluation %}
+
+                            {% if students %}
+
+                                <form
+                                    method="POST"
+                                    class="academic-form"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <!-- Évaluation sélectionnée -->
+                                    <input
+                                        type="hidden"
+                                        name="evaluation"
+                                        value="{{ selected_evaluation.id }}"
+                                    >
+
+
+                                    <div class="academic-grade-entry">
+
+                                        <!-- =================================================
+                                             EN-TÊTE DU TABLEAU
+                                        ================================================== -->
+
+                                        <div class="academic-grade-entry-header">
+
+                                            <div>
+
+                                                <h2>Étudiants</h2>
+
+                                                <p>
+                                                    Saisissez une note comprise
+                                                    entre 0 et 20 pour chaque étudiant.
+                                                </p>
+
+                                            </div>
+
+                                            <span class="academic-grade-count">
+
+                                                {{ students|length }}
+                                                étudiant{{ students|length|pluralize }}
+
+                                            </span>
+
+                                        </div>
+
+
+                                        <!-- =================================================
+                                             TABLEAU DES ÉTUDIANTS
+                                        ================================================== -->
+
+                                        <div class="academic-table-wrapper">
+
+                                            <table class="academic-grade-table">
+
+                                                <thead>
+
+                                                    <tr>
+
+                                                        <th>
+                                                            Étudiant
+                                                        </th>
+
+                                                        <th>
+                                                            Matricule
+                                                        </th>
+
+                                                        <th>
+                                                            Note / 20
+                                                        </th>
+
+                                                    </tr>
+
+                                                </thead>
+
+
+                                                <tbody>
+
+                                                    {% for student in students %}
+
+                                                        <tr>
+
+                                                            <!-- =========================
+                                                                 ÉTUDIANT
+                                                            ========================== -->
+
+                                                            <td>
+
+                                                                <div class="grade-student-cell">
+
+                                                                    <strong>
+                                                                        {{ student.nom }}
+                                                                        {{ student.prenom }}
+                                                                    </strong>
+
+                                                                </div>
+
+                                                            </td>
+
+
+                                                            <!-- =========================
+                                                                 MATRICULE
+                                                            ========================== -->
+
+                                                            <td>
+
+                                                                {{ student.matricule }}
+
+                                                            </td>
+
+
+                                                            <!-- =========================
+                                                                 NOTE
+                                                            ========================== -->
+
+                                                            <td>
+
+                                                                <input
+                                                                    type="number"
+                                                                    name="note_{{ student.id }}"
+                                                                    class="academic-grade-input"
+                                                                    min="0"
+                                                                    max="20"
+                                                                    step="0.01"
+                                                                    placeholder="Note"
+                                                                    value="{{ student.existing_note|default:'' }}"
+                                                                    required
+                                                                >
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    {% endfor %}
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- =================================================
+                                         ACTIONS
+                                    ================================================== -->
+
+                                    <div class="academic-form-actions">
+
+                                        <a
+                                            href="{% url 'professeur_grades' %}"
+                                            class="academic-btn academic-btn--secondary"
+                                        >
+                                            Annuler
+                                        </a>
+
+
+                                        <button
+                                            type="submit"
+                                            class="academic-btn academic-btn--primary"
+                                        >
+
+                                            <i class="fa-solid fa-floppy-disk"></i>
+
+                                            Enregistrer les notes
+
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+
+                            {% else %}
+
+                                <!-- =================================================
+                                     AUCUN ÉTUDIANT
+                                ================================================== -->
+
+                                <div class="academic-empty-state">
+
+                                    <i class="fa-solid fa-users"></i>
+
+                                    <h3>
+                                        Aucun étudiant à afficher
+                                    </h3>
+
+                                    <p>
+                                        Aucun étudiant n'est associé au niveau
+                                        de la matière de cette évaluation.
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
             </div>
+
+
+            {% include 'professeur/layout/footer.html' %}
+
         </main>
-        {% include 'professeur/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

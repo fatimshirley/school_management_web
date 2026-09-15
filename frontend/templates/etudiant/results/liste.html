@@ -1,0 +1,160 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Mes Résultats - Portail Étudiant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/results.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% include 'etudiant/layout/sidebar.html' %}
+
+    <div class="main-wrapper">
+        {% include 'etudiant/layout/header.html' %}
+
+        <main class="student-results">
+
+            <!-- ==================================================
+                 EN-TÊTE
+            ================================================== -->
+            <div class="page-header">
+                <div>
+                    <h1>
+                        Mes résultats
+                    </h1>
+                    <p>
+                        Consultez vos résultats obtenus aux différentes évaluations.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==================================================
+                 RÉSULTATS
+            ================================================== -->
+            <section class="results-section">
+                <div class="results-section__header">
+                    <div>
+                        <h2>
+                            Résultats académiques
+                        </h2>
+                        <p>
+                            Retrouvez l'ensemble de vos notes enregistrées.
+                        </p>
+                    </div>
+
+                    <div class="results-section__count">
+                        {{ grades|length }}
+                        note{{ grades|length|pluralize }}
+                    </div>
+                </div>
+
+                <!-- ==================================================
+                     TABLEAU
+                ================================================== -->
+                <div class="results-table-wrapper">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Matière
+                                </th>
+                                <th>
+                                    Évaluation
+                                </th>
+                                <th>
+                                    Session
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Note
+                                </th>
+                                <th>
+                                    Détail
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for grade in grades %}
+                            <tr>
+                                <!-- MATIÈRE -->
+                                <td>
+                                    <span class="results-table__subject">
+                                        {{ grade.evaluation.subject.nom|default:"Matière non renseignée" }}
+                                    </span>
+                                </td>
+
+                                <!-- ÉVALUATION -->
+                                <td>
+                                    {{ grade.evaluation.get_type_evaluation_display }}
+                                </td>
+
+                                <!-- SESSION -->
+                                <td>
+                                    Session {{ grade.evaluation.session }}
+                                </td>
+
+                                <!-- DATE -->
+                                <td>
+                                    {% if grade.evaluation.date %}
+                                        {{ grade.evaluation.date|date:"d/m/Y" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+
+                                <!-- NOTE -->
+                                <td>
+                                    <strong class="results-table__grade">
+                                        {{ grade.note }}/20
+                                    </strong>
+                                </td>
+
+                                <!-- DÉTAIL -->
+                                <td class="results-table__action">
+                                    <a
+                                        href="{% url 'etudiant_result_detail' grade.id %}"
+                                        class="results-detail-button"
+                                        title="Voir le détail"
+                                        aria-label="Voir le détail du résultat"
+                                    >
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <!-- ==================================================
+                                 AUCUN RÉSULTAT
+                            ================================================== -->
+                            <tr>
+                                <td colspan="6" class="results-table__empty">
+                                    <div class="results-empty">
+                                        <i class="fa-regular fa-file-lines"></i>
+                                        <strong>
+                                            Aucun résultat disponible
+                                        </strong>
+                                        <span>
+                                            Vos résultats apparaîtront ici
+                                            dès que des notes seront enregistrées.
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        {% include 'etudiant/layout/footer.html' %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+Mon profil - Espace Professeur
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/profile.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="app-container">
+
+
+{% include 'professeur/layout/sidebar.html' %}
+
+<div class="main-wrapper">
+
+    {% include 'professeur/layout/header.html' %}
+
+    <main class="professor-profile">
+
+        <div class="professor-profile__header">
+
+            <div>
+                <h1>Mon profil</h1>
+
+                <p>
+                    Consultez les informations associées à votre compte professeur.
+                </p>
+            </div>
+
+        </div>
+
+
+        <section class="profile-section">
+
+            <div class="profile-section__header">
+
+                <div>
+                    <h2>Informations personnelles</h2>
+
+                    <p>
+                        Informations de votre compte utilisateur.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="profile-grid">
+
+                <div class="profile-field">
+
+                    <span class="profile-field__label">
+                        Nom d'utilisateur
+                    </span>
+
+                    <span class="profile-field__value">
+                        {{ request.user.username|default:"—" }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span class="profile-field__label">
+                        Nom complet
+                    </span>
+
+                    <span class="profile-field__value">
+                        {{ request.user.get_full_name|default:"—" }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span class="profile-field__label">
+                        Prénom
+                    </span>
+
+                    <span class="profile-field__value">
+                        {{ request.user.first_name|default:"—" }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span class="profile-field__label">
+                        Nom
+                    </span>
+
+                    <span class="profile-field__value">
+                        {{ request.user.last_name|default:"—" }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span class="profile-field__label">
+                        Adresse e-mail
+                    </span>
+
+                    <span class="profile-field__value">
+                        {{ request.user.email|default:"—" }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span class="profile-field__label">
+                        Rôle
+                    </span>
+
+                    <span class="profile-field__value">
+                        Professeur
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="profile-section">
+
+            <div class="profile-section__header">
+
+                <div>
+                    <h2>Compte</h2>
+
+                    <p>
+                        Informations relatives à votre compte dans l'application.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="profile-account">
+
+                <div class="profile-account__icon">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <div class="profile-account__content">
+
+                    <strong>
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </strong>
+
+                    <span>
+                        Compte professeur actif
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+</div>
+
+{% endblock %}

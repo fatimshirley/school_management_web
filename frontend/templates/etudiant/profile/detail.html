@@ -3,26 +3,187 @@
 
 {% block title %}Mon Profil - Portail Étudiant{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/etudiant/profile.css' %}">
+{% block extra_css %}
+
+<!-- Layout étudiant -->
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/footer.css' %}"
+>
+
+<!-- CSS spécifique à la page -->
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/profile.css' %}"
+>
+
 {% endblock %}
 
 {% block content %}
+
 <div class="app-container">
+
     {% include 'etudiant/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
+
+    <div class="main-wrapper">
+
         {% include 'etudiant/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Mon Profil Étudiant</h2>
-            <div class="card shadow-sm border-0 p-4">
-                <p><strong>Nom :</strong> {{ student.nom }}</p>
-                <p><strong>Prénom :</strong> {{ student.prenom }}</p>
-                <p><strong>Matricule :</strong> {{ student.matricule }}</p>
-                <p><strong>Email :</strong> {{ request.user.email }}</p>
-                <p><strong>Niveau :</strong> {{ student.niveau }}</p>
+
+        <main class="student-profile">
+
+            <div class="page-header">
+                <div>
+                    <span class="page-header__eyebrow">ESPACE ÉTUDIANT</span>
+
+                    <h1>Mon profil</h1>
+
+                    <p>
+                        Consultez les informations associées à votre compte étudiant.
+                    </p>
+                </div>
             </div>
+
+            <section class="profile-layout">
+
+                <!-- IDENTITÉ -->
+                <div class="profile-card profile-card--identity">
+
+                    <div class="profile-avatar">
+                        {{ student.prenom|first|upper }}{{ student.nom|first|upper }}
+                    </div>
+
+                    <h2>
+                        {{ student.prenom }}
+                        {{ student.nom }}
+                    </h2>
+
+                    <p class="profile-matricule">
+                        {{ student.matricule }}
+                    </p>
+
+                    <span class="profile-role">
+                        Étudiant
+                    </span>
+
+                </div>
+
+                <!-- INFORMATIONS -->
+                <div class="profile-card">
+
+                    <div class="profile-card__header">
+                        <div>
+                            <h2>Informations personnelles</h2>
+
+                            <p>
+                                Données enregistrées dans votre dossier étudiant.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="profile-information">
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Nom
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ student.nom|default:"Non renseigné" }}
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Prénom
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ student.prenom|default:"Non renseigné" }}
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Matricule
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ student.matricule|default:"Non renseigné" }}
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Adresse e-mail
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ request.user.email|default:"Non renseigné" }}
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Filière
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ student.filiere_display }}
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Niveau
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ student.niveau_display }}
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Âge
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ student.age|default:"Non renseigné" }} ans
+                            </span>
+                        </div>
+
+                        <div class="profile-information__item">
+                            <span class="profile-information__label">
+                                Nom d'utilisateur
+                            </span>
+
+                            <span class="profile-information__value">
+                                {{ request.user.username }}
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
         </main>
+
         {% include 'etudiant/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

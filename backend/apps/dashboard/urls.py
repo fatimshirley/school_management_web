@@ -156,7 +156,6 @@ urlpatterns = [
         name='admin_subject_delete'
     ),
 
-
     # ==================================================
     # NOTES (ADMIN)
     # ==================================================
@@ -457,6 +456,12 @@ urlpatterns = [
         name='professeur_absence_add'
     ),
 
+    path(
+        'professeur/profil/', 
+        views.professeur_profile, 
+        name='professeur_profile'
+    ),
+
     # ==================================================
     # ESPACE ÉTUDIANT
     # ==================================================
@@ -474,9 +479,21 @@ urlpatterns = [
     ),
 
     path(
+        'etudiant/notes/<int:grade_id>/',
+        views.etudiant_grade_detail,
+        name='etudiant_grade_detail'
+    ),
+
+    path(
         'etudiant/resultats/',
         views.etudiant_results,
         name='etudiant_results'
+    ),
+
+    path(
+        'etudiant/resultats/<int:grade_id>/',
+        views.etudiant_result_detail,
+        name='etudiant_result_detail'
     ),
 
     path(

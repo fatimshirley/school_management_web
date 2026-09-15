@@ -1,0 +1,203 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Détail de l'évaluation — Espace Professeur{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/professeur/evaluations.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+
+{% include 'professeur/layout/header.html' %}
+
+<div class="admin-layout__body">
+
+    {% include 'professeur/layout/sidebar.html' %}
+
+    <main class="admin-main">
+
+        <div class="admin-main__content">
+
+            <!-- =====================================================
+                 EN-TÊTE DE PAGE
+                 ===================================================== -->
+            <div class="academic-page-heading">
+
+                <div>
+                    <h1>Détail de l'évaluation</h1>
+
+                    <p>
+                        Consultez les informations de l'évaluation sélectionnée.
+                    </p>
+                </div>
+
+                <div class="academic-page-heading__actions">
+
+                    <a
+                        href="{% url 'professeur_evaluations' %}"
+                        class="academic-btn academic-btn--secondary"
+                    >
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Retour
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 INFORMATIONS DE L'ÉVALUATION
+                 ===================================================== -->
+            <div class="academic-panel evaluation-detail">
+
+                <div class="academic-panel__header">
+
+                    <div>
+                        <h2>Informations de l'évaluation</h2>
+
+                        <p>
+                            Détails de l'épreuve sélectionnée.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="evaluation-detail__grid">
+
+                    <!-- INTITULÉ -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Intitulé
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.titre }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- MATIÈRE -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Matière
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.matiere.nom }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TYPE -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Type d'évaluation
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.get_type_evaluation_display }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SESSION -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Session
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.get_session_display }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DATE -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Date
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.date|date:"d/m/Y" }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- COEFFICIENT -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Coefficient
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.coefficient }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ANNÉE UNIVERSITAIRE -->
+                    <div class="evaluation-detail__item">
+
+                        <span class="evaluation-detail__label">
+                            Année universitaire
+                        </span>
+
+                        <strong class="evaluation-detail__value">
+                            {{ evaluation.annee_universitaire }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACTIONS
+                     ================================================= -->
+                <div class="evaluation-detail__actions">
+
+                    <a
+                        href="{% url 'professeur_evaluations' %}"
+                        class="academic-btn academic-btn--secondary"
+                    >
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Retour aux évaluations
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% include 'professeur/layout/footer.html' %}
+
+    </main>
+
+</div>
+
+
+</div>
+
+{% endblock %}

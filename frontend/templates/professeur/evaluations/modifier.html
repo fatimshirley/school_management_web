@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-Nouvelle évaluation — Espace Professeur
+Modifier l'évaluation
 {% endblock %}
 
 {% block extra_css %}
@@ -38,16 +38,47 @@ Nouvelle évaluation — Espace Professeur
                     <div>
 
                         <h1>
-                            Nouvelle évaluation
+                            Modifier l'évaluation
                         </h1>
 
                         <p>
-                            Créez une nouvelle évaluation pour l'une de vos matières.
+                            Modifiez les informations de cette évaluation.
                         </p>
 
                     </div>
 
+                    <div class="academic-page-heading__actions">
+
+                        <a
+                            href="{% url 'professeur_evaluation_detail' evaluation.pk %}"
+                            class="academic-btn academic-btn--secondary"
+                        >
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Retour
+                        </a>
+
+                    </div>
+
                 </div>
+
+
+                <!-- =====================================================
+                     MESSAGE D'ERREUR GLOBAL
+                ====================================================== -->
+
+                {% if error %}
+
+                    <div class="academic-alert academic-alert--error">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        <span>
+                            {{ error }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
 
 
                 <!-- =====================================================
@@ -61,12 +92,11 @@ Nouvelle évaluation — Espace Professeur
                         <div>
 
                             <h2>
-                                Nouvelle évaluation
+                                Informations de l'évaluation
                             </h2>
 
                             <p>
-                                Renseignez les informations nécessaires à
-                                la création de l'évaluation.
+                                Modifiez les informations puis enregistrez les changements.
                             </p>
 
                         </div>
@@ -83,29 +113,6 @@ Nouvelle évaluation — Espace Professeur
                         {% csrf_token %}
 
 
-                        <!-- =================================================
-                             ERREUR GÉNÉRALE
-                        ================================================== -->
-
-                        {% if error %}
-
-                            <div class="academic-form-errors">
-
-                                <i class="fa-solid fa-circle-exclamation"></i>
-
-                                <div>
-                                    {{ error }}
-                                </div>
-
-                            </div>
-
-                        {% endif %}
-
-
-                        <!-- =================================================
-                             CHAMPS
-                        ================================================== -->
-
                         <div class="academic-form-grid">
 
 
@@ -115,31 +122,29 @@ Nouvelle évaluation — Espace Professeur
 
                             <div class="academic-form-group">
 
-                                <label for="subject">
+                                <label for="matiere">
                                     Matière
                                 </label>
 
                                 <select
-                                    id="subject"
-                                    name="subject"
+                                    name="matiere"
+                                    id="matiere"
                                     required
                                 >
 
                                     <option value="">
-                                        Sélectionnez une matière
+                                        Sélectionner une matière
                                     </option>
 
                                     {% for subject in subjects %}
 
                                         <option
                                             value="{{ subject.id }}"
+                                            {% if subject.id == evaluation.matiere.id %}
+                                                selected
+                                            {% endif %}
                                         >
                                             {{ subject.nom }}
-
-                                            {% if subject.credits %}
-                                                — Coefficient {{ subject.credits }}
-                                            {% endif %}
-
                                         </option>
 
                                     {% endfor %}
@@ -160,29 +165,45 @@ Nouvelle évaluation — Espace Professeur
                                 </label>
 
                                 <select
-                                    id="type_evaluation"
                                     name="type_evaluation"
+                                    id="type_evaluation"
                                     required
                                 >
 
-                                    <option value="">
-                                        Sélectionnez un type
+                                    <option
+                                        value="cc1"
+                                        {% if evaluation.type_evaluation == 'cc1' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Contrôle continu 1
                                     </option>
 
-                                    <option value="cc1">
-                                        CC 1
+                                    <option
+                                        value="cc2"
+                                        {% if evaluation.type_evaluation == 'cc2' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Contrôle continu 2
                                     </option>
 
-                                    <option value="cc2">
-                                        CC 2
-                                    </option>
-
-                                    <option value="devoir">
+                                    <option
+                                        value="devoir"
+                                        {% if evaluation.type_evaluation == 'devoir' %}
+                                            selected
+                                        {% endif %}
+                                    >
                                         Devoir
                                     </option>
 
-                                    <option value="examen">
-                                        Examen
+                                    <option
+                                        value="examen"
+                                        {% if evaluation.type_evaluation == 'examen' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Examen final
                                     </option>
 
                                 </select>
@@ -201,16 +222,26 @@ Nouvelle évaluation — Espace Professeur
                                 </label>
 
                                 <select
-                                    id="session"
                                     name="session"
+                                    id="session"
                                     required
                                 >
 
-                                    <option value="1">
+                                    <option
+                                        value="1"
+                                        {% if evaluation.session == 1 %}
+                                            selected
+                                        {% endif %}
+                                    >
                                         Session 1
                                     </option>
 
-                                    <option value="2">
+                                    <option
+                                        value="2"
+                                        {% if evaluation.session == 2 %}
+                                            selected
+                                        {% endif %}
+                                    >
                                         Session 2
                                     </option>
 
@@ -231,8 +262,10 @@ Nouvelle évaluation — Espace Professeur
 
                                 <input
                                     type="date"
-                                    id="date_evaluation"
                                     name="date_evaluation"
+                                    id="date_evaluation"
+                                    value="{{ evaluation.date|date:'Y-m-d' }}"
+                                    required
                                 >
 
                             </div>
@@ -240,7 +273,7 @@ Nouvelle évaluation — Espace Professeur
                         </div>
 
 
-                     
+
 
 
                         <!-- =====================================================
@@ -250,26 +283,18 @@ Nouvelle évaluation — Espace Professeur
                         <div class="academic-form-actions">
 
                             <a
-                                href="{% url 'professeur_evaluations' %}"
+                                href="{% url 'professeur_evaluation_detail' evaluation.pk %}"
                                 class="academic-btn academic-btn--secondary"
                             >
-
-                                <i class="fa-solid fa-arrow-left"></i>
-
-                                Retour à la liste
-
+                                Annuler
                             </a>
-
 
                             <button
                                 type="submit"
                                 class="academic-btn academic-btn--primary"
                             >
-
                                 <i class="fa-solid fa-check"></i>
-
-                                Créer l'évaluation
-
+                                Enregistrer les modifications
                             </button>
 
                         </div>

@@ -527,3 +527,85 @@
     width: 100%;
   }
 }
+
+
+/* ==================================================
+   DÉTAIL ABSENCE
+================================================== */
+
+.absence-detail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 12px 24px;
+}
+
+.absence-detail__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.absence-detail__item:nth-child(odd) {
+  padding-right: 24px;
+}
+
+.absence-detail__item:nth-child(even) {
+  padding-left: 24px;
+}
+
+.absence-detail__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.absence-detail__value {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #1e293b;
+}
+
+.absence-detail__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 24px;
+  padding: 20px 0 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 768px) {
+
+  .absence-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .absence-detail__item {
+    padding: 16px 0 !important;
+  }
+
+  .absence-detail__item:last-child {
+    border-bottom: none;
+  }
+
+  .absence-detail__actions {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0 24px;
+  }
+
+  .absence-detail__actions .grades-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

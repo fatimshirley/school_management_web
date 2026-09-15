@@ -1,0 +1,300 @@
+/* ============================================================
+   ÉTUDIANT — SIDEBAR
+============================================================ */
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 235px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    z-index: 1000;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   EN-TÊTE SIDEBAR
+============================================================ */
+.admin-sidebar__header {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    border-bottom: 1px solid #e5e7eb;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   LOGO
+============================================================ */
+.admin-sidebar__logo-wrapper {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #f3f4f6;
+    overflow: hidden;
+}
+
+.admin-sidebar__logo-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* ============================================================
+   TITRE
+============================================================ */
+.admin-sidebar__title {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+.admin-sidebar__nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   BARRE DE DÉFILEMENT
+============================================================ */
+.admin-sidebar__nav::-webkit-scrollbar {
+    width: 5px;
+}
+
+.admin-sidebar__nav::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 10px;
+}
+
+.admin-sidebar__nav::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* ============================================================
+   SECTIONS
+============================================================ */
+.admin-sidebar__section {
+    margin-bottom: 24px;
+}
+
+.admin-sidebar__section:last-child {
+    margin-bottom: 0;
+}
+
+.admin-sidebar__section-title {
+    display: block;
+    padding: 0 10px 8px;
+    color: #9ca3af;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+/* ============================================================
+   LIENS
+============================================================ */
+.admin-sidebar__link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    color: #4b5563;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* ============================================================
+   ICÔNES
+============================================================ */
+.admin-sidebar__link i {
+    width: 18px;
+    flex-shrink: 0;
+    color: #6b7280;
+    font-size: 15px;
+    text-align: center;
+    transition: color 0.15s ease;
+}
+
+.admin-sidebar__link span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* ============================================================
+   HOVER
+============================================================ */
+.admin-sidebar__link:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.admin-sidebar__link:hover i {
+    color: #111827;
+}
+
+/* ============================================================
+   LIEN ACTIF
+============================================================ */
+.admin-sidebar__link.active {
+    background-color: #eef3f8;
+    color: #1e3a5f;
+    font-weight: 600;
+}
+
+.admin-sidebar__link.active i {
+    color: #1e3a5f;
+}
+
+/* ============================================================
+   ZONE BASSE
+============================================================ */
+.admin-sidebar__bottom {
+    padding: 16px 12px;
+    border-top: 1px solid #e5e7eb;
+    box-sizing: border-box;
+}
+
+.admin-sidebar__bottom form {
+    width: 100%;
+    margin: 0;
+}
+
+/* ============================================================
+   DÉCONNEXION
+============================================================ */
+.admin-sidebar__logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #dc2626;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-sidebar__logout span {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.admin-sidebar__logout i {
+    width: 18px;
+    flex-shrink: 0;
+    font-size: 15px;
+    text-align: center;
+}
+
+.admin-sidebar__logout:hover {
+    background-color: #ffeeef;
+    color: #b91c1c;
+}
+
+/* ============================================================
+   MODE RÉDUIT
+============================================================ */
+.admin-sidebar.is-collapsed {
+    width: 72px;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__title,
+.admin-sidebar.is-collapsed .admin-sidebar__section-title,
+.admin-sidebar.is-collapsed .admin-sidebar__link span,
+.admin-sidebar.is-collapsed .admin-sidebar__logout span {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    display: none;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__header {
+    padding: 0;
+    justify-content: center;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__link,
+.admin-sidebar.is-collapsed .admin-sidebar__logout {
+    justify-content: center;
+    padding: 10px 0;
+}
+
+/* ============================================================
+   TABLETTE
+============================================================ */
+@media (max-width: 992px) {
+    .admin-sidebar {
+        width: 72px;
+    }
+
+    .admin-sidebar__title,
+    .admin-sidebar__section-title,
+    .admin-sidebar__link span,
+    .admin-sidebar__logout span {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        display: none;
+    }
+
+    .admin-sidebar__header {
+        padding: 0;
+        justify-content: center;
+    }
+
+    .admin-sidebar__link,
+    .admin-sidebar__logout {
+        justify-content: center;
+        padding: 10px 0;
+    }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 64px;
+    }
+}

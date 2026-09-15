@@ -1,27 +1,276 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Détails Étudiant - Espace Professeur{% endblock %}
+{% block title %}Détail étudiant — Espace Professeur{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/professeur/students.css' %}">
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/dashboard.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/students.css' %}"
+>
+
 {% endblock %}
 
+
 {% block content %}
-<div class="app-container">
-    {% include 'professeur/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'professeur/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Fiche Étudiant : {{ student.nom }} {{ student.prenom }}</h2>
-            <div class="card shadow-sm border-0 p-4">
-                <p><strong>Matricule :</strong> {{ student.matricule }}</p>
-                <p><strong>Email :</strong> {{ student.user.email }}</p>
-                <p><strong>Niveau :</strong> {{ student.niveau }}</p>
-                <a href="{% url 'professeur_students' %}" class="btn btn-secondary mt-3">Retour à la liste</a>
+
+<div class="admin-layout">
+
+
+    <!-- ============================================================
+         HEADER
+         ============================================================ -->
+
+    {% include 'professeur/layout/header.html' %}
+
+
+    <div class="admin-layout__body">
+
+
+        <!-- ========================================================
+             SIDEBAR
+             ======================================================== -->
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+
+        <!-- ========================================================
+             CONTENU PRINCIPAL
+             ======================================================== -->
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+
+                <!-- ==================================================
+                     EN-TÊTE
+                     ================================================== -->
+
+                <div class="academic-page-heading">
+
+
+                    <div>
+
+                        <h1>
+                            Fiche étudiant
+                        </h1>
+
+                        <p>
+                            Consultez les informations générales
+                            de l'étudiant.
+                        </p>
+
+                    </div>
+
+
+                    <!-- RETOUR -->
+
+                    <a
+                        href="{% url 'professeur_students' %}"
+                        class="academic-btn academic-btn--secondary"
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Retour aux étudiants
+
+                    </a>
+
+                </div>
+
+
+                <!-- ==================================================
+                     INFORMATIONS ÉTUDIANT
+                     ================================================== -->
+
+                <div class="academic-panel">
+
+
+                    <!-- EN-TÊTE -->
+
+                    <div class="academic-panel-header">
+
+                        <div>
+
+                            <h2>
+
+                                {{ student.nom }}
+                                {{ student.prenom }}
+
+                            </h2>
+
+                            <p>
+
+                                Informations générales de l'étudiant.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INFORMATIONS -->
+
+                    <div class="academic-panel-body">
+
+
+                        <div class="student-detail-grid">
+
+
+                            <!-- MATRICULE -->
+
+                            <div class="student-detail-item">
+
+                                <span class="student-detail-label">
+                                    Matricule
+                                </span>
+
+                                <strong>
+
+                                    {{ student.matricule|default:"-" }}
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- NOM -->
+
+                            <div class="student-detail-item">
+
+                                <span class="student-detail-label">
+                                    Nom complet
+                                </span>
+
+                                <strong>
+
+                                    {{ student.nom }}
+                                    {{ student.prenom }}
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="student-detail-item">
+
+                                <span class="student-detail-label">
+                                    Adresse email
+                                </span>
+
+                                <strong>
+
+                                    {% if student.user %}
+
+                                        {{ student.user.email|default:"-" }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- ÂGE -->
+
+                            <div class="student-detail-item">
+
+                                <span class="student-detail-label">
+                                    Âge
+                                </span>
+
+                                <strong>
+
+                                    {{ student.age }} ans
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- NIVEAU -->
+
+                            <div class="student-detail-item">
+
+                                <span class="student-detail-label">
+                                    Niveau
+                                </span>
+
+                                <strong>
+
+                                    {{ student.niveau_display }}
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- FILIÈRE -->
+
+                            <div class="student-detail-item">
+
+                                <span class="student-detail-label">
+                                    Filière
+                                </span>
+
+                                <strong>
+
+                                    {{ student.filiere_display }}
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
             </div>
+
+
+            <!-- ======================================================
+                 FOOTER
+                 ====================================================== -->
+
+            {% include 'professeur/layout/footer.html' %}
+
         </main>
-        {% include 'professeur/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

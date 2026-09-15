@@ -3,30 +3,532 @@
 
 {% block title %}Portail Étudiant - Tableau de bord{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/etudiant/dashboard.css' %}">
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/dashboard.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/etudiant/layout/footer.css' %}"
+>
+
 {% endblock %}
 
 {% block content %}
+
 <div class="app-container">
-    {% include 'etudiant/layout/sidebar.html' %}
 
-    <div class="main-wrapper flex-grow-1">
-        {% include 'etudiant/layout/header.html' %}
 
-        <main class="main-content container-fluid py-4">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="card shadow-sm border-0 bg-primary text-white p-4">
-                        <h2 class="fw-bold">Bienvenue, {{ student.prenom|default:"Étudiant" }} {{ student.nom|default:"" }}</h2>
-                        <p class="mb-0">Matricule : <strong>{{ student.matricule|default:"N/A" }}</strong></p>
-                    </div>
+{% include 'etudiant/layout/sidebar.html' %}
+
+<div class="main-wrapper">
+
+    {% include 'etudiant/layout/header.html' %}
+
+    <main class="student-dashboard">
+
+        <div class="dashboard-heading">
+
+            <span class="dashboard-eyebrow">
+                Portail étudiant
+            </span>
+
+            <h1>
+                Tableau de bord
+            </h1>
+
+            <p>
+                Consultez vos informations scolaires et suivez votre
+                parcours académique.
+            </p>
+
+        </div>
+
+
+        <section class="welcome-card">
+
+            <div class="welcome-card__content">
+
+                <div class="welcome-card__icon">
+                    <i class="fa-solid fa-hand"></i>
                 </div>
-            </div>
-            <!-- Cartes de raccourcis notes, absences, etc. -->
-        </main>
 
-        {% include 'etudiant/layout/footer.html' %}
-    </div>
+                <div>
+
+                    <span class="welcome-card__label">
+                        Bienvenue
+                    </span>
+
+                    <h2>
+                        {{ student.prenom|default:"Étudiant" }}
+                        {{ student.nom|default:"" }}
+                    </h2>
+
+                    <p>
+                        Heureux de vous retrouver sur votre espace étudiant.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="student-identity">
+
+                <div class="student-identity__item">
+
+                    <span>
+                        Matricule
+                    </span>
+
+                    <strong>
+                        {{ student.matricule|default:"N/A" }}
+                    </strong>
+
+                </div>
+
+
+                {% if student.classe %}
+
+                <div class="student-identity__item">
+
+                    <span>
+                        Classe
+                    </span>
+
+                    <strong>
+                        {{ student.classe }}
+                    </strong>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <section class="dashboard-stats">
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--blue">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div class="stat-card__content">
+
+                    <span>
+                        Moyenne générale
+                    </span>
+
+                    <strong>
+                        {% if moyenne_generale %}
+                            {{ moyenne_generale }}/20
+                        {% else %}
+                            —
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--green">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+
+                <div class="stat-card__content">
+
+                    <span>
+                        Notes
+                    </span>
+
+                    <strong>
+                        {{ nombre_notes|default:"0" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--orange">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                </div>
+
+                <div class="stat-card__content">
+
+                    <span>
+                        Absences
+                    </span>
+
+                    <strong>
+                        {{ nombre_absences|default:"0" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--red">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+
+                <div class="stat-card__content">
+
+                    <span>
+                        Arriérés
+                    </span>
+
+                    <strong>
+                        {% if montant_arrieres %}
+                            {{ montant_arrieres }}
+                        {% else %}
+                            0 FCFA
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="dashboard-grid">
+
+            <div class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-header__eyebrow">
+                            Évaluations
+                        </span>
+
+                        <h2>
+                            Mes dernières notes
+                        </h2>
+
+                    </div>
+
+                    <a
+                        href="{% url 'etudiant_grades' %}"
+                        class="panel-link"
+                    >
+                        Voir toutes
+                    </a>
+
+                </div>
+
+
+                <div class="notes-list">
+
+                    {% if dernieres_notes %}
+
+                        {% for note in dernieres_notes %}
+
+                        <div class="note-item">
+
+                            <div class="note-item__subject">
+
+                                <div class="subject-icon">
+                                    <i class="fa-solid fa-book"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        {{ note.matiere }}
+                                    </strong>
+
+                                    <span>
+                                        {{ note.evaluation|default:"Évaluation" }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="note-item__score">
+
+                                <strong>
+                                    {{ note.note }}/20
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-state__icon">
+                                <i class="fa-solid fa-clipboard"></i>
+                            </div>
+
+                            <p>
+                                Aucune note disponible pour le moment.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-header__eyebrow">
+                            Programme
+                        </span>
+
+                        <h2>
+                            Mes matières
+                        </h2>
+
+                    </div>
+
+                    <a
+                        href="{% url 'etudiant_subjects' %}"
+                        class="panel-link"
+                    >
+                        Voir toutes
+                    </a>
+
+                </div>
+
+
+                <div class="subjects-list">
+
+                    {% if matieres %}
+
+                        {% for matiere in matieres|slice:":5" %}
+
+                        <div class="subject-item">
+
+                            <div class="subject-item__icon">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+
+                            <div class="subject-item__info">
+
+                                <strong>
+                                    {{ matiere.nom }}
+                                </strong>
+
+                                {% if matiere.coefficient %}
+
+                                <span>
+                                    Coefficient :
+                                    {{ matiere.coefficient }}
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-state__icon">
+                                <i class="fa-solid fa-book"></i>
+                            </div>
+
+                            <p>
+                                Aucune matière disponible.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="quick-access">
+
+            <div class="section-title">
+
+                <span>
+                    Navigation rapide
+                </span>
+
+                <h2>
+                    Mon espace
+                </h2>
+
+            </div>
+
+
+            <div class="quick-access-grid">
+
+                <a
+                    href="{% url 'etudiant_profile' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-card__icon quick-card__icon--blue">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Mon profil
+                        </strong>
+
+                        <span>
+                            Consulter mes informations
+                        </span>
+
+                    </div>
+
+                    <span class="quick-card__arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'etudiant_grades' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-card__icon quick-card__icon--green">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Mes notes
+                        </strong>
+
+                        <span>
+                            Consulter mes évaluations
+                        </span>
+
+                    </div>
+
+                    <span class="quick-card__arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'etudiant_results' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-card__icon quick-card__icon--purple">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Mes résultats
+                        </strong>
+
+                        <span>
+                            Voir mes résultats scolaires
+                        </span>
+
+                    </div>
+
+                    <span class="quick-card__arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'etudiant_absences' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-card__icon quick-card__icon--orange">
+                        <i class="fa-solid fa-calendar-xmark"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Mes absences
+                        </strong>
+
+                        <span>
+                            Suivre mes absences
+                        </span>
+
+                    </div>
+
+                    <span class="quick-card__arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    {% include 'etudiant/layout/footer.html' %}
+
 </div>
+
+
+</div>
+
 {% endblock %}

@@ -1,4 +1,809 @@
-/* Étudiants Professeur Styles */
-.table tbody tr:hover {
-    background-color: rgba(25, 135, 84, 0.05);
+/* ============================================================
+   PROFESSEUR — ÉTUDIANTS
+   ============================================================ */
+
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+
+:root {
+    --student-primary: #198754;
+    --student-primary-dark: #146c43;
+    --student-primary-light: rgba(25, 135, 84, 0.08);
+
+    --student-bg: #f8f9fa;
+    --student-card: #ffffff;
+
+    --student-text: #212529;
+    --student-text-dark: #111827;
+    --student-text-muted: #6b7280;
+
+    --student-border: #e5e7eb;
+    --student-border-light: #f0f2f4;
+
+    --student-header-bg: #f8fafc;
+
+    --student-action-bg: #f3f4f6;
+    --student-action-border: #e5e7eb;
+    --student-action-color: #6b7280;
+    --student-action-hover-bg: #e5e7eb;
+    --student-action-hover-border: #d1d5db;
+    --student-action-hover-color: #374151;
+
+    --student-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.04);
+
+    --student-shadow-hover:
+        0 5px 16px rgba(15, 23, 42, 0.07);
+}
+
+
+/* ============================================================
+   POLICE
+   ============================================================ */
+
+.admin-layout,
+.admin-layout button,
+.admin-layout input,
+.admin-layout select,
+.admin-layout textarea,
+.admin-layout table {
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* ============================================================
+   CONTENU PRINCIPAL
+   ============================================================ */
+
+.admin-main {
+    background-color: var(--student-bg);
+}
+
+.admin-main__content {
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* ============================================================
+   EN-TÊTE DE PAGE
+   ============================================================ */
+
+.academic-page-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+}
+
+.academic-page-heading > div {
+    min-width: 0;
+}
+
+.academic-page-heading h1 {
+    margin: 0 0 6px;
+
+    color: var(--student-text-dark);
+
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 700;
+
+    letter-spacing: -0.02em;
+}
+
+.academic-page-heading p {
+    margin: 0;
+
+    max-width: 700px;
+
+    color: var(--student-text-muted);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   PANNEAU PRINCIPAL
+   ============================================================ */
+
+.academic-panel {
+    width: 100%;
+
+    background-color: var(--student-card);
+
+    border: 1px solid var(--student-border);
+    border-radius: 12px;
+
+    box-shadow: var(--student-shadow);
+
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   EN-TÊTE DU PANNEAU
+   ============================================================ */
+
+.academic-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px 24px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid var(--student-border-light);
+}
+
+.academic-panel-header > div {
+    min-width: 0;
+}
+
+.academic-panel-header h2 {
+    margin: 0 0 5px;
+
+    color: var(--student-text-dark);
+
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 650;
+}
+
+.academic-panel-header p {
+    margin: 0;
+
+    color: var(--student-text-muted);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   COMPTEUR
+   ============================================================ */
+
+.academic-grade-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 34px;
+
+    padding: 7px 12px;
+
+    background-color: var(--student-primary-light);
+
+    border: 1px solid rgba(25, 135, 84, 0.14);
+    border-radius: 7px;
+
+    color: var(--student-primary-dark);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   CORPS DU PANNEAU
+   ============================================================ */
+
+.academic-panel-body {
+    padding: 24px;
+}
+
+.academic-panel-body--table {
+    padding: 0;
+}
+
+
+/* ============================================================
+   CONTENEUR DU TABLEAU
+   ============================================================ */
+
+.academic-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: thin;
+}
+
+
+/* ============================================================
+   TABLEAU
+   ============================================================ */
+
+.academic-table {
+    width: 100%;
+    min-width: 760px;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    background-color: #ffffff;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   EN-TÊTE TABLEAU
+   ============================================================ */
+
+.academic-table thead {
+    background-color: var(--student-header-bg);
+}
+
+.academic-table thead tr {
+    border-bottom: 1px solid var(--student-border);
+}
+
+.academic-table th {
+    padding: 14px 20px;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    text-align: left;
+    text-transform: uppercase;
+
+    letter-spacing: 0.045em;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   CELLULES
+   ============================================================ */
+
+.academic-table td {
+    padding: 16px 20px;
+
+    color: #475569;
+
+    border-bottom: 1px solid var(--student-border-light);
+
+    vertical-align: middle;
+
+    line-height: 1.5;
+}
+
+.academic-table tbody tr {
+    background-color: #ffffff;
+
+    transition:
+        background-color 0.15s ease;
+}
+
+.academic-table tbody tr:hover {
+    background-color: rgba(25, 135, 84, 0.025);
+}
+
+.academic-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* ============================================================
+   MATRICULE
+   ============================================================ */
+
+.academic-table td:first-child {
+    white-space: nowrap;
+}
+
+.academic-table td:first-child strong {
+    color: var(--student-text-dark);
+
+    font-size: 13px;
+    font-weight: 650;
+
+    letter-spacing: 0.01em;
+}
+
+
+/* ============================================================
+   NOM ET PRÉNOM
+   ============================================================ */
+
+.student-name-cell {
+    display: flex;
+    align-items: center;
+
+    min-width: 210px;
+}
+
+.student-name-cell strong {
+    color: var(--student-text-dark);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   NIVEAU
+   ============================================================ */
+
+.academic-table td:nth-child(3) {
+    color: #475569;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   FILIÈRE
+   ============================================================ */
+
+.academic-table td:nth-child(4) {
+    color: #475569;
+
+    font-size: 13px;
+
+    min-width: 180px;
+}
+
+
+/* ============================================================
+   COLONNE ACTION
+   ============================================================ */
+
+.academic-table__actions {
+    width: 80px;
+
+    text-align: center !important;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   ICÔNE — DÉTAIL ÉTUDIANT
+   ============================================================ */
+
+.academic-action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    background-color: var(--student-action-bg);
+
+    border: 1px solid var(--student-action-border);
+    border-radius: 8px;
+
+    color: var(--student-action-color);
+
+    text-decoration: none;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.academic-action-icon i {
+    font-size: 13px;
+
+    line-height: 1;
+}
+
+.academic-action-icon:hover {
+    background-color: var(--student-action-hover-bg);
+
+    border-color: var(--student-action-hover-border);
+
+    color: var(--student-action-hover-color);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 3px 8px rgba(15, 23, 42, 0.08);
+}
+
+.academic-action-icon:active {
+    transform: translateY(0);
+
+    box-shadow: none;
+}
+
+.academic-action-icon:focus-visible {
+    outline: 3px solid rgba(107, 114, 128, 0.18);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   ÉTAT VIDE
+   ============================================================ */
+
+.academic-table-empty {
+    padding: 60px 24px !important;
+
+    text-align: center !important;
+
+    color: var(--student-text-muted);
+}
+
+.academic-table-empty i {
+    display: block;
+
+    margin-bottom: 15px;
+
+    color: #94a3b8;
+
+    font-size: 30px;
+}
+
+.academic-table-empty h3 {
+    margin: 0 0 7px;
+
+    color: var(--student-text-dark);
+
+    font-size: 15px;
+    font-weight: 650;
+
+    line-height: 1.4;
+}
+
+.academic-table-empty p {
+    max-width: 450px;
+
+    margin: 0 auto;
+
+    color: var(--student-text-muted);
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   DÉTAIL ÉTUDIANT
+   ============================================================ */
+
+.student-detail-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+.student-detail-item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    min-height: 90px;
+
+    padding: 18px;
+
+    background-color: #f8fafc;
+
+    border: 1px solid var(--student-border);
+
+    border-radius: 10px;
+
+    transition:
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.student-detail-item:hover {
+    background-color: #ffffff;
+
+    border-color: #d5dbe1;
+
+    box-shadow:
+        0 3px 10px rgba(15, 23, 42, 0.04);
+}
+
+.student-detail-label {
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+}
+
+.student-detail-item strong {
+    color: var(--student-text-dark);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+
+/* ============================================================
+   BOUTONS — SI UTILISÉS SUR LA PAGE DÉTAIL
+   ============================================================ */
+
+.academic-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 40px;
+
+    padding: 9px 15px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
+}
+
+.academic-btn i {
+    font-size: 12px;
+}
+
+.academic-btn--primary {
+    background-color: var(--student-primary);
+
+    border-color: var(--student-primary);
+
+    color: #ffffff;
+}
+
+.academic-btn--primary:hover {
+    background-color: var(--student-primary-dark);
+
+    border-color: var(--student-primary-dark);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 10px rgba(25, 135, 84, 0.18);
+}
+
+.academic-btn--secondary {
+    background-color: #ffffff;
+
+    border-color: var(--student-border);
+
+    color: #374151;
+}
+
+.academic-btn--secondary:hover {
+    background-color: #f8fafc;
+
+    border-color: #cbd5e1;
+
+    color: #111827;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 3px 8px rgba(15, 23, 42, 0.05);
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLETTE
+   ============================================================ */
+
+@media (max-width: 992px) {
+
+    .academic-page-heading {
+        gap: 18px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 23px;
+    }
+
+    .academic-panel-header {
+        padding: 18px 20px;
+    }
+
+    .academic-table th,
+    .academic-table td {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .student-name-cell {
+        min-width: 190px;
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .academic-page-heading {
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 12px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 22px;
+    }
+
+    .academic-page-heading p {
+        font-size: 13px;
+    }
+
+    .academic-panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 12px;
+
+        padding: 18px;
+    }
+
+    .academic-grade-count {
+        align-self: flex-start;
+    }
+
+    .academic-panel-body {
+        padding: 16px;
+    }
+
+    .academic-panel-body--table {
+        padding: 0;
+    }
+
+    .student-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .academic-table th,
+    .academic-table td {
+        padding: 14px 15px;
+    }
+}
+
+
+/* ============================================================
+   PETITS ÉCRANS
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .academic-page-heading {
+        margin-bottom: 18px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 20px;
+    }
+
+    .academic-page-heading p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .academic-panel {
+        border-radius: 10px;
+    }
+
+    .academic-panel-header {
+        padding: 16px;
+    }
+
+    .academic-panel-header h2 {
+        font-size: 16px;
+    }
+
+    .academic-panel-header p {
+        font-size: 12px;
+    }
+
+    .academic-grade-count {
+        font-size: 12px;
+    }
+
+    .academic-table {
+        min-width: 720px;
+    }
+
+    .academic-table th {
+        font-size: 10px;
+    }
+
+    .academic-table td {
+        font-size: 13px;
+    }
+
+    .academic-action-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .academic-action-icon i {
+        font-size: 12px;
+    }
+
+    .academic-table-empty {
+        padding: 50px 18px !important;
+    }
+
+    .student-detail-grid {
+        gap: 12px;
+    }
+
+    .student-detail-item {
+        min-height: 80px;
+
+        padding: 15px;
+    }
 }

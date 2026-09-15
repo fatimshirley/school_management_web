@@ -1,47 +1,297 @@
-{% extends 'base/base.html' %} {% load static %} {% block title %}Mes Étudiants
-- Espace Professeur{% endblock %} {% block css %}
-<link rel="stylesheet" href="{% static 'css/professeur/absences.css' %}" />
-{% endblock %} {% block content %}
-<div class="app-container">
-  {% include 'professeur/layout/sidebar.html' %}
-  <div class="main-wrapper flex-grow-1">
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Mes étudiants — Espace Professeur{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/header.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/sidebar.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/layout/footer.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/dashboard.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/professeur/students.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="admin-layout">
+
     {% include 'professeur/layout/header.html' %}
-    <main class="main-content container-fluid py-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Liste de mes Étudiants</h2>
-      </div>
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <table class="table align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>Matricule</th>
-                <th>Nom et Prénom</th>
-                <th>Niveau / Classe</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for student in students %}
-              <tr>
-                <td>{{ student.matricule|default:"-" }}</td>
-                <td style="font-weight: 600; color: #0f172a">
-                  {{ student.nom }} {{ student.prenom }}
-                </td>
-                <td>{{ student.niveau|default:"-" }}</td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="3" class="text-center text-muted py-4">
-                  Aucun étudiant trouvé pour vos cours.
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-    {% include 'professeur/layout/footer.html' %}
-  </div>
+
+
+    <div class="admin-layout__body">
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+
+                <!-- ==================================================
+                     EN-TÊTE
+                     ================================================== -->
+
+                <div class="academic-page-heading">
+
+                    <div>
+
+                        <h1>
+                            Mes étudiants
+                        </h1>
+
+                        <p>
+                            Consultez les étudiants des niveaux associés
+                            à vos matières.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     PANNEAU PRINCIPAL
+                     ================================================== -->
+
+                <div class="academic-panel">
+
+
+                    <!-- ==================================================
+                         EN-TÊTE DU PANNEAU
+                         ================================================== -->
+
+                    <div class="academic-panel-header">
+
+                        <div>
+
+                            <h2>
+                                Liste des étudiants
+                            </h2>
+
+                            <p>
+                                Les étudiants sont regroupés selon les niveaux
+                                de vos matières enseignées.
+                            </p>
+
+                        </div>
+
+
+                        <span class="academic-grade-count">
+
+                            {{ students|length }}
+
+                            étudiant{{ students|length|pluralize }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         CORPS DU PANNEAU
+                         ================================================== -->
+
+                    <div
+                        class="academic-panel-body academic-panel-body--table"
+                    >
+
+                        <div class="academic-table-wrapper">
+
+                            <table class="academic-table">
+
+
+                                <!-- ==================================================
+                                     COLONNES
+                                     ================================================== -->
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Matricule
+                                        </th>
+
+                                        <th>
+                                            Nom et prénom
+                                        </th>
+
+                                        <th>
+                                            Niveau
+                                        </th>
+
+                                        <th>
+                                            Filière
+                                        </th>
+
+                                        <th class="academic-table__actions">
+                                            Action
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <!-- ==================================================
+                                     DONNÉES
+                                     ================================================== -->
+
+                                <tbody>
+
+                                    {% for student in students %}
+
+                                    <tr>
+
+
+                                        <!-- MATRICULE -->
+
+                                        <td>
+
+                                            <strong>
+                                                {{ student.matricule|default:"-" }}
+                                            </strong>
+
+                                        </td>
+
+
+                                        <!-- NOM ET PRÉNOM -->
+
+                                        <td>
+
+                                            <div class="student-name-cell">
+
+                                                <strong>
+                                                    {{ student.nom }}
+                                                    {{ student.prenom }}
+                                                </strong>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <!-- NIVEAU -->
+
+                                        <td>
+
+                                            {{ student.niveau_display }}
+
+                                        </td>
+
+
+                                        <!-- FILIÈRE -->
+
+                                        <td>
+
+                                            {{ student.filiere_display }}
+
+                                        </td>
+
+
+                                        <!-- ACTION -->
+
+                                        <td class="academic-table__actions">
+
+                                            <a
+                                                href="{% url 'professeur_student_detail' student.pk %}"
+                                                class="academic-action-icon"
+                                                title="Voir le détail de l'étudiant"
+                                                aria-label="Voir le détail de {{ student.nom }} {{ student.prenom }}"
+                                            >
+
+                                                <i class="fa-solid fa-eye"></i>
+
+                                            </a>
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    {% empty %}
+
+
+                                    <!-- ==================================================
+                                         ÉTAT VIDE
+                                         ================================================== -->
+
+                                    <tr>
+
+                                        <td
+                                            colspan="5"
+                                            class="academic-table-empty"
+                                        >
+
+                                            <i
+                                                class="fa-solid fa-user-graduate"
+                                            ></i>
+
+
+                                            <h3>
+                                                Aucun étudiant trouvé
+                                            </h3>
+
+
+                                            <p>
+                                                Aucun étudiant n'est actuellement
+                                                associé aux niveaux de vos matières.
+                                            </p>
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 FOOTER
+                 ================================================== -->
+
+            {% include 'professeur/layout/footer.html' %}
+
+        </main>
+
+    </div>
+
 </div>
+
 {% endblock %}

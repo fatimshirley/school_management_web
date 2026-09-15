@@ -1,49 +1,211 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Historique des Notes - Espace Professeur{% endblock %}
+{% block title %}Historique des notes — Espace Professeur{% endblock %}
 
-{% block css %}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/professeur/grades.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="app-container">
-    {% include 'professeur/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'professeur/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Historique des notes attribuées</h2>
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Étudiant</th>
-                                <th>Évaluation</th>
-                                <th>Note</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for grade in grades %}
-                            <tr>
-                                <td>{{ grade.date_saisie|date:"d/m/Y" }}</td>
-                                <td>{{ grade.etudiant.nom }} {{ grade.etudiant.prenom }}</td>
-                                <td>{{ grade.evaluation.titre }}</td>
-                                <td><strong>{{ grade.valeur }}/20</strong></td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center text-muted">Aucun historique disponible.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+<div class="admin-layout">
+
+    {% include 'professeur/layout/header.html' %}
+
+    <div class="admin-layout__body">
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <!-- =====================================================
+                     EN-TÊTE
+                ====================================================== -->
+
+                <div class="academic-page-heading">
+
+                    <div>
+                        <h1>Historique des notes</h1>
+
+                        <p>
+                            Consultez l'ensemble des notes saisies dans vos matières.
+                        </p>
+                    </div>
+
+                    <a
+                        href="{% url 'professeur_grade_add' %}"
+                        class="academic-btn academic-btn--primary"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Saisir des notes
+                    </a>
+
                 </div>
+
+
+                <!-- =====================================================
+                     HISTORIQUE
+                ====================================================== -->
+
+                <div class="academic-panel">
+
+                    <div class="academic-table-wrapper">
+
+                        <table class="academic-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Étudiant</th>
+                                    <th>Matière</th>
+                                    <th>Évaluation</th>
+                                    <th>Session</th>
+                                    <th>Date</th>
+                                    <th>Note / 20</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for grade in grades %}
+
+                                <tr>
+
+                                    <!-- =================================================
+                                         ÉTUDIANT
+                                    ================================================== -->
+
+                                    <td class="grade-student">
+
+                                        {{ grade.student.nom }}
+                                        {{ grade.student.prenom }}
+
+                                        {% if grade.student.matricule %}
+                                            <span class="grade-student-matricule">
+                                                {{ grade.student.matricule }}
+                                            </span>
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         MATIÈRE
+                                    ================================================== -->
+
+                                    <td>
+
+                                        <span class="grade-subject">
+                                            {{ grade.evaluation.subject.nom }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         ÉVALUATION
+                                    ================================================== -->
+
+                                    <td>
+
+                                        <span class="grade-evaluation__title">
+                                            {{ grade.evaluation.get_type_evaluation_display }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         SESSION
+                                    ================================================== -->
+
+                                    <td>
+
+                                        <span class="grade-evaluation__session">
+                                            Session {{ grade.evaluation.session }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         DATE
+                                    ================================================== -->
+
+                                    <td>
+                                        {{ grade.evaluation.date|date:"d/m/Y" }}
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         NOTE
+                                    ================================================== -->
+
+                                    <td>
+
+                                        {% if grade.note is not None %}
+
+                                            <span class="grade-value">
+                                                {{ grade.note }} / 20
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="grade-empty">
+                                                Non renseignée
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <!-- =================================================
+                                     AUCUN HISTORIQUE
+                                ================================================== -->
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="academic-table-empty"
+                                    >
+
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                                        <span>
+                                            Aucun historique de notes disponible.
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
             </div>
+
+            {% include 'professeur/layout/footer.html' %}
+
         </main>
-        {% include 'professeur/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

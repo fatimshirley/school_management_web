@@ -1,5 +1,259 @@
-/* Profil Étudiant Styles */
-.card p {
-    margin-bottom: 0.75rem;
-    font-size: 1.05rem;
+/* ============================================================
+   STRUCTURE GLOBale
+============================================================ */
+
+.app-container {
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main-wrapper {
+    margin-left: 235px;
+    padding-top: 72px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   ÉTUDIANT — PROFIL
+============================================================ */
+
+.student-profile,
+.student-profile * {
+    box-sizing: border-box;
+}
+
+.student-profile {
+    width: 100%;
+    min-height: calc(100vh - 72px);
+    padding: 32px;
+    background: #f8fafc;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #1f2937;
+}
+
+/* ============================================================
+   EN-TÊTE DE PAGE
+============================================================ */
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-header__eyebrow {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.page-header p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #6b7280;
+}
+
+/* ============================================================
+   STRUCTURE
+============================================================ */
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+/* ============================================================
+   CARTES
+============================================================ */
+
+.profile-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 24px;
+}
+
+/* ============================================================
+   CARTE IDENTITÉ
+============================================================ */
+
+.profile-card--identity {
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef3f8;
+    color: #1e3a5f;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.profile-card--identity h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.profile-matricule {
+    margin: 8px 0 14px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.profile-role {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #dbe3eb;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
+    background: #f8fafc;
+}
+
+/* ============================================================
+   EN-TÊTE DE CARTE
+============================================================ */
+
+.profile-card__header {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-card__header h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.profile-card__header p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ============================================================
+   INFORMATIONS
+============================================================ */
+
+.profile-information {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.profile-information__item {
+    min-width: 0;
+    padding: 18px 16px;
+    border-bottom: 1px solid #eef0f2;
+}
+
+.profile-information__item:nth-child(odd) {
+    border-right: 1px solid #eef0f2;
+}
+
+.profile-information__label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.profile-information__value {
+    display: block;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* ============================================================
+   TABLETTE
+============================================================ */
+
+@media (max-width: 992px) {
+    .main-wrapper {
+        margin-left: 72px;
+    }
+
+    .student-profile {
+        padding: 28px 24px;
+    }
+
+    .profile-layout {
+        grid-template-columns: 240px minmax(0, 1fr);
+    }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 768px) {
+    .main-wrapper {
+        margin-left: 64px;
+    }
+
+    .student-profile {
+        padding: 24px 16px;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card--identity {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-information {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-information__item:nth-child(odd) {
+        border-right: none;
+    }
+}
+
+/* ============================================================
+   PETIT MOBILE
+============================================================ */
+
+@media (max-width: 480px) {
+    .main-wrapper {
+        margin-left: 64px;
+    }
+
+    .student-profile {
+        padding: 20px 14px;
+    }
+
+    .page-header h1 {
+        font-size: 22px;
+    }
+
+    .profile-card {
+        padding: 20px;
+    }
 }

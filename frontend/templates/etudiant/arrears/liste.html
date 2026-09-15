@@ -3,51 +3,149 @@
 
 {% block title %}Mes Arriérés - Portail Étudiant{% endblock %}
 
-{% block css %}
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/footer.css' %}">
 <link rel="stylesheet" href="{% static 'css/etudiant/arrears.css' %}">
+
 {% endblock %}
 
 {% block content %}
+
 <div class="app-container">
-    {% include 'etudiant/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'etudiant/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">État de mes arriérés financiers</h2>
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Motif</th>
-                                <th>Montant Dû</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for arriere in arrieres %}
-                            <tr>
-                                <td>{{ arriere.motif }}</td>
-                                <td>{{ arriere.montant }} FCFA</td>
-                                <td>
-                                    {% if arriere.paye %}
-                                        <span class="badge bg-success">Payé</span>
-                                    {% else %}
-                                        <span class="badge bg-warning text-dark">En attente</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">Aucun arriéré enregistré.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+
+{% include 'etudiant/layout/sidebar.html' %}
+
+<div class="main-wrapper">
+
+    {% include 'etudiant/layout/header.html' %}
+
+    <main class="student-arrears">
+
+        <div class="student-arrears__header">
+
+            <div>
+                <h1>Mes arriérés</h1>
+
+                <p>
+                    Consultez l'état de vos arriérés financiers.
+                </p>
             </div>
-        </main>
-        {% include 'etudiant/layout/footer.html' %}
-    </div>
+
+        </div>
+
+
+        <section class="arrears-section">
+
+            <div class="arrears-section__header">
+
+                <div>
+                    <h2>État de mes arriérés financiers</h2>
+
+                    <p>
+                        Retrouvez l'ensemble de vos arriérés enregistrés.
+                    </p>
+                </div>
+
+                <span class="arrears-count">
+                    {{ arrieres|length }}
+                    arriéré{{ arrieres|length|pluralize }}
+                </span>
+
+            </div>
+
+
+            <div class="arrears-table-wrapper">
+
+                <table class="arrears-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Motif</th>
+                            <th>Montant dû</th>
+                            <th>Statut</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for arriere in arrieres %}
+
+                        <tr>
+
+                            <td class="arrear-reason">
+                                {{ arriere.motif }}
+                            </td>
+
+
+                            <td class="arrear-amount">
+                                {{ arriere.montant }} FCFA
+                            </td>
+
+
+                            <td class="arrear-status">
+
+                                {% if arriere.paye %}
+
+                                    <span class="arrear-status__paid">
+                                        Payé
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="arrear-status__pending">
+                                        En attente
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="3" class="arrears-empty">
+
+                                <div class="arrears-empty__content">
+
+                                    <i class="fa-regular fa-file-circle-check"></i>
+
+                                    <p>
+                                        Aucun arriéré enregistré.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    {% include 'etudiant/layout/footer.html' %}
+
 </div>
+
+
+</div>
+
 {% endblock %}

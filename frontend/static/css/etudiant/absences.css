@@ -1,4 +1,232 @@
-/* Absences Étudiant Styles */
-.table th {
+/* ============================================================
+ÉTUDIANT — ABSENCES
+============================================================ */
+/* ============================================================
+STRUCTURE PRINCIPALE
+============================================================ */
+.app-container {
+    width: 100%;
+    min-height: 100vh;
+}
+.main-wrapper {
+    margin-left: 235px;
+    padding-top: 72px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+.student-absences {
+    width: 100%;
+    min-height: calc(100vh - 72px);
+    padding: 30px 32px 40px;
+    box-sizing: border-box;
+}
+/* ============================================================
+EN-TÊTE DE PAGE
+============================================================ */
+.student-absences__header {
+    margin-bottom: 28px;
+}
+.student-absences__header h1 {
+    margin: 0 0 7px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #1f2937;
+}
+.student-absences__header p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+/* ============================================================
+SECTION ABSENCES
+============================================================ */
+.absences-section {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+}
+.absences-section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 22px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.absences-section__header h2 {
+    margin: 0 0 5px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1f2937;
+}
+.absences-section__header p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+.absences-count {
+    white-space: nowrap;
+    font-size: 13px;
+    color: #6b7280;
+}
+/* ============================================================
+TABLE
+============================================================ */
+.absences-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+.absences-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+.absences-table th {
+    padding: 13px 18px;
     background-color: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4b5563;
+    white-space: nowrap;
+}
+.absences-table td {
+    padding: 15px 18px;
+    border-bottom: 1px solid #edf0f2;
+    font-size: 13px;
+    color: #374151;
+    vertical-align: middle;
+}
+.absences-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.absences-table tbody tr:hover {
+    background-color: #fafafa;
+}
+/* ============================================================
+MATIÈRE
+============================================================ */
+.absence-subject {
+    font-weight: 500;
+    color: #1f2937;
+}
+/* ============================================================
+DATE
+============================================================ */
+.absence-date {
+    color: #4b5563;
+    white-space: nowrap;
+}
+/* ============================================================
+STATUT
+============================================================ */
+.absence-status {
+    white-space: nowrap;
+}
+.absence-status__justified,
+.absence-status__unjustified {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.absence-status__justified {
+    color: #166534;
+    background-color: #f0fdf4;
+}
+.absence-status__unjustified {
+    color: #991b1b;
+    background-color: #fef2f2;
+}
+/* ============================================================
+ÉTAT VIDE
+============================================================ */
+.absences-empty {
+    padding: 55px 20px !important;
+    text-align: center !important;
+}
+.absences-empty__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.absences-empty__content i {
+    margin-bottom: 12px;
+    font-size: 28px;
+    color: #9ca3af;
+}
+.absences-empty__content p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+/* ============================================================
+RESPONSIVE — TABLETTE
+============================================================ */
+@media (max-width: 992px) {
+
+    .main-wrapper {
+        margin-left: 210px;
+    }
+
+    .student-absences {
+        padding: 26px 24px 35px;
+    }
+}
+/* ============================================================
+RESPONSIVE — MOBILE
+============================================================ */
+@media (max-width: 768px) {
+
+    .main-wrapper {
+        margin-left: 0;
+        padding-top: 64px;
+    }
+
+    .student-absences {
+        padding: 22px 16px 30px;
+    }
+
+    .student-absences__header h1 {
+        font-size: 22px;
+    }
+
+    .absences-section__header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .absences-table th,
+    .absences-table td {
+        padding: 12px 14px;
+    }
+}
+/* ============================================================
+PETIT MOBILE
+============================================================ */
+@media (max-width: 480px) {
+
+    .student-absences {
+        padding: 20px 12px 25px;
+    }
+
+    .student-absences__header {
+        margin-bottom: 22px;
+    }
+
+    .student-absences__header h1 {
+        font-size: 20px;
+    }
+
+    .absences-section__header h2 {
+        font-size: 16px;
+    }
+
+    .absences-table {
+        min-width: 520px;
+    }
 }

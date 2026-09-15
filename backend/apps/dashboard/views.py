@@ -33,6 +33,9 @@ from apps.academic.models import (
 )
 
 from apps.subjects.models import Enseignement
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from apps.accounts.models import UserProfile
 
 
 # ==================================================
@@ -4006,7 +4009,19 @@ def professeur_subjects(request):
         }
     )
 
+@login_required
+def professeur_profile(request):
+    profile = UserProfile.objects.filter(user=request.user).first()
+    if profile is None or profile.role != 'professeur':
+        return redirect('dashboard')
 
+    return render(
+        request,
+        'professeur/profile.html',
+        {
+            'profile': profile,
+        }
+    )
 
 # ==================================================
 # PROTECTION ÉTUDIANT
@@ -4170,18 +4185,20 @@ def etudiant_profile(request):
 # ==================================================
 # NOTES ÉTUDIANT
 # ==================================================
-
 @etudiant_required
 def etudiant_grades(request):
-
     student = (
         Student.objects
-        .select_related('user')
+        .select_related(
+            'user',
+            'filiere',
+            'niveau',
+        )
         .filter(user=request.user)
         .first()
     )
 
-    if not student:
+    if student is None:
         return redirect('etudiant_dashboard')
 
     grades = (
@@ -4190,7 +4207,7 @@ def etudiant_grades(request):
         .select_related(
             'student',
             'evaluation',
-            'evaluation__matiere',
+            'evaluation__subject',
             'evaluation__annee_universitaire',
         )
         .order_by(
@@ -4209,55 +4226,121 @@ def etudiant_grades(request):
     )
 
 
-# ==================================================
-# RÉSULTATS ÉTUDIANT
-# ==================================================
 
 @etudiant_required
-def etudiant_results(request):
+def etudiant_grade_detail(request, grade_id):
 
     student = (
         Student.objects
-        .select_related('user')
+        .select_related('user', 'filiere', 'niveau')
         .filter(user=request.user)
         .first()
     )
 
-    if not student:
+    if student is None:
+        return redirect('etudiant_dashboard')
+
+    grade = (
+        Grade.objects
+        .filter(
+            id=grade_id,
+            student=student
+        )
+        .select_related(
+            'student',
+            'evaluation',
+            'evaluation__subject',
+            'evaluation__annee_universitaire',
+        )
+        .first()
+    )
+
+    if grade is None:
+        return redirect('etudiant_grades')
+
+    return render(
+        request,
+        'etudiant/grades/detail.html',
+        {
+            'student': student,
+            'grade': grade,
+        }
+    )
+
+from django.shortcuts import get_object_or_404, redirect, render
+from apps.grades.models import Grade
+from apps.students.models import Student
+# Assurez-vous d'importer votre décorateur personnalisé s'il est dans un autre fichier (ex: from .decorators import etudiant_required)
+
+
+# ==================================================
+# RÉSULTATS ÉTUDIANT (LISTE)
+# ==================================================
+@etudiant_required
+def etudiant_results(request):
+    student = (
+        Student.objects
+        .select_related(
+            'user',
+            'filiere',
+            'niveau',
+        )
+        .filter(user=request.user)
+        .first()
+    )
+
+    if student is None:
         return redirect('etudiant_dashboard')
 
     grades = (
         Grade.objects
         .filter(student=student)
         .select_related(
-            'student',
             'evaluation',
-            'evaluation__matiere',
+            'evaluation__subject',
             'evaluation__annee_universitaire',
         )
         .order_by(
-            'evaluation__matiere__nom',
             '-evaluation__date',
             '-id',
         )
     )
 
-    moyennes = (
-        Grade.objects
-        .filter(
-            student=student,
-            valeur__isnull=False,
-        )
-        .values(
-            'evaluation__matiere__id',
-            'evaluation__matiere__nom',
-        )
-        .annotate(
-            moyenne=Avg('valeur')
-        )
-        .order_by(
-            'evaluation__matiere__nom'
-        )
+    return render(
+        request,
+        'etudiant/results/liste.html',
+        {
+            'student': student,
+            'grades': grades,
+        }
+    )
+
+
+# ==================================================
+# DÉTAIL RÉSULTAT ÉTUDIANT
+# ==================================================
+@etudiant_required
+def etudiant_result_detail(request, grade_id):
+    """
+    Affiche le détail d'un résultat appartenant à l'étudiant connecté.
+    """
+    student = get_object_or_404(
+        Student.objects.select_related(
+            'user',
+            'filiere',
+            'niveau'
+        ),
+        user=request.user
+    )
+
+    grade = get_object_or_404(
+        Grade.objects.select_related(
+            'evaluation',
+            'evaluation__subject',
+            'evaluation__annee_universitaire'
+        ),
+        id=grade_id,
+        student=student
     )
 
     return render(
@@ -4265,24 +4348,18 @@ def etudiant_results(request):
         'etudiant/results/detail.html',
         {
             'student': student,
-            'grades': grades,
-            'moyennes': moyennes,
+            'grade': grade,
         }
     )
-
-
 # ==================================================
 # ABSENCES ÉTUDIANT
 # ==================================================
 
 @etudiant_required
 def etudiant_absences(request):
-
     student = (
         Student.objects
-        .filter(
-            user=request.user
-        )
+        .filter(user=request.user)
         .first()
     )
 
@@ -4291,17 +4368,9 @@ def etudiant_absences(request):
     else:
         absences = (
             Absence.objects
-            .filter(
-                student=student
-            )
-            .select_related(
-                'class_subject',
-                'class_subject__subject',
-                'semester',
-            )
-            .order_by(
-                '-date'
-            )
+            .filter(student=student)
+            .select_related('subject')
+            .order_by('-date_absence')
         )
 
     return render(
@@ -4319,11 +4388,12 @@ def etudiant_absences(request):
 
 @etudiant_required
 def etudiant_subjects(request):
-
     student = (
         Student.objects
         .select_related(
-            'classe'
+            'user',
+            'filiere',
+            'niveau'
         )
         .filter(
             user=request.user
@@ -4333,11 +4403,13 @@ def etudiant_subjects(request):
 
     if student is None:
         subjects = Subject.objects.none()
+
     else:
         subjects = (
             Subject.objects
             .filter(
-                classsubject__classe=student.classe
+                enseignements__filiere=student.filiere,
+                enseignements__semestre__niveau=student.niveau
             )
             .distinct()
             .order_by(
@@ -4349,9 +4421,12 @@ def etudiant_subjects(request):
         request,
         'etudiant/subjects/liste.html',
         {
+            'student': student,
             'subjects': subjects,
         }
     )
+
+
 
 
 # ==================================================

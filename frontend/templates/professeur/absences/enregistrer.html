@@ -1,34 +1,264 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Enregistrer une Absence - Espace Professeur{% endblock %}
+{% block title %}Marquer une absence — Espace Professeur{% endblock %}
 
-{% block css %}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/professeur/absences.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="app-container">
-    {% include 'professeur/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'professeur/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body p-4">
-                            <h2 class="mb-4">Signaler une absence</h2>
-                            <form method="POST">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <button type="submit" class="btn btn-danger w-100 mt-3">Enregistrer</button>
-                            </form>
-                        </div>
+
+<div class="admin-layout">
+
+    {% include 'professeur/layout/header.html' %}
+
+    <div class="admin-layout__body">
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <!-- =====================================================
+                     EN-TÊTE
+                ====================================================== -->
+
+                <div class="academic-page-heading">
+
+                    <div>
+                        <h1>Marquer une absence</h1>
+
+                        <p>
+                            Enregistrez l'absence d'un étudiant dans l'une
+                            de vos matières.
+                        </p>
                     </div>
+
+                    <a
+                        href="{% url 'professeur_absences' %}"
+                        class="academic-btn academic-btn--secondary"
+                    >
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Retour aux absences
+                    </a>
+
                 </div>
+
+
+                <!-- =====================================================
+                     ERREUR
+                ====================================================== -->
+
+                {% if error %}
+
+                    <div class="academic-form-errors">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        <span>
+                            {{ error }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =====================================================
+                     FORMULAIRE
+                ====================================================== -->
+
+                <div class="academic-panel academic-absence-form-panel">
+
+                    <div class="academic-panel-header">
+
+                        <div>
+
+                            <h2>Informations de l'absence</h2>
+
+                            <p>
+                                Sélectionnez une matière, puis l'étudiant
+                                concerné et indiquez la date de son absence.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="academic-panel-body">
+
+                        <form
+                            method="POST"
+                            class="academic-form"
+                        >
+
+                            {% csrf_token %}
+
+                            <div class="academic-form-grid">
+
+                                <!-- =================================================
+                                     MATIÈRE
+                                ================================================== -->
+
+                                <div class="academic-form-group">
+
+                                    <label for="subject">
+                                        Matière
+                                    </label>
+
+                                    <select
+                                        name="subject"
+                                        id="subject"
+                                        required
+                                        onchange="this.form.submit()"
+                                    >
+
+                                        <option value="">
+                                            Sélectionner une matière
+                                        </option>
+
+                                        {% for subject in subjects %}
+
+                                            <option
+                                                value="{{ subject.id }}"
+                                                {% if selected_subject and selected_subject.id == subject.id %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                {{ subject.nom }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- =================================================
+                                     ÉTUDIANT
+                                ================================================== -->
+
+                                <div class="academic-form-group">
+
+                                    <label for="student">
+                                        Étudiant
+                                    </label>
+
+                                    <select
+                                        name="student"
+                                        id="student"
+                                        required
+                                        {% if not selected_subject %}
+                                            disabled
+                                        {% endif %}
+                                    >
+
+                                        <option value="">
+
+                                            {% if selected_subject %}
+                                                Sélectionner un étudiant
+                                            {% else %}
+                                                Sélectionnez d'abord une matière
+                                            {% endif %}
+
+                                        </option>
+
+                                        {% for student in students %}
+
+                                            <option
+                                                value="{{ student.id }}"
+                                                {% if selected_student_id|stringformat:"s" == student.id|stringformat:"s" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+
+                                                {{ student.nom }}
+                                                {{ student.prenom }}
+
+                                                {% if student.matricule %}
+                                                    — {{ student.matricule }}
+                                                {% endif %}
+
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- =================================================
+                                     DATE
+                                ================================================== -->
+
+                                <div class="academic-form-group">
+
+                                    <label for="date_absence">
+                                        Date de l'absence
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        name="date_absence"
+                                        id="date_absence"
+                                        value="{{ date_absence|default:'' }}"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================================
+                                 ACTIONS
+                            ====================================================== -->
+
+                            <div class="academic-form-actions">
+
+                                <a
+                                    href="{% url 'professeur_absences' %}"
+                                    class="academic-btn academic-btn--secondary"
+                                >
+                                    Annuler
+                                </a>
+
+                                <button
+                                    type="submit"
+                                    class="academic-btn academic-btn--danger"
+                                    {% if not selected_subject %}
+                                        disabled
+                                    {% endif %}
+                                >
+
+                                    <i class="fa-solid fa-user-xmark"></i>
+
+                                    Enregistrer l'absence
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
             </div>
+
+
+            {% include 'professeur/layout/footer.html' %}
+
         </main>
-        {% include 'professeur/layout/footer.html' %}
+
     </div>
+
 </div>
+
 {% endblock %}

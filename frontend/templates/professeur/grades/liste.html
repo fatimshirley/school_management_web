@@ -1,100 +1,264 @@
-{% extends 'base/base.html' %} {% load static %} {% block title %}Gestion des
-Notes — Espace Professeur{% endblock %} {% block css %}
-<link rel="stylesheet" href="{% static 'css/professeur/evaluations.css' %}" />
-<style>
-  /* Sécurité anti-bug : Force l'affichage même si le fichier CSS externe tarde à charger */
-  .admin-main {
-    margin-left: 235px !important;
-    padding-top: 85px !important;
-    box-sizing: border-box !important;
-  }
-  @media (max-width: 992px) {
-    .admin-main {
-      margin-left: 0 !important;
-    }
-  }
-</style>
-{% endblock %} {% block content %}
-<div class="admin-layout">
-  {% include 'professeur/layout/header.html' %}
-  <div class="admin-layout__body">
-    {% include 'professeur/layout/sidebar.html' %}
-    <main class="admin-main">
-      <div class="admin-main__content">
-        <div class="academic-page-heading">
-          <div>
-            <h1>Gestion des Notes & Évaluations</h1>
-            <p>Consultez et attribuez les notes de vos élèves</p>
-          </div>
-          <a
-            href="{% url 'professeur_evaluation_ajouter' %}"
-            class="academic-btn academic-btn--primary"
-          >
-            <i class="fa-solid fa-plus"></i> Nouvelle Évaluation
-          </a>
-        </div>
+{% extends 'base/base.html' %}
+{% load static %}
 
-        <div class="academic-panel">
-          <div class="academic-table-wrapper">
-            <table class="academic-table">
-              <thead>
-                <tr>
-                  <th>Élève</th>
-                  <th>Évaluation / Matière</th>
-                  <th>Note / 20</th>
-                  <th>Appréciation</th>
-                  <th style="text-align: right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for grade in grades %}
-                <tr>
-                  <td style="font-weight: 600; color: #0f172a">
-                    {{
-                    grade.student.user.get_full_name|default:grade.student.user.username
-                    }}
-                  </td>
-                  <td>
-                    <span style="display: block; font-weight: 500"
-                      >{{ grade.evaluation.titre }}</span
-                    >
-                    <span style="font-size: 12px; color: #64748b"
-                      >{{ grade.evaluation.matiere.nom }}</span
-                    >
-                  </td>
-                  <td>
-                    <span style="font-weight: 700; color: #1e3a5f"
-                      >{{ grade.note }} / 20</span
-                    >
-                  </td>
-                  <td>{{ grade.appreciation|default:"-" }}</td>
-                  <td style="text-align: right">
-                    <a
-                      href="#"
-                      class="academic-btn-icon"
-                      title="Modifier la note"
-                    >
-                      <i class="fa-solid fa-pen"></i>
-                    </a>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td
-                    colspan="5"
-                    style="text-align: center; padding: 40px; color: #64748b"
-                  >
-                    Aucune note enregistrée pour le moment.
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      {% include 'professeur/layout/footer.html' %}
-    </main>
-  </div>
+{% block title %}Gestion des Notes — Espace Professeur{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/professeur/grades.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+    {% include 'professeur/layout/header.html' %}
+
+    <div class="admin-layout__body">
+
+        {% include 'professeur/layout/sidebar.html' %}
+
+        <main class="admin-main">
+
+            <div class="admin-main__content">
+
+                <!-- =====================================================
+                     EN-TÊTE
+                ====================================================== -->
+
+                <div class="academic-page-heading">
+
+                    <div>
+
+                        <h1>
+                            Gestion des Notes
+                        </h1>
+
+                        <p>
+                            Consultez et gérez les notes attribuées aux étudiants.
+                        </p>
+
+                    </div>
+
+
+                    <div class="academic-page-heading__actions">
+
+                        <!-- HISTORIQUE -->
+
+                        <a
+                            href="{% url 'professeur_grade_history' %}"
+                            class="academic-btn academic-btn--secondary"
+                        >
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            Historique
+                        </a>
+
+
+                        <!-- SAISIR DES NOTES -->
+
+                        <a
+                            href="{% url 'professeur_grade_add' %}"
+                            class="academic-btn academic-btn--primary"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Saisir des notes
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================================
+                     TABLEAU DES NOTES
+                ====================================================== -->
+
+                <div class="academic-panel">
+
+                    <div class="academic-table-wrapper">
+
+                        <table class="academic-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Étudiant
+                                    </th>
+
+                                    <th>
+                                        Matière
+                                    </th>
+
+                                    <th>
+                                        Évaluation
+                                    </th>
+
+                                    <th>
+                                        Session
+                                    </th>
+
+                                    <th>
+                                        Note / 20
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for grade in grades %}
+
+                                <tr>
+
+                                    <!-- =================================================
+                                         ÉTUDIANT
+                                    ================================================== -->
+
+                                    <td class="grade-student">
+
+                                        {% if grade.student.user %}
+
+                                            {% if grade.student.user.get_full_name %}
+
+                                                {{ grade.student.user.get_full_name }}
+
+                                            {% else %}
+
+                                                {{ grade.student.user.username }}
+
+                                            {% endif %}
+
+                                        {% else %}
+
+                                            {{ grade.student.nom }}
+                                            {{ grade.student.prenom }}
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         MATIÈRE
+                                    ================================================== -->
+
+                                    <td>
+
+                                        <span class="grade-subject">
+
+                                            {{ grade.evaluation.subject.nom }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         ÉVALUATION
+                                    ================================================== -->
+
+                                    <td class="grade-evaluation">
+
+                                        <span class="grade-evaluation__title">
+
+                                            {{ grade.evaluation.get_type_evaluation_display }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         SESSION
+                                    ================================================== -->
+
+                                    <td>
+
+                                        <span class="grade-evaluation__session">
+
+                                            Session {{ grade.evaluation.session }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         NOTE
+                                    ================================================== -->
+
+                                    <td>
+
+                                        {% if grade.note is not None %}
+
+                                            <span class="grade-value">
+
+                                                {{ grade.note }} / 20
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="grade-empty">
+
+                                                Non renseignée
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+
+                                {% empty %}
+
+                                <!-- =================================================
+                                     AUCUNE NOTE
+                                ================================================== -->
+
+                                <tr>
+
+                                    <td
+                                        colspan="5"
+                                        class="academic-table-empty"
+                                    >
+
+                                        <i class="fa-solid fa-file-pen"></i>
+
+                                        <span>
+
+                                            Aucune note enregistrée pour le moment.
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {% include 'professeur/layout/footer.html' %}
+
+        </main>
+
+    </div>
+
 </div>
+
 {% endblock %}

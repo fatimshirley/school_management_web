@@ -1,4 +1,459 @@
-/* Matières Professeur Styles */
-.card-title {
-    font-size: 1.25rem;
+/* ============================================================
+PROFESSEUR — MATIÈRES
+============================================================ */
+
+/* ============================================================
+VARIABLES
+============================================================ */
+:root {
+    --subject-primary: #198754;
+    --subject-primary-dark: #146c43;
+    --subject-primary-light: rgba(25, 135, 84, 0.08);
+    --subject-bg: #f8f9fa;
+    --subject-card: #ffffff;
+
+    --subject-text: #212529;
+    --subject-text-dark: #111827;
+    --subject-text-muted: #6b7280;
+
+    --subject-border: #e5e7eb;
+    --subject-border-light: #f0f2f4;
+
+    --subject-header-bg: #f8fafc;
+
+    --subject-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --subject-shadow-hover: 0 5px 16px rgba(15, 23, 42, 0.07);
+}
+
+/* ============================================================
+POLICE
+============================================================ */
+.admin-layout,
+.admin-layout button,
+.admin-layout input,
+.admin-layout select,
+.admin-layout textarea,
+.admin-layout table {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+}
+
+/* ============================================================
+CONTENU PRINCIPAL
+============================================================ */
+.admin-main {
+    background-color: var(--subject-bg);
+}
+
+.admin-main__content {
+    width: 100%;
+    min-width: 0;
+}
+
+/* ============================================================
+EN-TÊTE DE PAGE
+============================================================ */
+.academic-page-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.academic-page-heading > div {
+    min-width: 0;
+}
+
+.academic-page-heading h1 {
+    margin: 0 0 6px;
+    color: var(--subject-text-dark);
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.academic-page-heading p {
+    margin: 0;
+    max-width: 700px;
+    color: var(--subject-text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+PANNEAU PRINCIPAL
+============================================================ */
+.academic-panel {
+    width: 100%;
+    background-color: var(--subject-card);
+    border: 1px solid var(--subject-border);
+    border-radius: 12px;
+    box-shadow: var(--subject-shadow);
+    overflow: hidden;
+}
+
+/* ============================================================
+EN-TÊTE DU PANNEAU
+============================================================ */
+.academic-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--subject-border-light);
+}
+
+.academic-panel-header > div {
+    min-width: 0;
+}
+
+.academic-panel-header h2 {
+    margin: 0 0 5px;
+    color: var(--subject-text-dark);
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 650;
+}
+
+.academic-panel-header p {
+    margin: 0;
+    color: var(--subject-text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ============================================================
+COMPTEUR DES MATIÈRES
+============================================================ */
+.academic-subject-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: 34px;
+    padding: 7px 12px;
+    background-color: var(--subject-primary-light);
+    border: 1px solid rgba(25, 135, 84, 0.14);
+    border-radius: 7px;
+    color: var(--subject-primary-dark);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* ============================================================
+CORPS DU PANNEAU
+============================================================ */
+.academic-panel-body {
+    padding: 24px;
+}
+
+.academic-panel-body--table {
+    padding: 0;
+}
+
+/* ============================================================
+CONTENEUR DU TABLEAU
+============================================================ */
+.academic-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+}
+
+/* ============================================================
+TABLEAU
+============================================================ */
+.academic-table {
+    width: 100%;
+    min-width: 780px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #ffffff;
+    font-size: 14px;
+}
+
+/* ============================================================
+EN-TÊTE DU TABLEAU
+============================================================ */
+.academic-table thead {
+    background-color: var(--subject-header-bg);
+}
+
+.academic-table thead tr {
+    border-bottom: 1px solid var(--subject-border);
+}
+
+.academic-table th {
+    padding: 14px 20px;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.045em;
+    white-space: nowrap;
+}
+
+/* ============================================================
+CELLULES
+============================================================ */
+.academic-table td {
+    padding: 16px 20px;
+    color: #475569;
+    border-bottom: 1px solid var(--subject-border-light);
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+.academic-table tbody tr {
+    background-color: #ffffff;
+    transition: background-color 0.15s ease;
+}
+
+.academic-table tbody tr:hover {
+    background-color: rgba(25, 135, 84, 0.025);
+}
+
+.academic-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ============================================================
+CODE DE LA MATIÈRE
+============================================================ */
+.subject-code {
+    display: inline-block;
+    color: var(--subject-text-dark);
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+/* ============================================================
+NOM DE LA MATIÈRE
+============================================================ */
+.subject-name-cell {
+    display: flex;
+    align-items: center;
+    min-width: 190px;
+}
+
+.subject-name-cell strong {
+    color: var(--subject-text-dark);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* ============================================================
+NIVEAU
+============================================================ */
+.academic-table td:nth-child(3) {
+    min-width: 140px;
+    color: #475569;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.subject-level {
+    display: inline-block;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.subject-empty-value {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+/* ============================================================
+DESCRIPTION
+============================================================ */
+.academic-table td:nth-child(4) {
+    min-width: 280px;
+    color: var(--subject-text-muted);
+    font-size: 13px;
+}
+
+.subject-description {
+    display: block;
+    max-width: 600px;
+    color: var(--subject-text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* ============================================================
+ÉTAT VIDE
+============================================================ */
+.academic-table-empty {
+    padding: 60px 24px !important;
+    text-align: center !important;
+    color: var(--subject-text-muted);
+}
+
+.academic-table-empty i {
+    display: block;
+    margin-bottom: 15px;
+    color: #94a3b8;
+    font-size: 30px;
+}
+
+.academic-table-empty h3 {
+    margin: 0 0 7px;
+    color: var(--subject-text-dark);
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.academic-table-empty p {
+    max-width: 450px;
+    margin: 0 auto;
+    color: var(--subject-text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+RESPONSIVE — TABLETTE
+============================================================ */
+@media (max-width: 992px) {
+    .academic-page-heading {
+        gap: 18px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 23px;
+    }
+
+    .academic-panel-header {
+        padding: 18px 20px;
+    }
+
+    .academic-table th,
+    .academic-table td {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .subject-name-cell {
+        min-width: 175px;
+    }
+
+    .academic-table td:nth-child(4) {
+        min-width: 240px;
+    }
+}
+
+/* ============================================================
+RESPONSIVE — MOBILE
+============================================================ */
+@media (max-width: 768px) {
+    .academic-page-heading {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 22px;
+    }
+
+    .academic-page-heading p {
+        font-size: 13px;
+    }
+
+    .academic-panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px;
+    }
+
+    .academic-subject-count {
+        align-self: flex-start;
+    }
+
+    .academic-panel-body {
+        padding: 16px;
+    }
+
+    .academic-panel-body--table {
+        padding: 0;
+    }
+
+    .academic-table th,
+    .academic-table td {
+        padding: 14px 15px;
+    }
+}
+
+/* ============================================================
+PETITS ÉCRANS
+============================================================ */
+@media (max-width: 480px) {
+    .academic-page-heading {
+        margin-bottom: 18px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 20px;
+    }
+
+    .academic-page-heading p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .academic-panel {
+        border-radius: 10px;
+    }
+
+    .academic-panel-header {
+        padding: 16px;
+    }
+
+    .academic-panel-header h2 {
+        font-size: 16px;
+    }
+
+    .academic-panel-header p {
+        font-size: 12px;
+    }
+
+    .academic-subject-count {
+        font-size: 12px;
+    }
+
+    .academic-table {
+        min-width: 700px;
+    }
+
+    .academic-table th {
+        font-size: 10px;
+    }
+
+    .academic-table td {
+        font-size: 13px;
+    }
+
+    .academic-table-empty {
+        padding: 50px 18px !important;
+    }
+
+    .subject-description {
+        max-width: 420px;
+    }
 }

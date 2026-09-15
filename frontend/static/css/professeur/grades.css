@@ -1,8 +1,1334 @@
-/* Notes Professeur Styles */
-.table input[type="text"], 
-.table input[type="number"] {
-    max-width: 120px;
+/* ============================================================
+   PROFESSEUR — NOTES
+   MISE EN PAGE GLOBALE
+   ============================================================ */
+
+
+/* ============================================================
+   POLICE GLOBALE
+   ============================================================ */
+
+.admin-main,
+.admin-main__content,
+.admin-main button,
+.admin-main input,
+.admin-main select,
+.admin-main textarea {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
 }
-.table td {
+
+
+/* ============================================================
+   STRUCTURE PRINCIPALE
+   ============================================================ */
+
+.admin-layout {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    background: #f8fafc;
+}
+
+
+/* ============================================================
+   ZONE PRINCIPALE
+   ============================================================ */
+
+.admin-main {
+    position: relative;
+
+    margin-left: 235px !important;
+
+    padding-top: 85px !important;
+
+    width: calc(100% - 235px);
+
+    min-height: 100vh;
+
+    box-sizing: border-box;
+
+    background: #f8fafc;
+
+    overflow-x: hidden;
+}
+
+
+/* ============================================================
+   CONTENU PRINCIPAL
+   ============================================================ */
+
+.admin-main__content {
+    width: 100%;
+
+    max-width: 1600px;
+
+    margin: 0 auto;
+
+    padding: 28px 32px 40px;
+
+    box-sizing: border-box;
+
+    min-width: 0;
+}
+
+
+/* ============================================================
+   TITRE DE PAGE
+   ============================================================ */
+
+.academic-page-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    width: 100%;
+
+    margin-bottom: 24px;
+
+    box-sizing: border-box;
+}
+
+
+.academic-page-heading > div {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.academic-page-heading h1 {
+    margin: 0;
+
+    font-size: 26px;
+
+    line-height: 1.3;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    overflow-wrap: anywhere;
+}
+
+
+.academic-page-heading p {
+    margin: 7px 0 0;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   PANNEAU
+   ============================================================ */
+
+.academic-panel {
+    width: 100%;
+
+    max-width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+.academic-panel-header {
+    width: 100%;
+
+    padding: 22px 24px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+
+.academic-panel-header > div {
+    min-width: 0;
+}
+
+
+.academic-panel-header h2 {
+    margin: 0;
+
+    font-size: 17px;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    overflow-wrap: anywhere;
+}
+
+
+.academic-panel-header p {
+    margin: 6px 0 0;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   CORPS DU PANNEAU
+   ============================================================ */
+
+.academic-panel-body {
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   FORMULAIRE
+   ============================================================ */
+
+.academic-form {
+    width: 100%;
+
+    max-width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+
+.academic-form-grid {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+
+.academic-form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+
+.academic-form-group--full {
+    width: 100%;
+
+    min-width: 0;
+}
+
+
+.academic-form-group label {
+    display: block;
+
+    max-width: 100%;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    font-weight: 600;
+
+    color: #334155;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   CHAMPS DU FORMULAIRE
+   ============================================================ */
+
+.academic-form-group input,
+.academic-form-group select,
+.academic-form-group textarea {
+    display: block;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    min-width: 0;
+
+    min-height: 42px;
+
+    padding: 10px 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dbe2ea;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #0f172a;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.academic-form-group select {
+    text-overflow: ellipsis;
+
+    overflow: hidden;
+}
+
+
+.academic-form-group textarea {
+    min-height: 100px;
+
+    resize: vertical;
+}
+
+
+.academic-form-group input:focus,
+.academic-form-group select:focus,
+.academic-form-group textarea:focus {
+    border-color: #1e3a5f;
+
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.10);
+}
+
+
+/* ============================================================
+   SÉLECTION DE L'ÉVALUATION
+   ============================================================ */
+
+.academic-grade-form-panel {
+    overflow: hidden;
+}
+
+
+.academic-grade-form-panel .academic-form {
+    margin: 0;
+
+    padding: 0;
+}
+
+
+.academic-grade-form-panel .academic-form-grid {
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* ============================================================
+   ERREURS
+   ============================================================ */
+
+.academic-form-errors {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    margin-bottom: 20px;
+
+    padding: 12px 14px;
+
+    box-sizing: border-box;
+
+    border-radius: 8px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+}
+
+
+.academic-form-errors i {
+    flex-shrink: 0;
+
+    margin-top: 2px;
+}
+
+
+.academic-form-errors span {
+    min-width: 0;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+}
+
+
+.academic-field-error {
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    color: #dc2626;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   ZONE DE SAISIE DES NOTES
+   ============================================================ */
+
+.academic-grade-entry {
+    width: 100%;
+
+    max-width: 100%;
+
+    min-width: 0;
+
+    margin-top: 28px;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   EN-TÊTE DE LA ZONE DE SAISIE
+   ============================================================ */
+
+.academic-grade-entry-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    width: 100%;
+
+    min-width: 0;
+
+    margin-bottom: 18px;
+
+    box-sizing: border-box;
+}
+
+
+.academic-grade-entry-header > div {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.academic-grade-entry-header h2 {
+    margin: 0;
+
+    font-size: 17px;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    overflow-wrap: anywhere;
+}
+
+
+.academic-grade-entry-header p {
+    margin: 6px 0 0;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   NOMBRE D'ÉTUDIANTS
+   ============================================================ */
+
+.academic-grade-count {
+    flex-shrink: 0;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 32px;
+
+    max-width: 100%;
+
+    padding: 6px 10px;
+
+    box-sizing: border-box;
+
+    border-radius: 7px;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   TABLEAU
+   ============================================================ */
+
+.academic-table-wrapper {
+    width: 100%;
+
+    max-width: 100%;
+
+    min-width: 0;
+
+    overflow-x: auto;
+
+    overflow-y: visible;
+
+    -webkit-overflow-scrolling: touch;
+
+    box-sizing: border-box;
+}
+
+
+.academic-table {
+    width: 100%;
+
+    min-width: 760px;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+}
+
+
+.academic-table thead {
+    background: #f8fafc;
+}
+
+
+.academic-table th {
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.03em;
+
+    text-align: left;
+
+    color: #64748b;
+
+    white-space: nowrap;
+}
+
+
+.academic-table td {
+    padding: 16px 18px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    font-size: 14px;
+
+    color: #334155;
+
     vertical-align: middle;
+
+    overflow-wrap: anywhere;
+}
+
+
+.academic-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.academic-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+/* ============================================================
+   TABLEAU DE SAISIE DES NOTES
+   ============================================================ */
+
+.academic-grade-table {
+    width: 100%;
+
+    min-width: 650px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+    background: #ffffff;
+}
+
+
+.academic-grade-table th,
+.academic-grade-table td {
+    padding: 14px 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    vertical-align: middle;
+
+    box-sizing: border-box;
+}
+
+
+.academic-grade-table th {
+    background: #f8fafc;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+
+    color: #64748b;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.03em;
+
+    white-space: nowrap;
+}
+
+
+.academic-grade-table td {
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: #334155;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+}
+
+
+.academic-grade-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.academic-grade-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+/* ============================================================
+   LARGEURS DES COLONNES
+   ============================================================ */
+
+.academic-grade-table th:nth-child(1),
+.academic-grade-table td:nth-child(1) {
+    width: 45%;
+}
+
+
+.academic-grade-table th:nth-child(2),
+.academic-grade-table td:nth-child(2) {
+    width: 30%;
+}
+
+
+.academic-grade-table th:nth-child(3),
+.academic-grade-table td:nth-child(3) {
+    width: 25%;
+}
+
+
+/* ============================================================
+   CELLULE ÉTUDIANT
+   ============================================================ */
+
+.grade-student-cell {
+    display: block;
+
+    min-width: 0;
+
+    max-width: 100%;
+}
+
+
+.grade-student-cell strong {
+    display: block;
+
+    max-width: 100%;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    font-weight: 600;
+
+    color: #0f172a;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+}
+
+
+/* ============================================================
+   CHAMP NOTE
+   ============================================================ */
+
+.academic-grade-input {
+    display: block;
+
+    width: 120px !important;
+
+    max-width: 100% !important;
+
+    min-width: 0;
+
+    min-height: 40px;
+
+    padding: 9px 10px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    border: 1px solid #dbe2ea;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #0f172a;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.academic-grade-input:focus {
+    border-color: #1e3a5f;
+
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.10);
+}
+
+
+.academic-grade-input::placeholder {
+    color: #94a3b8;
+
+    font-weight: 400;
+}
+
+
+/* ============================================================
+   NOTE DANS LA LISTE
+   ============================================================ */
+
+.grade-value {
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #1e3a5f;
+
+    white-space: nowrap;
+}
+
+
+.grade-empty {
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   ÉTUDIANT DANS LA LISTE
+   ============================================================ */
+
+.grade-student {
+    font-weight: 600;
+
+    color: #0f172a;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   ÉVALUATION DANS LA LISTE
+   ============================================================ */
+
+.grade-evaluation {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+
+.grade-evaluation__title {
+    font-weight: 600;
+
+    color: #0f172a;
+
+    overflow-wrap: anywhere;
+}
+
+
+.grade-evaluation__session {
+    font-size: 12px;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   ACTIONS DU TABLEAU
+   ============================================================ */
+
+.academic-table-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+
+.academic-btn-icon {
+    width: 36px;
+
+    height: 36px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    border: 1px solid #e2e8f0;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.academic-btn-icon:hover {
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+
+    color: #1e3a5f;
+
+    transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   BOUTONS
+   ============================================================ */
+
+.academic-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 40px;
+
+    max-width: 100%;
+
+    padding: 0 16px;
+
+    box-sizing: border-box;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    border: 1px solid transparent;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.academic-btn i {
+    flex-shrink: 0;
+}
+
+
+.academic-btn--primary {
+    background: #1e3a5f;
+
+    color: #ffffff;
+}
+
+
+.academic-btn--primary:hover {
+    background: #172f4d;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+.academic-btn--secondary {
+    background: #ffffff;
+
+    border-color: #dbe2ea;
+
+    color: #334155;
+}
+
+
+.academic-btn--secondary:hover {
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+}
+
+
+/* ============================================================
+   ACTIONS DU FORMULAIRE
+   ============================================================ */
+
+.academic-form-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    width: 100%;
+
+    margin-top: 24px;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   ÉTAT VIDE
+   ============================================================ */
+
+.academic-empty-state {
+    width: 100%;
+
+    max-width: 100%;
+
+    padding: 40px 24px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+
+.academic-empty-state i {
+    display: block;
+
+    margin-bottom: 14px;
+
+    font-size: 28px;
+
+    color: #94a3b8;
+}
+
+
+.academic-empty-state h3 {
+    margin: 0;
+
+    font-size: 16px;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+
+    color: #334155;
+
+    overflow-wrap: anywhere;
+}
+
+
+.academic-empty-state p {
+    max-width: 600px;
+
+    margin: 8px auto 0;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   MESSAGE AUCUNE NOTE
+   ============================================================ */
+
+.academic-table-empty {
+    padding: 48px 24px !important;
+
+    text-align: center;
+
+    color: #64748b !important;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   OBSERVATION
+   ============================================================ */
+
+.academic-observation-input {
+    min-width: 180px;
+}
+
+/* ============================================================
+   ACTIONS DE L'EN-TÊTE
+   ============================================================ */
+
+.academic-page-heading__actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+
+    flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   RESPONSIVE — ACTIONS DE L'EN-TÊTE
+   ============================================================ */
+
+@media (max-width: 992px) {
+
+    .academic-page-heading__actions {
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .academic-page-heading__actions {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        width: 100%;
+    }
+
+    .academic-page-heading__actions .academic-btn {
+        width: 100%;
+    }
+
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLETTE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .admin-main {
+        margin-left: 235px !important;
+
+        width: calc(100% - 235px);
+    }
+
+    .admin-main__content {
+        padding-left: 24px;
+
+        padding-right: 24px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 23px;
+    }
+
+    .academic-panel-body {
+        padding: 20px;
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE — PETIT ÉCRAN
+   ============================================================ */
+
+@media (max-width: 992px) {
+
+    .admin-main {
+        margin-left: 0 !important;
+
+        width: 100% !important;
+
+        padding-top: 85px !important;
+    }
+
+    .admin-main__content {
+        padding: 24px 20px 32px;
+    }
+
+    .academic-page-heading {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 16px;
+    }
+
+    .academic-page-heading .academic-btn {
+        align-self: flex-start;
+    }
+
+    .academic-grade-entry-header {
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .academic-grade-count {
+        align-self: flex-start;
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 576px) {
+
+    .admin-main {
+        padding-top: 78px !important;
+    }
+
+    .admin-main__content {
+        padding: 20px 14px 28px;
+    }
+
+    .academic-page-heading {
+        margin-bottom: 18px;
+
+        gap: 16px;
+    }
+
+    .academic-page-heading h1 {
+        font-size: 21px;
+    }
+
+    .academic-page-heading p {
+        font-size: 13px;
+    }
+
+    .academic-panel {
+        border-radius: 10px;
+    }
+
+    .academic-panel-header {
+        padding: 18px 16px;
+    }
+
+    .academic-panel-body {
+        padding: 16px;
+    }
+
+    .academic-grade-entry {
+        margin-top: 24px;
+    }
+
+    .academic-grade-entry-header h2 {
+        font-size: 16px;
+    }
+
+    .academic-grade-entry-header p {
+        font-size: 12px;
+    }
+
+    .academic-table th,
+    .academic-table td {
+        padding: 13px 14px;
+    }
+
+    .academic-grade-table th,
+    .academic-grade-table td {
+        padding: 12px 12px;
+    }
+
+    .academic-grade-input {
+        width: 100px !important;
+    }
+
+    .academic-form-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .academic-form-actions .academic-btn {
+        width: 100%;
+    }
+
+    .academic-btn {
+        width: 100%;
+    }
+
+    .academic-page-heading .academic-btn {
+        width: 100%;
+    }
 }

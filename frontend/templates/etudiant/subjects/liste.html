@@ -3,33 +3,110 @@
 
 {% block title %}Mes Matières - Portail Étudiant{% endblock %}
 
-{% block css %}
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/etudiant/layout/footer.css' %}">
 <link rel="stylesheet" href="{% static 'css/etudiant/subjects.css' %}">
+
 {% endblock %}
 
 {% block content %}
+
 <div class="app-container">
-    {% include 'etudiant/layout/sidebar.html' %}
-    <div class="main-wrapper flex-grow-1">
-        {% include 'etudiant/layout/header.html' %}
-        <main class="main-content container-fluid py-4">
-            <h2 class="mb-4">Matières de votre cursus</h2>
-            <div class="row g-4">
-                {% for subject in subjects %}
-                <div class="col-md-4">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary fw-bold">{{ subject.nom }}</h5>
-                            <p class="card-text text-muted">Coefficient : {{ subject.coefficient }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="text-muted">Aucune matière enregistrée pour le moment.</p>
-                {% endfor %}
+
+
+{% include 'etudiant/layout/sidebar.html' %}
+
+<div class="main-wrapper">
+
+    {% include 'etudiant/layout/header.html' %}
+
+    <main class="student-subjects">
+
+        <div class="student-subjects__header">
+
+            <div>
+                <h1>Mes matières</h1>
+
+                <p>
+                    Consultez les matières correspondant à votre cursus.
+                </p>
             </div>
-        </main>
-        {% include 'etudiant/layout/footer.html' %}
-    </div>
+
+        </div>
+
+        <section class="subjects-section">
+
+            <div class="subjects-section__header">
+
+                <div>
+                    <h2>Matières de votre cursus</h2>
+
+                    <p>
+                        Retrouvez l'ensemble des matières qui vous sont enseignées.
+                    </p>
+                </div>
+
+                <span class="subjects-count">
+                    {{ subjects|length }}
+                    matière{{ subjects|length|pluralize }}
+                </span>
+
+            </div>
+
+            <div class="subjects-grid">
+
+                {% for subject in subjects %}
+
+                <article class="subject-card">
+
+                    <div class="subject-card__content">
+
+                        <h3 class="subject-card__title">
+                            {{ subject.nom }}
+                        </h3>
+
+                        {% if subject.credits %}
+                            <p class="subject-card__credits">
+                                {{ subject.credits }} crédit{{ subject.credits|pluralize }}
+                            </p>
+                        {% else %}
+                            <p class="subject-card__credits">
+                                Crédits non renseignés
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+                {% empty %}
+
+                <div class="subjects-empty">
+
+                    <i class="fa-regular fa-book-open"></i>
+
+                    <p>
+                        Aucune matière enregistrée pour votre cursus.
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+    {% include 'etudiant/layout/footer.html' %}
+
 </div>
+
+
+</div>
+
 {% endblock %}

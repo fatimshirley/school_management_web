@@ -1,14 +1,18 @@
 {% extends "base/base.html" %}
+
 {% load static %}
 
 {% block title %}Ajouter une matière — Administration{% endblock %}
 
 {% block extra_css %}
+
 <link rel="stylesheet" href="{% static 'css/admin/layout/header.css' %}">
 <link rel="stylesheet" href="{% static 'css/admin/layout/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/admin/layout/footer.css' %}">
 <link rel="stylesheet" href="{% static 'css/admin/subjects.css' %}">
+
 {% endblock %}
+
 
 {% block content %}
 
@@ -28,40 +32,62 @@
 
                     <div class="subjects-page-heading__title">
 
-       
                         <div>
-                            <h1>Ajouter une matière</h1>
-                            <p>Enregistrer une nouvelle matière</p>
+
+                            <h1>
+                                Ajouter une matière
+                            </h1>
+
+                            <p>
+                                Enregistrer une matière et son affectation pédagogique
+                            </p>
+
                         </div>
 
                     </div>
 
                 </div>
 
+
                 <section class="subjects-form-panel">
 
                     <div class="subjects-form-panel__header">
 
-                        <h2>Informations de la matière</h2>
+                        <h2>
+                            Informations de la matière
+                        </h2>
 
                         <p>
-                            Renseignez les informations pédagogiques.
+                            Renseignez la matière, son semestre, sa filière et son professeur.
                         </p>
 
                     </div>
 
+
                     {% if error %}
+
                     <div class="subjects-message subjects-message--error">
+
                         <i class="fa-solid fa-circle-exclamation"></i>
-                        <span>{{ error }}</span>
+
+                        <span>
+                            {{ error }}
+                        </span>
+
                     </div>
+
                     {% endif %}
+
 
                     <form method="post" class="subjects-form">
 
                         {% csrf_token %}
 
+
                         <div class="subjects-form-grid">
+
+
+                            <!-- NOM -->
 
                             <div class="subjects-form-group">
 
@@ -79,6 +105,9 @@
 
                             </div>
 
+
+                            <!-- CREDITS -->
+
                             <div class="subjects-form-group">
 
                                 <label for="credits">
@@ -95,13 +124,20 @@
 
                             </div>
 
+
+                            <!-- SEMESTRE -->
+
                             <div class="subjects-form-group">
 
                                 <label for="semestre">
-                                    Semestre
+                                    Semestre *
                                 </label>
 
-                                <select id="semestre" name="semestre">
+                                <select
+                                    id="semestre"
+                                    name="semestre"
+                                    required
+                                >
 
                                     <option value="">
                                         Sélectionner un semestre
@@ -115,7 +151,11 @@
                                             selected
                                         {% endif %}
                                     >
-                                        {{ semestre.niveau.code }} — {{ semestre.nom }}
+
+                                        {{ semestre.niveau.code }}
+                                        —
+                                        {{ semestre.nom }}
+
                                     </option>
 
                                     {% endfor %}
@@ -124,22 +164,74 @@
 
                             </div>
 
+
+                            <!-- FILIERE -->
+
+                            <div class="subjects-form-group">
+
+                                <label for="filiere">
+                                    Filière *
+                                </label>
+
+                                <select
+                                    id="filiere"
+                                    name="filiere"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Sélectionner une filière
+                                    </option>
+
+                                    {% for filiere in filieres %}
+
+                                    <option
+                                        value="{{ filiere.id }}"
+                                        {% if request.POST.filiere == filiere.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ filiere.code }}
+                                        —
+                                        {{ filiere.nom }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- PROFESSEUR -->
+
                             <div class="subjects-form-group subjects-form-group--full">
 
                                 <label for="teachers">
-                                    Professeurs
+                                    Professeur(s) *
                                 </label>
 
                                 <select
                                     id="teachers"
                                     name="teachers"
                                     multiple
+                                    required
                                 >
 
                                     {% for teacher in teachers %}
 
-                                    <option value="{{ teacher.id }}">
-                                        {{ teacher.nom }} {{ teacher.prenom|default:"" }}
+                                    <option
+                                        value="{{ teacher.id }}"
+                                        {% if teacher.id|stringformat:"s" in request.POST.getlist %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ teacher.nom }}
+                                        {{ teacher.prenom|default:"" }}
+
                                     </option>
 
                                     {% endfor %}
@@ -152,7 +244,9 @@
 
                             </div>
 
+
                         </div>
+
 
                         <div class="subjects-form-actions">
 
@@ -160,25 +254,34 @@
                                 href="{% url 'admin_subjects' %}"
                                 class="subjects-btn subjects-btn--secondary"
                             >
+
                                 <i class="fa-solid fa-arrow-left"></i>
+
                                 Annuler
+
                             </a>
+
 
                             <button
                                 type="submit"
                                 class="subjects-btn subjects-btn--primary"
                             >
+
                                 <i class="fa-solid fa-floppy-disk"></i>
+
                                 Enregistrer
+
                             </button>
 
                         </div>
+
 
                     </form>
 
                 </section>
 
             </div>
+
 
             {% include "admin/layout/footer.html" %}
 
