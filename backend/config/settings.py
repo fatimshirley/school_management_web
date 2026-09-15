@@ -192,29 +192,32 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # LOGGING
 # ============================================================
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "school_format": {
-            "format": "[{asctime}] [{levelname}] {message}",
-            "style": "{",
-        },
+"version": 1,
+"disable_existing_loggers": False,
+
+"formatters": {
+    "school_format": {
+        "format": "[{asctime}] [{levelname}] {message}",
+        "style": "{",
     },
-    "handlers": {
-        "school_file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": BASE_DIR.parent / "logs" / "school.log",
-            "formatter": "school_format",
-        },
+},
+
+"handlers": {
+    "console": {
+        "level": "INFO",
+        "class": "logging.StreamHandler",
+        "formatter": "school_format",
     },
-    "loggers": {
-        "school": {
-            "handlers": ["school_file"],
-            "level": "INFO",
-            "propagate": False,
-        },
+},
+
+"loggers": {
+    "school": {
+        "handlers": ["console"],
+        "level": "INFO",
+        "propagate": False,
     },
+},
+
 }
 
 # ============================================================
